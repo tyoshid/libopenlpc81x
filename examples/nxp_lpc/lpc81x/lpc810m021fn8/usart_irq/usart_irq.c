@@ -66,7 +66,7 @@ static void gpio_setup(void)
 	gpio_config(GPIO_OUTPUT, GPIO_IO, PIO0_10 | PIO0_11);
 	gpio_clear(PIO0_10 | PIO0_11);
 
-	/* Set PIO0_2 and PIO0_3 to 'output push-pull' (LED). */
+	/* Set PIO0_2 and PIO0_3 to 'output push-pull'. */
 	gpio_config(GPIO_OUTPUT, 0, PIO0_2 | PIO0_3);
 
 	/* Set PIO0_4 to 'USART0 TXD'. */
@@ -98,7 +98,7 @@ void uart0_isr(void)
 	int s;
 
 	/* Rx, Tx queue */
-	static u8 queue[QUEUESIZE];
+	static int queue[QUEUESIZE];
 	static int head;
 	static int tail;
 
