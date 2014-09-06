@@ -29,15 +29,15 @@ OBJDUMP		= arm-none-eabi-objdump
 SIZE		= arm-none-eabi-size
 
 ARCHFLAGS	= -mthumb -mcpu=cortex-m0plus
-CFLAGS		+= -MMD -Os \
-		   -Wall -Wextra -Wimplicit-function-declaration \
-		   -Wredundant-decls -Wstrict-prototypes -Wundef \
-		   -I$(LIBDIR)/include -I$(LIBDIR)/include/nxp_lpc/lpc81x \
-		   -fno-common -fstack-usage $(ARCHFLAGS)
-LDFLAGS		+= -L$(LIBDIR)/lib/nxp_lpc/lpc81x -llpc81x \
-		   -T $(LDSCRIPT) -nostartfiles $(LDSPECS) \
-	           -Wl,--gc-sections -Wl,-Map=$(NAME).map -Wl,--cref \
-		   $(ARCHFLAGS)
+CFLAGS		= -MMD -Os \
+		  -Wall -Wextra -Wimplicit-function-declaration \
+		  -Wredundant-decls -Wstrict-prototypes -Wundef \
+		  -I$(LIBDIR)/include -I$(LIBDIR)/include/nxp_lpc/lpc81x \
+		  -fno-common -fstack-usage $(ARCHFLAGS)
+LDFLAGS		= -L$(LIBDIR)/lib/nxp_lpc/lpc81x -llpc81x \
+		  -T $(LDSCRIPT) -nostartfiles $(LDSPECS) \
+	          -Wl,--gc-sections -Wl,-Map=$(NAME).map -Wl,--cref \
+		  $(ARCHFLAGS)
 
 USARTUTIL	?= $(LIBDIR)/tools/nxp_lpc/lpc81x/usart-util/usart-util
 ifneq ($(strip &(USARTUTIL_DEVICE)),)
