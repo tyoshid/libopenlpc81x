@@ -454,6 +454,7 @@ typedef enum {
 
 /* Peripheral */
 enum {
+	SYSCON_UARTFRG = (1 << 20),
 	SYSCON_ACMP = (1 << 19),
 	SYSCON_IOCON = (1 << 18),
 	SYSCON_WWDT = (1 << 17),

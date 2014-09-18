@@ -29,14 +29,50 @@ syscon_map_t syscon_get_system_memory_remap(void)
 	return SYSCON_SYSMEMREMAP & 3;
 }
 
+static int peripheral_to_reset(int peripheral)
+{
+	int reset;
+	int i;
+	static const int peripheral_reset[] = {
+		0,
+		0,
+		0,
+		0,
+		SYSCON_PRESETCTRL_FLASH_RST_N,
+		SYSCON_PRESETCTRL_I2C_RST_N,
+		SYSCON_PRESETCTRL_GPIO_RST_N,
+		0,
+		SYSCON_PRESETCTRL_SCT_RST_N,
+		SYSCON_PRESETCTRL_WKT_RST_N,
+		SYSCON_PRESETCTRL_MRT_RST_N,
+		SYSCON_PRESETCTRL_SPI0_RST_N,
+		SYSCON_PRESETCTRL_SPI1_RST_N,
+		0,
+		SYSCON_PRESETCTRL_UART0_RST_N,
+		SYSCON_PRESETCTRL_UART1_RST_N,
+		SYSCON_PRESETCTRL_UART2_RST_N,
+		0,
+		0,
+		SYSCON_PRESETCTRL_ACMP_RST_N,
+		SYSCON_PRESETCTRL_UARTFRG_RST_N
+	};
+
+	reset = 0;
+	for (i = 0; i < (int)(sizeof(peripheral_reset) / sizeof(int)); i++) {
+		if (peripheral & (1 << i))
+			reset |= peripheral_reset[i];
+	}
+	return reset;
+}
+
 void syscon_disable_reset(int peripheral)
 {
-	SYSCON_PRESETCTRL |= peripheral;
+	SYSCON_PRESETCTRL |= peripheral_to_reset(peripheral);
 }
 
 void syscon_enable_reset(int peripheral)
 {
-	SYSCON_PRESETCTRL &= ~peripheral;
+	SYSCON_PRESETCTRL &= ~peripheral_to_reset(peripheral);
 }
 
 void syscon_enable_pll(syscon_osc_t source, int m, int p)
@@ -156,12 +192,12 @@ void syscon_set_system_clock(syscon_osc_t source, int div)
 
 void syscon_enable_clock(int peripheral)
 {
-	SYSCON_SYSAHBCLKCTRL |= peripheral;
+	SYSCON_SYSAHBCLKCTRL |= (peripheral & 0xfffff);
 }
 
 void syscon_disable_clock(int peripheral)
 {
-	SYSCON_SYSAHBCLKCTRL &= ~peripheral;
+	SYSCON_SYSAHBCLKCTRL &= ~(peripheral & 0xfffff);
 }
 
 void syscon_set_usart_clock(int main_clock, int u_pclk)
