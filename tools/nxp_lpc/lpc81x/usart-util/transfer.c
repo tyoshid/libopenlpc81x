@@ -35,7 +35,7 @@ int upload(int fd, FILE *stream, int bytes)
 	int i;
 	int n;
 	int r;
-	uint8_t buf[1024];
+	uint8_t buf[SECTOR_SIZE];
 
 	a = FLASH_ADDRESS;
 	i = 0;
@@ -77,13 +77,11 @@ int download(int fd, FILE *stream)
 	int m;
 	uint8_t flash[SECTOR_SIZE];
 
-	if (sram_size <= 1024) {
-		ramaddr = SRAM_ADDRESS + RESERVE_SIZE;
+	ramaddr = SRAM_ADDRESS + RESERVE_SIZE;
+	if (sram_size <= SECTOR_SIZE + RESERVE_SIZE)
 		ramsize = sram_size - RESERVE_SIZE;
-	} else {
-		ramaddr = SRAM_ADDRESS + SECTOR_SIZE;
+	else
 		ramsize = SECTOR_SIZE;
-	}
 
 	if (unlock(fd))
 		return -1;
@@ -103,7 +101,7 @@ int download(int fd, FILE *stream)
 			if (r == 0)
 				break;
 
-			for (i = r; i < n; i++)
+			for (i = r; i < sizeof(buf); i++)
 				buf[i] = 0xff;
 		}
 		bytes += r;
@@ -149,8 +147,19 @@ int download(int fd, FILE *stream)
 		if (debug)
 			printf("- Write data -\n");
 		/* Write data */
-		for (i = 0; i < n; i += ramsize) {
-			m = ramsize < n - i ? ramsize : n - i;
+		for (i = 0; i < n; i += m) {
+			if (n - i <= 64)
+				m = 64; /* PAGE_SIZE */
+			else if (n - i <= 128)
+				m = 128;
+			else if (ramsize <= 256)
+				m = 128;
+			else if (n - i <= 256)
+				m = 256;
+			else if (n - i <= 512)
+				m = 512;
+			else
+				m = 1024; /* SECTOR_SIZE */
 			if (write_to_ram(fd, ramaddr, m, &buf[i]))
 				return -1;
 
@@ -182,10 +191,12 @@ int download(int fd, FILE *stream)
 	if (read_memory(fd, CRP, 4, flash))
 		return -1;
 
-	w = flash[PAGE_SIZE - 1] << 24 |
-		flash[PAGE_SIZE - 2] << 16 |
-		flash[PAGE_SIZE - 3] << 8 |
-		flash[PAGE_SIZE - 4];
+	w = flash[3] << 24 |
+		flash[2] << 16 |
+		flash[1] << 8 |
+		flash[0];
+	if (debug)
+		printf("CRP = 0x%08x\n", w);
 
 	switch (w) {
 	case 0x12345678:
