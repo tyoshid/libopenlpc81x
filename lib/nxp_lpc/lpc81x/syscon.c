@@ -19,14 +19,15 @@
 
 #include <syscon.h>
 
-void syscon_set_system_memory_remap(syscon_map_t map)
+void syscon_set_system_memory_remap(enum syscon_map map)
 {
 	SYSCON_SYSMEMREMAP = map;
 }
 
-syscon_map_t syscon_get_system_memory_remap(void)
+enum syscon_map syscon_get_system_memory_remap(void)
 {
-	return SYSCON_SYSMEMREMAP & 3;
+	return SYSCON_SYSMEMREMAP & (SYSCON_SYSMEMREMAP_MAP1 |
+				     SYSCON_SYSMEMREMAP_MAP0);
 }
 
 static int peripheral_to_reset(int peripheral)
@@ -37,8 +38,8 @@ static int peripheral_to_reset(int peripheral)
 		0,
 		0,
 		0,
-		0,
 		SYSCON_PRESETCTRL_FLASH_RST_N,
+		0,
 		SYSCON_PRESETCTRL_I2C_RST_N,
 		SYSCON_PRESETCTRL_GPIO_RST_N,
 		0,
@@ -75,7 +76,7 @@ void syscon_enable_reset(int peripheral)
 	SYSCON_PRESETCTRL &= ~peripheral_to_reset(peripheral);
 }
 
-void syscon_enable_pll(syscon_osc_t source, int m, int p)
+void syscon_enable_pll(enum syscon_osc source, int m, int p)
 {
 	int osc;
 	int psel;
@@ -123,10 +124,10 @@ void syscon_disable_pll(void)
 	SYSCON_PDRUNCFG |= SYSCON_PDRUNCFG_SYSPLL_PD;
 }
 
-void syscon_enable_sys_osc(bool bypass, syscon_range_t freq)
+void syscon_enable_sys_osc(bool bypass, enum syscon_range freq)
 {
 	SYSCON_PDRUNCFG &= ~SYSCON_PDRUNCFG_SYSOSC_PD;
-	SYSCON_SYSOSCCTRL = freq | (bypass ? 1 : 0);
+	SYSCON_SYSOSCCTRL = freq | (bypass ? SYSCON_SYSOSCCTRL_BYPASS : 0);
 }
 
 void syscon_disable_sys_osc(void)
@@ -134,7 +135,7 @@ void syscon_disable_sys_osc(void)
 	SYSCON_PDRUNCFG |= SYSCON_PDRUNCFG_SYSOSC_PD;
 }
 
-void syscon_enable_wdt_osc(syscon_fclkana_t fclkana, int divsel)
+void syscon_enable_wdt_osc(enum syscon_fclkana fclkana, int divsel)
 {
 	SYSCON_PDRUNCFG &= ~SYSCON_PDRUNCFG_WDTOSC_PD;
 
@@ -155,10 +156,14 @@ int syscon_get_reset_status(int reset)
 
 void syscon_clear_reset_status(int reset)
 {
-	SYSCON_SYSRSTSTAT = reset;
+	SYSCON_SYSRSTSTAT = reset & (SYSCON_SYSRSTSTAT_SYSRST |
+				     SYSCON_SYSRSTSTAT_BOD |
+				     SYSCON_SYSRSTSTAT_WDT |
+				     SYSCON_SYSRSTSTAT_EXTRST |
+				     SYSCON_SYSRSTSTAT_POR);
 }
 
-void syscon_set_system_clock(syscon_osc_t source, int div)
+void syscon_set_system_clock(enum syscon_osc source, int div)
 {
 	int osc;
 
@@ -192,7 +197,7 @@ void syscon_set_system_clock(syscon_osc_t source, int div)
 
 void syscon_enable_clock(int peripheral)
 {
-	SYSCON_SYSAHBCLKCTRL |= (peripheral & 0xfffff);
+	SYSCON_SYSAHBCLKCTRL |= peripheral & 0xfffff;
 }
 
 void syscon_disable_clock(int peripheral)
@@ -228,7 +233,7 @@ void syscon_set_usart_clock(int main_clock, int u_pclk)
 	}
 }
 
-void syscon_set_clockout(syscon_osc_t source, int div)
+void syscon_set_clockout(enum syscon_osc source, int div)
 {
 	int osc;
 
@@ -260,31 +265,22 @@ void syscon_set_clockout(syscon_osc_t source, int div)
 	SYSCON_CLKOUTDIV = div;
 }
 
-void syscon_set_external_trace_buffer_command(syscon_exttracecmd_t command)
+void syscon_set_external_trace_buffer_command(enum syscon_exttracecmd command)
 {
 	SYSCON_EXTTRACECMD = command;
 }
 
-int syscon_get_gpio_status_at_por(void)
+int syscon_get_pio0_status_at_por(void)
 {
 	return SYSCON_PIOPORCAP0 & 0x3ffff;
 }
 
 void syscon_set_ioconclkdiv(int num, int div)
 {
-	static volatile u32 * const reg[] = {
-		&SYSCON_IOCONCLKDIV0,
-		&SYSCON_IOCONCLKDIV1,
-		&SYSCON_IOCONCLKDIV2,
-		&SYSCON_IOCONCLKDIV3,
-		&SYSCON_IOCONCLKDIV4,
-		&SYSCON_IOCONCLKDIV5,
-		&SYSCON_IOCONCLKDIV6
-	};
-
 	if (num > 6 || num < 0)
 		return;
-	*reg[num] = div;
+
+	SYSCON_IOCONCLKDIV(num) = div;
 }
 
 void syscon_set_bod_interrupt(int level)
@@ -292,8 +288,9 @@ void syscon_set_bod_interrupt(int level)
 	int r;
 
 	r = SYSCON_BODCTRL;
-	r &= ~0xc;
-	SYSCON_BODCTRL = r | ((level & 3) << 2);
+	r &= ~(SYSCON_BODCTRL_BODINTVAL1 | SYSCON_BODCTRL_BODINTVAL0);
+	SYSCON_BODCTRL = r | ((level << 2) & (SYSCON_BODCTRL_BODINTVAL1 |
+					      SYSCON_BODCTRL_BODINTVAL0));
 }
 
 void syscon_enable_bod_reset(int level)
@@ -301,8 +298,10 @@ void syscon_enable_bod_reset(int level)
 	int r;
 
 	r = SYSCON_BODCTRL;
-	r &= ~(SYSCON_BODCTRL_BODRSTENA | 3);
-	SYSCON_BODCTRL = r | SYSCON_BODCTRL_BODRSTENA | (level & 3);
+	r &= ~(SYSCON_BODCTRL_BODRSTLEV1 | SYSCON_BODCTRL_BODRSTLEV0);
+	SYSCON_BODCTRL = r | SYSCON_BODCTRL_BODRSTENA |
+		(level & (SYSCON_BODCTRL_BODRSTLEV1 |
+			  SYSCON_BODCTRL_BODRSTLEV0));
 }
 
 void syscon_disable_bod_reset(void)
@@ -334,23 +333,13 @@ void syscon_select_pins(int offset, int pins)
 {
 	int i;
 	int j;
-	static volatile u32 * const reg[] = {
-		&SYSCON_PINTSEL0,
-		&SYSCON_PINTSEL1,
-		&SYSCON_PINTSEL2,
-		&SYSCON_PINTSEL3,
-		&SYSCON_PINTSEL4,
-		&SYSCON_PINTSEL5,
-		&SYSCON_PINTSEL6,
-		&SYSCON_PINTSEL7
-	};
 
 	j = offset;
 	if (j >= 8)
 		return;
 	for (i = 0; i < 18; i++) {
 		if (pins & (1 << i)) {
-			*reg[j++] = i;
+			SYSCON_PINTSEL(j++) = i;
 			if (j >= 8)
 				break;
 		}
@@ -363,36 +352,36 @@ void syscon_set_wakeup_interrupt(int interrupt)
 	SYSCON_STARTERP1 = (interrupt >> 8) & 0xb13b;
 }
 
-void syscon_disable_deep_sleep_power_down(syscon_power_down_t pd)
+void syscon_disable_deep_sleep_power_down(int pd)
 {
 	SYSCON_PDSLEEPCFG &= ~(pd & (SYSCON_PDSLEEPCFG_BOD_PD |
 				     SYSCON_PDSLEEPCFG_WDTOSC_PD));
 }
 
-void syscon_enable_deep_sleep_power_down(syscon_power_down_t pd)
+void syscon_enable_deep_sleep_power_down(int pd)
 {
 	SYSCON_PDSLEEPCFG |= pd & (SYSCON_PDSLEEPCFG_BOD_PD |
 				   SYSCON_PDSLEEPCFG_WDTOSC_PD);
 }
 
-void syscon_disable_wakeup_power_down(syscon_power_down_t pd)
+void syscon_disable_wakeup_power_down(int pd)
 {
-	SYSCON_PDAWAKECFG &= ~pd;
+	SYSCON_PDAWAKECFG &= ~(pd & 0x80ef);
 }
 
-void syscon_enable_wakeup_power_down(syscon_power_down_t pd)
+void syscon_enable_wakeup_power_down(int pd)
 {
-	SYSCON_PDAWAKECFG |= pd;
+	SYSCON_PDAWAKECFG |= pd & 0x80ef;
 }
 
-void syscon_disable_power_down(syscon_power_down_t pd)
+void syscon_disable_power_down(int pd)
 {
-	SYSCON_PDRUNCFG &= ~pd;
+	SYSCON_PDRUNCFG &= ~(pd & 0x80ef);
 }
 
-void syscon_enable_power_down(syscon_power_down_t pd)
+void syscon_enable_power_down(int pd)
 {
-	SYSCON_PDRUNCFG |= pd;
+	SYSCON_PDRUNCFG |= pd & 0x80ef;
 }
 
 int syscon_get_device_id(void)

@@ -113,25 +113,28 @@
 #define SYSCON_UARTFRGMULT		MMIO32(SYSCON_BASE + 0x0f4)
 #define SYSCON_EXTTRACECMD		MMIO32(SYSCON_BASE + 0x0fc)
 #define SYSCON_PIOPORCAP0		MMIO32(SYSCON_BASE + 0x100)
-#define SYSCON_IOCONCLKDIV6		MMIO32(SYSCON_BASE + 0x134)
-#define SYSCON_IOCONCLKDIV5		MMIO32(SYSCON_BASE + 0x138)
-#define SYSCON_IOCONCLKDIV4		MMIO32(SYSCON_BASE + 0x13c)
-#define SYSCON_IOCONCLKDIV3		MMIO32(SYSCON_BASE + 0x140)
-#define SYSCON_IOCONCLKDIV2		MMIO32(SYSCON_BASE + 0x144)
-#define SYSCON_IOCONCLKDIV1		MMIO32(SYSCON_BASE + 0x148)
-#define SYSCON_IOCONCLKDIV0		MMIO32(SYSCON_BASE + 0x14c)
+#define SYSCON_IOCONCLKDIV(n)		MMIO32(SYSCON_BASE + 0x134 + \
+					       (6 - (n)) * 4)
+#define SYSCON_IOCONCLKDIV6		SYSCON_IOCONCLKDIV(6)
+#define SYSCON_IOCONCLKDIV5		SYSCON_IOCONCLKDIV(5)
+#define SYSCON_IOCONCLKDIV4		SYSCON_IOCONCLKDIV(4)
+#define SYSCON_IOCONCLKDIV3		SYSCON_IOCONCLKDIV(3)
+#define SYSCON_IOCONCLKDIV2		SYSCON_IOCONCLKDIV(2)
+#define SYSCON_IOCONCLKDIV1		SYSCON_IOCONCLKDIV(1)
+#define SYSCON_IOCONCLKDIV0		SYSCON_IOCONCLKDIV(0)
 #define SYSCON_BODCTRL			MMIO32(SYSCON_BASE + 0x150)
 #define SYSCON_SYSTCKCAL		MMIO32(SYSCON_BASE + 0x154)
 #define SYSCON_IRQLATENCY		MMIO32(SYSCON_BASE + 0x170)
 #define SYSCON_NMISRC			MMIO32(SYSCON_BASE + 0x174)
-#define SYSCON_PINTSEL0			MMIO32(SYSCON_BASE + 0x178)
-#define SYSCON_PINTSEL1			MMIO32(SYSCON_BASE + 0x17c)
-#define SYSCON_PINTSEL2			MMIO32(SYSCON_BASE + 0x180)
-#define SYSCON_PINTSEL3			MMIO32(SYSCON_BASE + 0x184)
-#define SYSCON_PINTSEL4			MMIO32(SYSCON_BASE + 0x188)
-#define SYSCON_PINTSEL5			MMIO32(SYSCON_BASE + 0x18c)
-#define SYSCON_PINTSEL6			MMIO32(SYSCON_BASE + 0x190)
-#define SYSCON_PINTSEL7			MMIO32(SYSCON_BASE + 0x194)
+#define SYSCON_PINTSEL(n)		MMIO32(SYSCON_BASE + 0x178 + (n) * 4)
+#define SYSCON_PINTSEL0			SYSCON_PINTSEL(0)
+#define SYSCON_PINTSEL1			SYSCON_PINTSEL(1)
+#define SYSCON_PINTSEL2			SYSCON_PINTSEL(2)
+#define SYSCON_PINTSEL3			SYSCON_PINTSEL(3)
+#define SYSCON_PINTSEL4			SYSCON_PINTSEL(4)
+#define SYSCON_PINTSEL5			SYSCON_PINTSEL(5)
+#define SYSCON_PINTSEL6			SYSCON_PINTSEL(6)
+#define SYSCON_PINTSEL7			SYSCON_PINTSEL(7)
 #define SYSCON_STARTERP0		MMIO32(SYSCON_BASE + 0x204)
 #define SYSCON_STARTERP1		MMIO32(SYSCON_BASE + 0x214)
 #define SYSCON_PDSLEEPCFG		MMIO32(SYSCON_BASE + 0x230)
@@ -141,13 +144,13 @@
 
 /* --- SYSCON_SYSMEMREMAP values ------------------------------------------- */
 
-#define SYSCON_SYSMEMREAMP_MAP1		(1 << 1)
-#define SYSCON_SYSMEMREAMP_MAP0		(1 << 0)
+#define SYSCON_SYSMEMREMAP_MAP1		(1 << 1)
+#define SYSCON_SYSMEMREMAP_MAP0		(1 << 0)
 
 /* MAP */
-#define SYSCON_SYSMEMREAMP_MAP_BOOT	0
-#define SYSCON_SYSMEMREAMP_MAP_RAM	1
-#define SYSCON_SYSMEMREAMP_MAP_FLASH	2
+#define SYSCON_SYSMEMREMAP_MAP_BOOT	0
+#define SYSCON_SYSMEMREMAP_MAP_RAM	1
+#define SYSCON_SYSMEMREMAP_MAP_FLASH	2
 
 /* --- SYSCON_PRESETCTRL values -------------------------------------------- */
 
@@ -312,11 +315,17 @@
 /* --- SYSCON_BODCTRL values ----------------------------------------------- */
 
 #define SYSCON_BODCTRL_BODRSTENA	(1 << 4)
-/* SYSCON_BODCTRL[3:2]: BODINTVAL */
+#define SYSCON_BODCTRL_BODINTVAL1	(1 << 3)
+#define SYSCON_BODCTRL_BODINTVAL0	(1 << 2)
+#define SYSCON_BODCTRL_BODRSTLEV1	(1 << 1)
+#define SYSCON_BODCTRL_BODRSTLEV0	(1 << 0)
+
+/* BODINTVAL */
 #define SYSCON_BODCTRL_BODINTVAL_1	(1 << 2)
 #define SYSCON_BODCTRL_BODINTVAL_2	(2 << 2)
 #define SYSCON_BODCTRL_BODINTVAL_3	(3 << 2)
-/* SYSCON_BODCTRL[1:0]: BODRSTLEV */
+
+/* BODRSTLEV */
 #define SYSCON_BODCTRL_BODRSTLEV_1	(1 << 0)
 #define SYSCON_BODCTRL_BODRSTLEV_2	(2 << 0)
 #define SYSCON_BODCTRL_BODRSTLEV_3	(3 << 0)
@@ -401,20 +410,20 @@
 /* --- Function prototypes ------------------------------------------------- */
 
 /* System memory remap */
-typedef enum {
+enum syscon_map {
 	SYSCON_BOOT_LOADER_MODE,
 	SYSCON_USER_RAM_MODE,
 	SYSCON_USER_FLASH_MODE
-} syscon_map_t;
+};
 
 /* System oscillator frequency range */
-typedef enum {
+enum syscon_range {
 	SYSCON_1_20MHZ = 0,
 	SYSCON_15_25MHZ = 2
-} syscon_range_t;
+};
 
 /* Watchdog oscillator analog output frequency */
-typedef enum {
+enum  syscon_fclkana {
 	SYSCON_0_6MHZ = (1 << 5),
 	SYSCON_1_05MHZ = (2 << 5),
 	SYSCON_1_4MHZ = (3 << 5),
@@ -430,7 +439,7 @@ typedef enum {
 	SYSCON_4_2MHZ = (13 << 5),
 	SYSCON_4_4MHZ = (14 << 5),
 	SYSCON_4_6MHZ = (15 << 5)
-} syscon_fclkana_t;
+};
 
 /* Reset */
 enum {
@@ -442,7 +451,7 @@ enum {
 };
 
 /* Oscillator */
-typedef enum {
+enum syscon_osc {
 	SYSCON_IRC,
 	SYSCON_XTAL,
 	SYSCON_CLKIN,
@@ -450,7 +459,7 @@ typedef enum {
 	SYSCON_PLL_IN,
 	SYSCON_PLL_OUT,
 	SYSCON_MAIN
-} syscon_osc_t;
+};
 
 /* Peripheral */
 enum {
@@ -478,10 +487,10 @@ enum {
 };
 
 /* External trace buffer command */
-typedef enum {
+enum  syscon_exttracecmd {
 	SYSCON_TSTART = (1 << 0),
 	SYSCON_TSTOP = (1 << 1)
-} syscon_exttracecmd_t;
+};
 
 /* Interrupt */
 enum {
@@ -506,7 +515,7 @@ enum {
 };
 
 /* Power down */
-typedef enum {
+enum {
 	SYSCON_IRCOUT_PD = (1 << 0),
 	SYSCIN_IRC_PD = (1 << 1),
 	SYSCON_FLASH_PD = (1 << 2),
@@ -515,27 +524,27 @@ typedef enum {
 	SYSCON_WDTOSC_PD = (1 << 6),
 	SYSCON_SYSPLL_PD = (1 << 7),
 	SYSCON_ACMP_PD = (1 << 15)
-} syscon_power_down_t;
+};
 
-void syscon_set_system_memory_remap(syscon_map_t map);
-syscon_map_t syscon_get_system_memory_remap(void);
+void syscon_set_system_memory_remap(enum syscon_map map);
+enum syscon_map syscon_get_system_memory_remap(void);
 void syscon_disable_reset(int peripheral);
 void syscon_enable_reset(int peripheral);
-void syscon_enable_pll(syscon_osc_t source, int m, int p);
+void syscon_enable_pll(enum syscon_osc source, int m, int p);
 void syscon_disable_pll(void);
-void syscon_enable_sys_osc(bool bypass, syscon_range_t freq);
+void syscon_enable_sys_osc(bool bypass, enum syscon_range freq);
 void syscon_disable_sys_osc(void);
-void syscon_enable_wdt_osc(syscon_fclkana_t fclkana, int divsel);
+void syscon_enable_wdt_osc(enum syscon_fclkana fclkana, int divsel);
 void syscon_disable_wdt_osc(void);
 int syscon_get_reset_status(int reset);
 void syscon_clear_reset_status(int reset);
-void syscon_set_system_clock(syscon_osc_t source, int div);
+void syscon_set_system_clock(enum syscon_osc source, int div);
 void syscon_enable_clock(int peripheral);
 void syscon_disable_clock(int peripheral);
 void syscon_set_usart_clock(int main_clock, int u_pclk);
-void syscon_set_clockout(syscon_osc_t source, int div);
-void syscon_set_external_trace_buffer_command(syscon_exttracecmd_t command);
-int syscon_get_gpio_status_at_por(void);
+void syscon_set_clockout(enum syscon_osc source, int div);
+void syscon_set_external_trace_buffer_command(enum syscon_exttracecmd command);
+int syscon_get_pio0_status_at_por(void);
 void syscon_set_ioconclkdiv(int num, int div);
 void syscon_set_bod_interrupt(int level);
 void syscon_enable_bod_reset(int level);
@@ -546,10 +555,10 @@ void syscon_enable_nmi(int source);
 void syscon_disable_nmi(void);
 void syscon_select_pins(int offset, int pins);
 void syscon_set_wakeup_interrupt(int interrupt);
-void syscon_disable_deep_sleep_power_down(syscon_power_down_t pd);
-void syscon_enable_deep_sleep_power_down(syscon_power_down_t pd);
-void syscon_disable_wakeup_power_down(syscon_power_down_t pd);
-void syscon_enable_wakeup_power_down(syscon_power_down_t pd);
-void syscon_disable_power_down(syscon_power_down_t pd);
-void syscon_enable_power_down(syscon_power_down_t pd);
+void syscon_disable_deep_sleep_power_down(int pd);
+void syscon_enable_deep_sleep_power_down(int pd);
+void syscon_disable_wakeup_power_down(int pd);
+void syscon_enable_wakeup_power_down(int pd);
+void syscon_disable_power_down(int pd);
+void syscon_enable_power_down(int pd);
 int syscon_get_device_id(void);
