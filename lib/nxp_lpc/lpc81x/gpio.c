@@ -21,18 +21,6 @@
 #include <iocon.h>
 #include <gpio.h>
 
-static volatile u32 * const pinassignp[] = {
-	&SWM_PINASSIGN0,
-	&SWM_PINASSIGN1,
-	&SWM_PINASSIGN2,
-	&SWM_PINASSIGN3,
-	&SWM_PINASSIGN4,
-	&SWM_PINASSIGN5,
-	&SWM_PINASSIGN6,
-	&SWM_PINASSIGN7,
-	&SWM_PINASSIGN8
-};
-
 static const int pinenable_bits[] = {
 	(1 << 0),
 	(1 << 1) | (1 << 7),
@@ -68,7 +56,7 @@ static volatile u32 * const ioconp[] = {
 	&IOCON_PIO0_17
 };
 
-static int swm_enable_fixed_pin_function(gpio_func_t func)
+static int swm_enable_fixed_pin_function(enum gpio_func func)
 {
 	int pin;
 
@@ -132,7 +120,7 @@ static void swm_disable_fixed_pin_function(int pins)
 		SWM_PINENABLE0 = r | d;
 }
 
-static int swm_enable_movable_function(gpio_func_t func, int pins)
+static int swm_enable_movable_function(enum gpio_func func, int pins)
 {
 	int p;
 	int r;
@@ -144,9 +132,9 @@ static int swm_enable_movable_function(gpio_func_t func, int pins)
 
 	if (func >= SWM_PINASSIGN_REGNUM * 4)
 		return 0;
-	r = *pinassignp[func / 4];
+	r = SWM_PINASSIGN(func / 4);
 	r &= ~(0xff << func % 4 * 8);
-	*pinassignp[func / 4] = r | p << func % 4 * 8;
+	SWM_PINASSIGN(func / 4) = r | p << func % 4 * 8;
 	
 	return 1 << p;
 }
@@ -161,7 +149,7 @@ static void swm_disable_movable_function(int pins)
 	int k;
 
 	for (i = 0; i < SWM_PINASSIGN_REGNUM; i++) {
-		r = *pinassignp[i];
+		r = SWM_PINASSIGN(i);
 		if (r == (int)0xffffffff)
 			continue;
 		d = 0;
@@ -177,7 +165,7 @@ static void swm_disable_movable_function(int pins)
 			}
 		}
 		if (d)
-			*pinassignp[i] = r | d;
+			SWM_PINASSIGN(i) = r | d;
 	}
 }
 
@@ -191,7 +179,7 @@ static void iocon_set_iocon(int iocon, int pins)
 	}
 }
 
-void gpio_config(gpio_func_t func, int iocon, int pins)
+void gpio_config(enum gpio_func func, int iocon, int pins)
 {
 	switch (func) {
 	case GPIO_OUTPUT:
@@ -224,7 +212,7 @@ void gpio_config(gpio_func_t func, int iocon, int pins)
 	}
 }
 
-void gpio_reconfig(gpio_func_t func, int iocon, int pins)
+void gpio_reconfig(enum gpio_func func, int iocon, int pins)
 {
 	switch (func) {
 	case GPIO_OUTPUT:
@@ -264,12 +252,12 @@ void gpio_reconfig(gpio_func_t func, int iocon, int pins)
 
 void gpio_set(int pins)
 {
-	GPIO_SET0 = pins;
+	GPIO_SET0 = pins & 0x3ffff;
 }
 
 void gpio_clear(int pins)
 {
-	GPIO_CLR0 = pins;
+	GPIO_CLR0 = pins & 0x3ffff;
 }
 
 int gpio_get(int pins)
@@ -279,15 +267,62 @@ int gpio_get(int pins)
 
 void gpio_toggle(int pins)
 {
-	GPIO_NOT0 = pins;
+	GPIO_NOT0 = pins & 0x3ffff;
 }
 
-int gpio_port_read(void)
+int gpio_read_port(void)
 {
 	return GPIO_PIN0;
 }
 
-void gpio_port_write(int data)
+void gpio_write_port(int data)
 {
-	GPIO_PIN0 = data;
+	GPIO_PIN0 = data & 0x3ffff;
+}
+
+void gpio_set_mask(int mask)
+{
+	GPIO_MASK0 = mask & 0x3ffff;
+}
+
+int gpio_read_masked_port(void)
+{
+	return GPIO_MPIN0;
+}
+
+void gpio_write_maksed_port(int data)
+{
+	GPIO_MPIN0 = data & 0x3ffff;
+}
+
+int gpio_read_pin_byte(int pin)
+{
+	if (pin < 0 || pin >= GPIO_MAXPIN)
+		return 0;
+
+	return GPIO_B(pin);
+}
+
+void gpio_write_pin_byte(int pin, int data)
+{
+	if (pin < 0 || pin >= GPIO_MAXPIN)
+		return;
+
+	GPIO_B(pin) = data;
+}
+
+int gpio_read_pin_word(int pin)
+{
+	if (pin < 0 || pin >= GPIO_MAXPIN)
+		return 0;
+
+	return GPIO_W(pin);
+}
+
+void gpio_write_pin_word(int pin, int data)
+{
+	if (pin < 0 || pin >= GPIO_MAXPIN)
+		return;
+
+	GPIO_W(pin) = data;
 }

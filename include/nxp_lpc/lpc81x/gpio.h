@@ -237,7 +237,7 @@ enum {
 	GPIO_FLOAT = 0
 };
 
-typedef enum {
+enum  gpio_func {
 	/* Movable functions */
 	GPIO_U0_TXD,
 	GPIO_U0_RXD,
@@ -290,13 +290,20 @@ typedef enum {
 	/* Standard I/O */
 	GPIO_OUTPUT,
 	GPIO_INPUT
-} gpio_func_t;
+};
 
-void gpio_config(gpio_func_t func, int iocon, int pins);
-void gpio_reconfig(gpio_func_t func, int iocon, int pins);
+void gpio_config(enum gpio_func func, int iocon, int pins);
+void gpio_reconfig(enum gpio_func func, int iocon, int pins);
 void gpio_set(int pins);
 void gpio_clear(int pins);
 int gpio_get(int pins);
 void gpio_toggle(int pins);
-int gpio_port_read(void);
-void gpio_port_write(int data);
+int gpio_read_port(void);
+void gpio_write_port(int data);
+void gpio_set_mask(int mask);
+int gpio_read_masked_port(void);
+void gpio_write_maksed_port(int data);
+int gpio_read_pin_byte(int pin);
+void gpio_write_pin_byte(int pin, int data);
+int gpio_read_pin_word(int pin);
+void gpio_write_pin_word(int pin, int data);
