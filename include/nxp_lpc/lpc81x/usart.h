@@ -147,6 +147,8 @@
 #define USART_STAT_RXIDLE		(1 << 1)
 #define USART_STAT_RXRDY		(1 << 0)
 
+#define USART_STAT_MASK			0xfd7f
+
 /* --- USART_INTENSET values ----------------------------------------------- */
 
 #define USART_INTENSET_RXNOISEEN	(1 << 15)
@@ -160,6 +162,8 @@
 #define USART_INTENSET_TXRDYEN		(1 << 2)
 #define USART_INTENSET_RXRDYEN		(1 << 0)
 
+#define USART_INTENSET_MASK		0xf965
+
 /* --- USART_INTENCLR values ----------------------------------------------- */
 
 #define USART_INTENCLR_RXNOISECLR	(1 << 15)
@@ -172,6 +176,8 @@
 #define USART_INTENCLR_DELTACTSCLR	(1 << 5)
 #define USART_INTENCLR_TXRDYCLR		(1 << 2)
 #define USART_INTENCLR_RXRDYCLR		(1 << 0)
+
+#define USART_INTENCLR_MASK		0xf965
 
 /* --- USART_RXDAT values -------------------------------------------------- */
 
@@ -199,6 +205,8 @@
 
 /* USART_BRG[15:0]: BRGVAL */
 
+#define USART_BRG_MASK			0xffff
+
 /* --- USART_INTSTAT values ------------------------------------------------ */
 
 #define USART_INTSTAT_RXNOISEINT	(1 << 15)
@@ -215,24 +223,24 @@
 /* --- Function prototypes ------------------------------------------------- */
 
 /* Device number */
-typedef enum {
+enum usart {
 	USART0,
 	USART1,
 	USART2
-} usart_t;
+};
 
 /* Parity */
-typedef enum {
+enum usart_parity {
 	USART_PARITY_NONE,
 	USART_ODD,
 	USART_EVEN
-} usart_parity_t;
+};
 
 /* Flow control */
-typedef enum {
+enum  usart_flowcontrol {
 	USART_FLOW_NONE,
 	USART_RTS_CTS
-} usart_flowcontrol_t;
+};
 
 /* Interrupt */
 enum {
@@ -248,34 +256,35 @@ enum {
 	USART_RX_NOISE = (1 << 15)
 };
 
-void usart_set_baudrate(usart_t usart, int u_pclk, int baud);
-void usart_set_databits(usart_t usart, int bits);
-void usart_set_stopbits(usart_t usart, int bits);
-void usart_set_parity(usart_t usart, usart_parity_t parity);
-void usart_set_flow_control(usart_t usart, usart_flowcontrol_t flowcontrol);
-void usart_init(usart_t usart, int u_pclk, int baud, int databits,
-		int stopbits, usart_parity_t parity,
-		usart_flowcontrol_t flowcontrol);
-void usart_enable(usart_t usart);
-void usart_disable(usart_t usart);
-void usart_enable_sync_mode(usart_t usart, bool master, bool rising_edge);
-void usart_disable_sync_mode(usart_t usart);
-void usart_send(usart_t usart, int data);
-int usart_recv(usart_t usart);
-void usart_send_blocking(usart_t usart, int data);
-int usart_recv_blocking(usart_t usart);
-void usart_enable_loopback(usart_t usart);
-void usart_disable_loopback(usart_t usart);
-void usart_enable_break(usart_t usart);
-void usart_disable_break(usart_t usart);
-void usart_enable_address_detect_mode(usart_t usart);
-void usart_disable_address_detect_mode(usart_t usart);
-void usart_disable_tx(usart_t usart);
-void usart_enable_tx(usart_t usart);
-void usart_enable_continuous_clock(usart_t usart, bool auto_clear);
-void usart_disable_continuous_clock(usart_t usart);
-void usart_enable_interrupt(usart_t usart, int interrupt);
-void usart_disable_interrupt(usart_t usart, int interrupt);
-int usart_get_interrupt_mask(usart_t usart, int interrupt);
-int usart_get_interrupt_status(usart_t usart, int interrupt);
-void usart_clear_interrupt(usart_t usart, int interrupt);
+void usart_set_baudrate(enum usart usart, int u_pclk, int baud);
+void usart_set_databits(enum usart usart, int bits);
+void usart_set_stopbits(enum usart usart, int bits);
+void usart_set_parity(enum usart usart, enum usart_parity parity);
+void usart_set_flow_control(enum usart usart,
+			    enum usart_flowcontrol flowcontrol);
+void usart_init(enum usart usart, int u_pclk, int baud, int databits,
+		int stopbits, enum usart_parity parity,
+		enum usart_flowcontrol flowcontrol);
+void usart_enable(enum usart usart);
+void usart_disable(enum usart usart);
+void usart_enable_sync_mode(enum usart usart, bool master, bool rising_edge);
+void usart_disable_sync_mode(enum usart usart);
+void usart_send(enum usart usart, int data);
+int usart_recv(enum usart usart);
+void usart_send_blocking(enum usart usart, int data);
+int usart_recv_blocking(enum usart usart);
+void usart_enable_loopback(enum usart usart);
+void usart_disable_loopback(enum usart usart);
+void usart_enable_break(enum usart usart);
+void usart_disable_break(enum usart usart);
+void usart_enable_address_detect_mode(enum usart usart);
+void usart_disable_address_detect_mode(enum usart usart);
+void usart_disable_tx(enum usart usart);
+void usart_enable_tx(enum usart usart);
+void usart_enable_continuous_clock(enum usart usart, bool auto_clear);
+void usart_disable_continuous_clock(enum usart usart);
+void usart_enable_interrupt(enum usart usart, int interrupt);
+void usart_disable_interrupt(enum usart usart, int interrupt);
+int usart_get_interrupt_mask(enum usart usart, int interrupt);
+int usart_get_interrupt_status(enum usart usart, int interrupt);
+void usart_clear_interrupt(enum usart usart, int interrupt);

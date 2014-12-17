@@ -19,7 +19,7 @@
 
 #include <usart.h>
 
-static int base_addr(usart_t usart)
+static int base_addr(enum usart usart)
 {
 	switch (usart) {
 	case USART0:
@@ -34,12 +34,13 @@ static int base_addr(usart_t usart)
 	return 0;
 }
 
-void usart_set_baudrate(usart_t usart, int u_pclk, int baud)
+void usart_set_baudrate(enum usart usart, int u_pclk, int baud)
 {
-	USART_BRG(base_addr(usart)) = u_pclk / (16 * baud) - 1;
+	USART_BRG(base_addr(usart)) = (u_pclk / (16 * baud) - 1) &
+		USART_BRG_MASK;
 }
 
-void usart_set_databits(usart_t usart, int bits)
+void usart_set_databits(enum usart usart, int bits)
 {
 	int base;
 	int r;
@@ -58,21 +59,21 @@ void usart_set_databits(usart_t usart, int bits)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_set_stopbits(usart_t usart, int bits)
+void usart_set_stopbits(enum usart usart, int bits)
 {
 	int base;
 	int r;
 
 	base = base_addr(usart);
 	r = USART_CFG(base);
-	if (bits == 2)
+	if (bits != 1)
 		r |= USART_CFG_STOPLEN;
 	else
 		r &= ~USART_CFG_STOPLEN;
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_set_parity(usart_t usart, usart_parity_t parity)
+void usart_set_parity(enum usart usart, enum usart_parity parity)
 {
 	int base;
 	int r;
@@ -90,23 +91,24 @@ void usart_set_parity(usart_t usart, usart_parity_t parity)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_set_flow_control(usart_t usart, usart_flowcontrol_t flowcontrol)
+void usart_set_flow_control(enum usart usart,
+			    enum usart_flowcontrol flowcontrol)
 {
 	int base;
 	int r;
 
 	base = base_addr(usart);
 	r = USART_CFG(base);
-	if (flowcontrol == USART_RTS_CTS)
+	if (flowcontrol != USART_FLOW_NONE)
 		r |= USART_CFG_CTSEN;
 	else
 		r &= ~USART_CFG_CTSEN;
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_init(usart_t usart, int u_pclk, int baud, int databits,
-		int stopbits, usart_parity_t parity,
-		usart_flowcontrol_t flowcontrol)
+void usart_init(enum usart usart, int u_pclk, int baud, int databits,
+		int stopbits, enum usart_parity parity,
+		enum usart_flowcontrol flowcontrol)
 {
 	int base;
 	int r;
@@ -114,7 +116,7 @@ void usart_init(usart_t usart, int u_pclk, int baud, int databits,
 	base = base_addr(usart);
 
 	/* Baud rate */
-	USART_BRG(base) = u_pclk / (16 * baud) - 1;
+	USART_BRG(base) = (u_pclk / (16 * baud) - 1) & USART_BRG_MASK;
 
 	r = USART_CFG(base);
 
@@ -130,7 +132,7 @@ void usart_init(usart_t usart, int u_pclk, int baud, int databits,
 	}
 
 	/* Stop bits */
-	if (stopbits == 2)
+	if (stopbits != 1)
 		r |= USART_CFG_STOPLEN;
 	else
 		r &= ~USART_CFG_STOPLEN;
@@ -146,7 +148,7 @@ void usart_init(usart_t usart, int u_pclk, int baud, int databits,
 	}
 
 	/* Flow control */
-	if (flowcontrol == USART_RTS_CTS)
+	if (flowcontrol != USART_FLOW_NONE)
 		r |= USART_CFG_CTSEN;
 	else
 		r &= ~USART_CFG_CTSEN;
@@ -157,7 +159,7 @@ void usart_init(usart_t usart, int u_pclk, int baud, int databits,
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_enable(usart_t usart)
+void usart_enable(enum usart usart)
 {
 	int base;
 	int r;
@@ -168,7 +170,7 @@ void usart_enable(usart_t usart)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_disable(usart_t usart)
+void usart_disable(enum usart usart)
 {
 	int base;
 	int r;
@@ -179,7 +181,7 @@ void usart_disable(usart_t usart)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_enable_sync_mode(usart_t usart, bool master, bool rising_edge)
+void usart_enable_sync_mode(enum usart usart, bool master, bool rising_edge)
 {
 	int base;
 	int r;
@@ -191,7 +193,7 @@ void usart_enable_sync_mode(usart_t usart, bool master, bool rising_edge)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_disable_sync_mode(usart_t usart)
+void usart_disable_sync_mode(enum usart usart)
 {
 	int base;
 	int r;
@@ -202,17 +204,17 @@ void usart_disable_sync_mode(usart_t usart)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_send(usart_t usart, int data)
+void usart_send(enum usart usart, int data)
 {
 	USART_TXDAT(base_addr(usart)) = data & USART_TXDAT_MASK;
 }
 
-int usart_recv(usart_t usart)
+int usart_recv(enum usart usart)
 {
 	return USART_RXDAT(base_addr(usart)) & USART_RXDAT_MASK;
 }
 
-void usart_send_blocking(usart_t usart, int data)
+void usart_send_blocking(enum usart usart, int data)
 {
 	int base;
 
@@ -222,7 +224,7 @@ void usart_send_blocking(usart_t usart, int data)
 	USART_TXDAT(base) = data & USART_TXDAT_MASK;
 }
 
-int usart_recv_blocking(usart_t usart)
+int usart_recv_blocking(enum usart usart)
 {
 	int base;
 
@@ -232,7 +234,7 @@ int usart_recv_blocking(usart_t usart)
 	return USART_RXDAT(base) & USART_RXDAT_MASK;
 }
 
-void usart_enable_loopback(usart_t usart)
+void usart_enable_loopback(enum usart usart)
 {
 	int base;
 	int r;
@@ -243,7 +245,7 @@ void usart_enable_loopback(usart_t usart)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_disable_loopback(usart_t usart)
+void usart_disable_loopback(enum usart usart)
 {
 	int base;
 	int r;
@@ -254,7 +256,7 @@ void usart_disable_loopback(usart_t usart)
 	USART_CFG(base) = r & USART_CFG_MASK;
 }
 
-void usart_enable_break(usart_t usart)
+void usart_enable_break(enum usart usart)
 {
 	int base;
 	int r;
@@ -265,7 +267,7 @@ void usart_enable_break(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_disable_break(usart_t usart)
+void usart_disable_break(enum usart usart)
 {
 	int base;
 	int r;
@@ -276,7 +278,7 @@ void usart_disable_break(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_enable_address_detect_mode(usart_t usart)
+void usart_enable_address_detect_mode(enum usart usart)
 {
 	int base;
 	int r;
@@ -287,7 +289,7 @@ void usart_enable_address_detect_mode(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_disable_address_detect_mode(usart_t usart)
+void usart_disable_address_detect_mode(enum usart usart)
 {
 	int base;
 	int r;
@@ -298,7 +300,7 @@ void usart_disable_address_detect_mode(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_disable_tx(usart_t usart)
+void usart_disable_tx(enum usart usart)
 {
 	int base;
 	int r;
@@ -309,7 +311,7 @@ void usart_disable_tx(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_enable_tx(usart_t usart)
+void usart_enable_tx(enum usart usart)
 {
 	int base;
 	int r;
@@ -320,7 +322,7 @@ void usart_enable_tx(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_enable_continuous_clock(usart_t usart, bool auto_clear)
+void usart_enable_continuous_clock(enum usart usart, bool auto_clear)
 {
 	int base;
 	int r;
@@ -331,7 +333,7 @@ void usart_enable_continuous_clock(usart_t usart, bool auto_clear)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_disable_continuous_clock(usart_t usart)
+void usart_disable_continuous_clock(enum usart usart)
 {
 	int base;
 	int r;
@@ -342,27 +344,27 @@ void usart_disable_continuous_clock(usart_t usart)
 	USART_CTL(base) = r & USART_CTL_MASK;
 }
 
-void usart_enable_interrupt(usart_t usart, int interrupt)
+void usart_enable_interrupt(enum usart usart, int interrupt)
 {
-	USART_INTENSET(base_addr(usart)) = interrupt;
+	USART_INTENSET(base_addr(usart)) = interrupt & USART_INTENSET_MASK;
 }
 
-void usart_disable_interrupt(usart_t usart, int interrupt)
+void usart_disable_interrupt(enum usart usart, int interrupt)
 {
-	USART_INTENCLR(base_addr(usart)) = interrupt;
+	USART_INTENCLR(base_addr(usart)) = interrupt & USART_INTENCLR_MASK;
 }
 
-int usart_get_interrupt_mask(usart_t usart, int interrupt)
+int usart_get_interrupt_mask(enum usart usart, int interrupt)
 {
 	return USART_INTENSET(base_addr(usart)) & interrupt;
 }
 
-int usart_get_interrupt_status(usart_t usart, int interrupt)
+int usart_get_interrupt_status(enum usart usart, int interrupt)
 {
 	return USART_INTSTAT(base_addr(usart)) & interrupt;
 }
 
-void usart_clear_interrupt(usart_t usart, int interrupt)
+void usart_clear_interrupt(enum usart usart, int interrupt)
 {
-	USART_STAT(base_addr(usart)) = interrupt;
+	USART_STAT(base_addr(usart)) = interrupt & USART_STAT_MASK;
 }
