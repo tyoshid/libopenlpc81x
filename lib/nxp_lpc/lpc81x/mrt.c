@@ -19,17 +19,17 @@
 
 #include <mrt.h>
 
-void mrt_set_mode(mrt_channel_t mrt, mrt_mode_t mode)
+void mrt_set_mode(enum mrt_channel mrt, enum mrt_mode mode)
 {
 	MRT_CTRL(mrt) = mode;
 }
 
-void mrt_set_interval(mrt_channel_t mrt, int ivalue)
+void mrt_set_interval(enum mrt_channel mrt, int ivalue)
 {
 	MRT_INTVAL(mrt) = ivalue;
 }
 
-int mrt_get_timer(mrt_channel_t mrt)
+int mrt_get_timer(enum mrt_channel mrt)
 {
 	return MRT_TIMER(mrt);
 }
@@ -78,12 +78,12 @@ void mrt_clear_interrupt(int interrupt)
 	MRT_IRQ_FLAG = interrupt;
 }
 
-int mrt_get_channel_status(mrt_channel_t mrt, int status)
+int mrt_get_channel_status(enum mrt_channel mrt, int status)
 {
 	return MRT_STAT(mrt) & status;
 }
 
-void mrt_clear_channel_status(mrt_channel_t mrt, int status)
+void mrt_clear_channel_status(enum mrt_channel mrt, int status)
 {
 	MRT_STAT(mrt) = status;
 }

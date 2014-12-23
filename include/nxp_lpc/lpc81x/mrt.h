@@ -119,19 +119,19 @@
 /* --- Function prototypes ------------------------------------------------- */
 
 /* Channel */
-typedef enum {
+enum  mrt_channel {
 	MRT0,
 	MRT1,
 	MRT2,
 	MRT3
-} mrt_channel_t;
+};
 
 /* Timer mode */
-typedef enum {
+enum  mrt_mode {
 	MRT_REPEAT = (0 << 1),
 	MRT_ONE_SHOT = (1 << 1),
 	MRT_BUS_STALL = (2 << 1)
-} mrt_mode_t;
+};
 
 /* Interrupt */
 enum {
@@ -147,14 +147,14 @@ enum {
 	MRT_RUN = (1 << 1)
 };
 
-void mrt_set_mode(mrt_channel_t mrt, mrt_mode_t mode);
-void mrt_set_interval(mrt_channel_t mrt, int ivalue);
-int mrt_get_timer(mrt_channel_t mrt);
+void mrt_set_mode(enum mrt_channel mrt, enum mrt_mode mode);
+void mrt_set_interval(enum mrt_channel mrt, int ivalue);
+int mrt_get_timer(enum mrt_channel mrt);
 void mrt_enable_interrupt(int interrupt);
 void mrt_disable_interrupt(int interrupt);
 int mrt_get_interrupt_mask(int interrupt);
 int mrt_get_interrupt_status(int interrupt);
 void mrt_clear_interrupt(int interrupt);
-int mrt_get_channel_status(mrt_channel_t mrt, int status);
-void mrt_clear_channel_status(mrt_channel_t mrt, int status);
+int mrt_get_channel_status(enum mrt_channel mrt, int status);
+void mrt_clear_channel_status(enum mrt_channel mrt, int status);
 int mrt_get_idle_channel(void);
