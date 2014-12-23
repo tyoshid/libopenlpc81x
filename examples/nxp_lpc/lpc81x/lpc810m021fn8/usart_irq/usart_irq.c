@@ -99,8 +99,9 @@ void uart0_isr(void)
 
 	/* Rx, Tx queue */
 	static int queue[QUEUESIZE];
-	static int head;
-	static int tail;
+	static int head;	/* read pointer */
+	static int tail;	/* write pointer */
+	static int qlen;
 
 	/* Get interrupt mask. */
 	m = usart_get_interrupt_mask(USART0, USART_RXRDY | USART_TXRDY);
@@ -110,13 +111,14 @@ void uart0_isr(void)
 
 	/* RxRDY */
 	if (m & s & USART_RXRDY) {
-		if ((tail + 1) % QUEUESIZE != head) {
+		if (qlen < QUEUESIZE) {
 			/* LED1 on/off */
 			gpio_toggle(PIO0_2);
 
 			/* Receive data. */
 			queue[tail++] = usart_recv(USART0);
 			tail %= QUEUESIZE;
+			qlen++;
 
 			/* Enable transmit interrupt. */
 			if (!(m & USART_TXRDY))
@@ -131,13 +133,14 @@ void uart0_isr(void)
 
 	/* TxRDY */
 	if (m & s & USART_TXRDY) {
-		if (head != tail) {
+		if (qlen) {
 			/* LED2 on/off */
 			gpio_toggle(PIO0_3);
 
 			/* Send data. */
 			usart_send(USART0, queue[head++]);
 			head %= QUEUESIZE;
+			qlen--;
 		} else {
 			/* No more data */
 			/* Disable transmit interrupt. */
