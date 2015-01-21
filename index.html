@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="description" content="Libopenlpc81x : NXP LPC81x peripheral library">
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Libopenlpc81x</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a id="libopenlpc81x" class="anchor" href="#libopenlpc81x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Libopenlpc81x</h1>
+
+<p>Libopenlpc81x is a peripheral library for NXP LPC81x microcontrollers.
+The LPC81x microcontroller family are based on the ARM Cortex-M0+ core.</p>
+
+<p>This library is used with ARM GCC, ARM binutils, and newlib C library.
+They form a toolchain for the LPC81x.</p>
+
+<p>This package includes a in-system programming utility (<code>usart-util</code>) and some examples.</p>
+
+<h2>
+<a id="building-libopenlpc81x" class="anchor" href="#building-libopenlpc81x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building libopenlpc81x</h2>
+
+<p>You need to install the ARM bare-metal (no OS) toolchain (<a href="https://launchpad.net/gcc-arm-embedded">GNU Tools for ARM Embedded Processors</a>).</p>
+
+<p>To build libopenlpc81x, use the following sequence of commands:</p>
+
+<pre><code>$ git clone https://github.com/tyoshid/libopenlpc81x.git
+$ cd libopenlpc81x
+$ make
+</code></pre>
+
+<p>The <code>make</code> step will build the target library (<code>lib/nxp_lpc/lpc81x/liblpc81x.a</code>) and the host utility (<code>tools/nxp_lpc/lpc81x/usart-util/usart-util</code>).</p>
+
+<h2>
+<a id="compiling-and-linking" class="anchor" href="#compiling-and-linking" aria-hidden="true"><span class="octicon octicon-link"></span></a>Compiling and Linking</h2>
+
+<h3>
+<a id="architecture" class="anchor" href="#architecture" aria-hidden="true"><span class="octicon octicon-link"></span></a>Architecture</h3>
+
+<p>"<code>-mthumb -mcpu=cortex-m0plus</code>"</p>
+
+<p>The ARM toolchain supports Cortex-A/R/M architectures.
+These options specify the ARM Cortex-M0+ core.
+The <em>ARMv6-M</em> architecture is selected.</p>
+
+<h3>
+<a id="header-files" class="anchor" href="#header-files" aria-hidden="true"><span class="octicon octicon-link"></span></a>Header files</h3>
+
+<p>"<code>-I</code><em>dir</em>"</p>
+
+<p>The LPC81x peripheral header files are placed in <code>include/nxp_lpc/lpc81x</code>.
+They refer to the common header files in <code>include</code>.</p>
+
+<h3>
+<a id="library" class="anchor" href="#library" aria-hidden="true"><span class="octicon octicon-link"></span></a>Library</h3>
+
+<p>"<code>-L</code><em>dir</em><code>-llpc81x</code>"</p>
+
+<p><code>liblpc81x.a</code> is generated in <code>lib/nxp_lpc/lpc81x</code>.</p>
+
+<h3>
+<a id="linker-script" class="anchor" href="#linker-script" aria-hidden="true"><span class="octicon octicon-link"></span></a>Linker script</h3>
+
+<p>"<code>-T</code><em>script</em><code>-nostartfiles</code>"</p>
+
+<p>The library includes its own startup code (reset handler) and the vector table (<code>lib/nxp_lpc/lpc81x/vector.c</code>).
+There are three linker scripts, <code>lpc810.x</code>, <code>lpc811.x</code>, and <code>lpc812.x</code> in <code>lib/nxp_lpc/lpx81x/ldscripts</code>.
+The difference between the three is only the size of memory.</p>
+
+<p>The linker issues an error message if the code or (global and static) data size is too large, but it can't detect a too large automatic variable (stack overflow).</p>
+
+<hr>
+
+<p>Here is an example:</p>
+
+<pre><code>$ arm-none-eabi-gcc -mthumb -mcpu=cortex-m0plus -Ilibopenlpc81x/include -Ilibopenlpc81x/include/nxp_lpc/lpc81x -o test.elf test.c -Llibopenlpc81x/lib/nxp_lpc/lpc81x -llpc81x -T ldscripts/lpc810.x -nostartfiles
+</code></pre>
+
+<h2>
+<a id="downloading" class="anchor" href="#downloading" aria-hidden="true"><span class="octicon octicon-link"></span></a>Downloading</h2>
+
+<p>The LPC81x always starts from the on-chip boot ROM after reset.
+The boot loader in the boot ROM can execute the ISP command handler or the user application code.</p>
+
+<p>The ISP command handler is executed in the following cases:</p>
+
+<ul>
+<li>No valid user code is present.</li>
+<li>The ISP entry pin is connected to LOW.</li>
+</ul>
+
+<p>The boot loader verifies the vector table entry 7 (0x0000001c).
+If it contain the 2's complement of the checksum of the vector table entries 0 through 6, the boot loader judge that a valid user code is present.</p>
+
+<p>The boot loader can automatically determine the baud rate of the serial port (auto-baud).</p>
+
+<p>The data stream is in plain binary format, not in uuencode format.</p>
+
+<p>See "<em>UM10601 LPC81x User manual</em>, Chapter21: LPC81x Boot ROM".</p>
+
+<p><code>usart-util</code> can download a binary image to the LPC81x using the ISP commands.
+It calculates and sets the checksum.
+The host serial device can be specified with <code>-d</code>.</p>
+
+<p>You can use <code>objcopy</code> to generate a raw binary file:</p>
+
+<pre><code>$ arm-none-eabi-objcopy -O binary test.elf test.bin
+</code></pre>
+
+<p>Here is an example:</p>
+
+<pre><code># libopenlpc81x/tools/nxp_lpc/lpc81x/usart-util/usart_util -d /dev/ttyUSB1 -D test.bin
+ISP version 13.4
+PID 0x8100  LPC810M021FN8
+Checksum = 0xeffff9bb
+CRP: NONE
+wrote 1220 bytes
+#
+</code></pre>
+
+<h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+
+<p>You can use <code>make</code> to generate the binary file:</p>
+
+<pre><code>$ cd examples/nxp_lpc/lpc81x/lpc810m021fn8/miniblink
+$ make -s
+  miniblink.c
+  miniblink.elf
+   text        data     bss     dec     hex filename
+    972           0       4     976     3d0 miniblink.elf
+  miniblink.bin
+  miniblink.list
+$ 
+</code></pre>
+
+<p>You can say <code>make flash</code> to download the binary file.
+The environment variable <code>USARTUTIL_DEVICE</code> can be used to specify the host serial device:</p>
+
+<pre><code>$ export USARTUTIL_DEVICE=/dev/ttyUSB1
+$ su
+Password:
+# make -s flash
+ISP version 13.4
+PID 0x8100  LPC810M021FN8
+Checksum = 0xeffff9bb
+CRP: NONE
+wrote 972 bytes
+#
+</code></pre>
+
+<h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span class="octicon octicon-link"></span></a>License</h2>
+
+<h3>
+<a id="hardware" class="anchor" href="#hardware" aria-hidden="true"><span class="octicon octicon-link"></span></a>Hardware</h3>
+
+<p>The hardware is released under the Creative Commons Attribution-ShareAlike 4.0 International License.</p>
+
+<p>See <a href="http://creativecommons.org/licenses/by-sa/4.0/">http://creativecommons.org/licenses/by-sa/4.0/</a>.</p>
+
+<h3>
+<a id="software" class="anchor" href="#software" aria-hidden="true"><span class="octicon octicon-link"></span></a>Software</h3>
+
+<p>The software is released under the terms of GNU General Public License (GPL), version 3 or later.</p>
+
+<p>See <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a> or COPYING.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
