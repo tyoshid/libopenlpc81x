@@ -127,6 +127,13 @@ If it contain the 2's complement of the checksum of the vector table entries 0 t
 It calculates and sets the checksum.
 The host serial device can be specified with <code>-d</code>.</p>
 
+<p>You can use a USB to serial module, like this:</p>
+
+<p><img src="usb_serial.jpg" width="320" height="206" alt="USB to serial module"></p>
+
+<p>It is a <abbr title="Future Technology Devices International Ltd.">FTDI</abbr> <i>FT232RL</i> module 
+(3.3V I/O).</p>
+
 <p>You can use <code>objcopy</code> to generate a raw binary file:</p>
 
 <pre><code>$ arm-none-eabi-objcopy -O binary test.elf test.bin
