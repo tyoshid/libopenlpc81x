@@ -34,13 +34,27 @@
         <h1>
 <a id="libopenlpc81x" class="anchor" href="#libopenlpc81x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Libopenlpc81x</h1>
 
-<p>Libopenlpc81x is a peripheral library for NXP LPC81x microcontrollers.
+<p>Libopenlpc81x is a peripheral library for <abbr title="NXP Semiconductors">NXP</abbr> LPC81x microcontrollers.
 The LPC81x microcontroller family are based on the ARM Cortex-M0+ core.</p>
 
 <p>This library is used with ARM GCC, ARM binutils, and newlib C library.
 They form a toolchain for the LPC81x.</p>
 
 <p>This package includes a in-system programming utility (<code>usart-util</code>) and some examples.</p>
+
+<h2><a href="directory_tree.html" name="files">Files</a></h2>
+
+<pre>
+<!a href="libopenlpc81x.html">libopenlpc81x<!/a>
+ |
+ |-- examples/ --- nxp_lpc/ --- lpc81x/ --- <!a href="examples/nxp_lpc/lpc81x/lpc810m021fn8/lpc810m021fn8.html">lpc810m021fn8/<!/a>
+ |
+ |-- <!a href="include/include.html">include/<!/a> --- nxp_lpc/ --- <!a href="include/nxp_lpc/lpc81x/lpc81x.html">lpc81x/<!/a>
+ |
+ |-- lib/ --- nxp_lpc/ --- <!a href="lib/nxp_lpc/lpc81x/lpc81x.html">lpc81x/<!/a> --- <!a href="lib/nxp_lpc/lpc81x/ldscripts/ldscripts.html">ldscripts/<!/a>
+ |
+ `-- tools/ --- nxp_lpc/ --- lpc81x/ --- <!a href="tools/nxp_lpc/lpc81x/usart-util/usart-util.html">usart-util/<!/a>
+</pre>
 
 <h2>
 <a id="building-libopenlpc81x" class="anchor" href="#building-libopenlpc81x" aria-hidden="true"><span class="octicon octicon-link"></span></a>Building libopenlpc81x</h2>
@@ -129,7 +143,7 @@ The host serial device can be specified with <code>-d</code>.</p>
 
 <p>You can use a USB to serial module, like this:</p>
 
-<p><img src="usb_serial.jpg" width="320" height="206" alt="USB to serial module"></p>
+<p><img src="usb_serial.jpg" alt="USB to serial module"></p>
 
 <p>It is a <abbr title="Future Technology Devices International Ltd.">FTDI</abbr> <i>FT232RL</i> module 
 (3.3V I/O).</p>
@@ -151,7 +165,8 @@ wrote 1220 bytes
 </code></pre>
 
 <h2>
-<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>Examples</h2>
+<a id="examples" class="anchor" href="#examples" aria-hidden="true"><span class="octicon octicon-link"></span></a>
+<!a href="examples/nxp_lpc/lpc81x/lpc810m021fn8/lpc810m021fn8.html">Examples<!/a></h2>
 
 <p>You can use <code>make</code> to generate the binary file:</p>
 
