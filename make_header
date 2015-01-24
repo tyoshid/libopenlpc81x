@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Copyright 2014 Toshiaki Yoshida <yoshida@mpc.net>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+c=`pwd`
+t=$c
+for i in `echo $0 | sed "s/\// /g"`
+do
+    if [ "${i}" = ".." ] ; then
+	t=${t%/*}
+    fi
+done
+if [ "$t" = "$c" ] ; then
+    p=""
+else
+    p=${c#${t}/}
+fi
+
+r="${0%/*}/"
+d=$t
+echo "<h1><a href=\"${r}libopenlpc81x.html\">libopenlpc81x</a>/"
+for i in `echo $p | sed "s/\// /g"`
+do
+    d=${d}/${i}
+    r=${r#*/}
+    if [ \( "${d}" != "${c}" -a -f "${d}/${i}.html" \) -o \( "${d}" = "${c}" -a -n "$1" \) ] ; then
+	if [ "${i}" = "lpc810m021fn8" ] ; then
+	    echo "<a href=\"${r}${i}.html#examples\">${i}</a>/"
+	else
+	    echo "<a href=\"${r}${i}.html\">${i}</a>/"
+	fi
+    else
+	echo "${i}/"
+    fi
+done
+
+echo "${1}</h1>"

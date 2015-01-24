@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Makefile</title>
+<link href="stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="./libopenlpc81x.html">libopenlpc81x</a>/
+Makefile</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">01:</span> <span class="comment"># Makefile for libopenlpc81x</span>
+<span class="linenum">02:</span> 
+<span class="linenum">03:</span> <span class="comment"># Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">04:</span> 
+<span class="linenum">05:</span> <span class="comment"># This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">06:</span> <span class="comment"># it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">07:</span> <span class="comment"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">08:</span> <span class="comment"># (at your option) any later version.</span>
+<span class="linenum">09:</span> 
+<span class="linenum">10:</span> <span class="comment"># This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">11:</span> <span class="comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">12:</span> <span class="comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">13:</span> <span class="comment"># GNU General Public License for more details.</span>
+<span class="linenum">14:</span> 
+<span class="linenum">15:</span> <span class="comment"># You should have received a copy of the GNU General Public License</span>
+<span class="linenum">16:</span> <span class="comment"># along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">17:</span> 
+<span class="linenum">18:</span> <span class="variable"><a name="18">LIBS</a></span><span class="variable">            </span><span class="symbol">=</span><span class="normal"> lib/nxp_lpc/lpc81x</span>
+<span class="linenum">19:</span> <span class="variable"><a name="19">TOOLS</a></span><span class="variable">           </span><span class="symbol">=</span><span class="normal"> tools/nxp_lpc/lpc81x/usart-util</span>
+<span class="linenum">20:</span> 
+<span class="linenum">21:</span> <span class="variable"><a name="21">EXAMPLES</a></span><span class="variable">        </span><span class="symbol">=</span><span class="normal"> examples/nxp_lpc/lpc81x/lpc810m021fn8/miniblink \</span>
+<span class="linenum">22:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/fancyblink \</span>
+<span class="linenum">23:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/button \</span>
+<span class="linenum">24:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/pinint \</span>
+<span class="linenum">25:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/usart \</span>
+<span class="linenum">26:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/usart_irq \</span>
+<span class="linenum">27:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/sct \</span>
+<span class="linenum">28:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/sct_pwm \</span>
+<span class="linenum">29:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/piezo \</span>
+<span class="linenum">30:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/rc_servo \</span>
+<span class="linenum">31:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/mrt \</span>
+<span class="linenum">32:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/wwdt \</span>
+<span class="linenum">33:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/wkt \</span>
+<span class="linenum">34:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/systick \</span>
+<span class="linenum">35:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/i2c_rom \</span>
+<span class="linenum">36:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/i2c_proximity \</span>
+<span class="linenum">37:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/spi_rom \</span>
+<span class="linenum">38:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/spi_barometer \</span>
+<span class="linenum">39:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/acmp \</span>
+<span class="linenum">40:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/crc \</span>
+<span class="linenum">41:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/flashcon \</span>
+<span class="linenum">42:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/flash_iap \</span>
+<span class="linenum">43:</span> <span class="normal">                  examples/nxp_lpc/lpc81x/lpc810m021fn8/rom_api</span>
+<span class="linenum">44:</span> 
+<span class="linenum">45:</span> <span class="keyword">ifeq</span><span class="normal"> ($(</span><span class="usertype">MAKECMDGOALS</span><span class="normal">), clean_example)</span>
+<span class="linenum">46:</span> <span class="variable"><a name="46">EXAMPLEGOAL</a></span><span class="variable">     </span><span class="symbol">=</span><span class="normal"> clean</span>
+<span class="linenum">47:</span> <span class="keyword">endif</span>
+<span class="linenum">48:</span> 
+<span class="linenum">49:</span> <span class="string">.PHONY</span><span class="normal">: all clean $(</span><span class="variable"><a href="#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="#19">TOOLS</a></span><span class="normal">)</span>
+<span class="linenum">50:</span> 
+<span class="linenum">51:</span> <span class="symbol">all clean</span><span class="normal">: $(</span><span class="variable"><a href="#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="#19">TOOLS</a></span><span class="normal">)</span>
+<span class="linenum">52:</span> 
+<span class="linenum">53:</span> <span class="normal">$(</span><span class="variable"><a href="#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="#19">TOOLS</a></span><span class="normal">):</span>
+<span class="linenum">54:</span> <span class="type">        @</span><span class="normal">echo "-- </span><span class="preproc">$@</span><span class="normal"> --"</span>
+<span class="linenum">55:</span> <span class="type">        @</span><span class="normal">$(</span><span class="usertype">MAKE</span><span class="normal">) -C </span><span class="preproc">$@</span><span class="normal"> -s $(</span><span class="usertype">MAKECMDGOALS</span><span class="normal">)</span>
+<span class="linenum">56:</span> 
+<span class="linenum">57:</span> <span class="string">.PHONY</span><span class="normal">: example clean_example $(</span><span class="variable"><a href="#21">EXAMPLES</a></span><span class="normal">)</span>
+<span class="linenum">58:</span> 
+<span class="linenum">59:</span> <span class="symbol">example clean_example</span><span class="normal">: $(</span><span class="variable"><a href="#21">EXAMPLES</a></span><span class="normal">)</span>
+<span class="linenum">60:</span> 
+<span class="linenum">61:</span> <span class="normal">$(</span><span class="variable"><a href="#21">EXAMPLES</a></span><span class="normal">):</span>
+<span class="linenum">62:</span> <span class="type">        @</span><span class="normal">echo "-- </span><span class="preproc">$@</span><span class="normal"> --"</span>
+<span class="linenum">63:</span> <span class="type">        @</span><span class="normal">$(</span><span class="usertype">MAKE</span><span class="normal">) -C </span><span class="preproc">$@</span><span class="normal"> -s $(</span><span class="variable"><a href="#46">EXAMPLEGOAL</a></span><span class="normal">)</span>
+<span class="linenum">64:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

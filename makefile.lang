@@ -1,0 +1,54 @@
+# definitions for Makefile
+
+# Copyright 2014 Toshiaki Yoshida <yoshida@mpc.net>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# comment
+environment comment start '^#' begin
+  include "url.lang"
+  include "todo.lang"
+end
+
+# dollar sign
+specialchar = "$$"
+
+# auto variables
+preproc = "$@|$%|$<|$?|$^|$+|$*"
+
+(normal, preproc) = `(\$\()(@D|@F|\*D|\*F|%D|%F|<D|<F|\^D|\^F|\+D|\+F|\?D|\?F|@|\*|%|<|\^|\+|\?)`
+
+# special variables
+(normal, usertype) = `(\$\()(MAKEFILES|VPATH|SHELL|MAKESHELL|MAKELEVEL|MAKEFLAGS|MAKECMDGOALS|MAKE|CURDIR|SUFFIXES|\.LIBPATTERNS)`
+
+# functions
+(normal, function) = `(\$\()(subst |patsubst |strip |findstring |filter-out |filter |sort |dir |notdir |suffix |basename |addsuffix | addprefix |join |words |wordlist |word |firstword |wildcard |error |warning |shell |origin |foreach |call)`
+
+# variables
+(normal, variable) = `(\$\()([^:#=[:space:]\)]+)`
+
+# setting variables
+(variable, symbol) = `(^[^:#=[:space:]]+[[:space:]]*)([:\+\?]?=)`
+
+# directives
+keyword = '^(define|endef|ifdef|ifndef|ifeq|ifneq|else|endif|include|-include|sinclude|override|export|unexport|vpath)'
+
+# special targets
+string = '^(\.PHONY|\.SUFFIXES|\.DEFAULT|\.PRECIOUS|\.INTERMEDIATE|\.SECONDARY|\.DELETE_ON_ERROR|\.IGNORE|\.SILENT|\.EXPORT_ALL_VARIABLES|\.NOTPARALLEL)(?=[[:space:]]*:)'
+
+# targets
+symbol = '^[^:#=[:space:]][^#=]*(?=:)'
+
+# no echoing
+type = '^        @'
