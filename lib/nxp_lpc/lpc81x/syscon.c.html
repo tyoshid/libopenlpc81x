@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>syscon.c</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+lib/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+syscon.c</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * SYSCON functions</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;syscon.h&gt;</span>
+<span class="linenum">021:</span> 
+<span class="linenum">022:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="22">syscon_set_system_memory_remap</a></span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#413">syscon_map</a></span><span class="normal"> map</span><span class="symbol">)</span>
+<span class="linenum">023:</span> <span class="cbracket">{</span>
+<span class="linenum">024:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#95">SYSCON_SYSMEMREMAP</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> map</span><span class="symbol">;</span>
+<span class="linenum">025:</span> <span class="cbracket">}</span>
+<span class="linenum">026:</span> 
+<span class="linenum">027:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#413">syscon_map</a></span><span class="normal"> </span><span class="function"><a name="27">syscon_get_system_memory_remap</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">028:</span> <span class="cbracket">{</span>
+<span class="linenum">029:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#95">SYSCON_SYSMEMREMAP</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#147">SYSCON_SYSMEMREMAP_MAP1</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">030:</span> <span class="normal">                                     </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#148">SYSCON_SYSMEMREMAP_MAP0</a></span><span class="symbol">);</span>
+<span class="linenum">031:</span> <span class="cbracket">}</span>
+<span class="linenum">032:</span> 
+<span class="linenum">033:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function"><a name="33">peripheral_to_reset</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> peripheral</span><span class="symbol">)</span>
+<span class="linenum">034:</span> <span class="cbracket">{</span>
+<span class="linenum">035:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> reset</span><span class="symbol">;</span>
+<span class="linenum">036:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">037:</span> <span class="normal">        </span><span class="keyword">static</span><span class="normal"> </span><span class="keyword">const</span><span class="normal"> </span><span class="type">int</span><span class="normal"> peripheral_reset</span><span class="symbol">[]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">038:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">039:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">040:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">041:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#158">SYSCON_PRESETCTRL_FLASH_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">042:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">043:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#163">SYSCON_PRESETCTRL_I2C_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">044:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#159">SYSCON_PRESETCTRL_GPIO_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">045:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">046:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#161">SYSCON_PRESETCTRL_SCT_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">047:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#160">SYSCON_PRESETCTRL_WKT_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">048:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#162">SYSCON_PRESETCTRL_MRT_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">049:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#169">SYSCON_PRESETCTRL_SPI0_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">050:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#168">SYSCON_PRESETCTRL_SPI1_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">051:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">052:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#166">SYSCON_PRESETCTRL_UART0_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">053:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#165">SYSCON_PRESETCTRL_UART1_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">054:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#164">SYSCON_PRESETCTRL_UART2_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">055:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">056:</span> <span class="normal">                </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">057:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#157">SYSCON_PRESETCTRL_ACMP_RST_N</a></span><span class="symbol">,</span>
+<span class="linenum">058:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#167">SYSCON_PRESETCTRL_UARTFRG_RST_N</a></span>
+<span class="linenum">059:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">060:</span> 
+<span class="linenum">061:</span> <span class="normal">        reset </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">062:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)(</span><span class="keyword">sizeof</span><span class="symbol">(</span><span class="normal">peripheral_reset</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> </span><span class="keyword">sizeof</span><span class="symbol">(</span><span class="type">int</span><span class="symbol">));</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">063:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">peripheral </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i</span><span class="symbol">))</span>
+<span class="linenum">064:</span> <span class="normal">                        reset </span><span class="symbol">|=</span><span class="normal"> peripheral_reset</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">];</span>
+<span class="linenum">065:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">066:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> reset</span><span class="symbol">;</span>
+<span class="linenum">067:</span> <span class="cbracket">}</span>
+<span class="linenum">068:</span> 
+<span class="linenum">069:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="69">syscon_disable_reset</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> peripheral</span><span class="symbol">)</span>
+<span class="linenum">070:</span> <span class="cbracket">{</span>
+<span class="linenum">071:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#96">SYSCON_PRESETCTRL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="function"><a href="syscon.c.html#33">peripheral_to_reset</a></span><span class="symbol">(</span><span class="normal">peripheral</span><span class="symbol">);</span>
+<span class="linenum">072:</span> <span class="cbracket">}</span>
+<span class="linenum">073:</span> 
+<span class="linenum">074:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="74">syscon_enable_reset</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> peripheral</span><span class="symbol">)</span>
+<span class="linenum">075:</span> <span class="cbracket">{</span>
+<span class="linenum">076:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#96">SYSCON_PRESETCTRL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="function"><a href="syscon.c.html#33">peripheral_to_reset</a></span><span class="symbol">(</span><span class="normal">peripheral</span><span class="symbol">);</span>
+<span class="linenum">077:</span> <span class="cbracket">}</span>
+<span class="linenum">078:</span> 
+<span class="linenum">079:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="79">syscon_enable_pll</a></span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#454">syscon_osc</a></span><span class="normal"> source</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> m</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> p</span><span class="symbol">)</span>
+<span class="linenum">080:</span> <span class="cbracket">{</span>
+<span class="linenum">081:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> osc</span><span class="symbol">;</span>
+<span class="linenum">082:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> psel</span><span class="symbol">;</span>
+<span class="linenum">083:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> msel</span><span class="symbol">;</span>
+<span class="linenum">084:</span> 
+<span class="linenum">085:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">source</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">086:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#455">SYSCON_IRC</a></span><span class="symbol">:</span>
+<span class="linenum">087:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#225">SYSCON_SYSPLLCLKSEL_SEL_IRC</a></span><span class="symbol">;</span>
+<span class="linenum">088:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">089:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#456">SYSCON_XTAL</a></span><span class="symbol">:</span>
+<span class="linenum">090:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#226">SYSCON_SYSPLLCLKSEL_SEL_SYSOSC</a></span><span class="symbol">;</span>
+<span class="linenum">091:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">092:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#457">SYSCON_CLKIN</a></span><span class="symbol">:</span>
+<span class="linenum">093:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#227">SYSCON_SYSPLLCLKSEL_SEL_CLKIN</a></span><span class="symbol">;</span>
+<span class="linenum">094:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">095:</span> <span class="label">        default:</span>
+<span class="linenum">096:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">097:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">098:</span> 
+<span class="linenum">099:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">psel </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> psel </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">4</span><span class="normal"> </span><span class="symbol">&amp;&amp;</span><span class="normal"> p </span><span class="symbol">!=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> psel</span><span class="symbol">;</span><span class="normal"> psel</span><span class="symbol">++)</span>
+<span class="linenum">100:</span> <span class="normal">                </span><span class="symbol">;</span>
+<span class="linenum">101:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">psel </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">102:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">103:</span> 
+<span class="linenum">104:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">m </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> m </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">32</span><span class="symbol">)</span>
+<span class="linenum">105:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">106:</span> <span class="normal">        msel </span><span class="symbol">=</span><span class="normal"> m </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span>
+<span class="linenum">107:</span> 
+<span class="linenum">108:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#392">SYSCON_PDRUNCFG_SYSPLL_PD</a></span><span class="symbol">;</span>
+<span class="linenum">109:</span> 
+<span class="linenum">110:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#102">SYSCON_SYSPLLCLKSEL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> osc</span><span class="symbol">;</span>
+<span class="linenum">111:</span> 
+<span class="linenum">112:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#103">SYSCON_SYSPLLCLKUEN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">113:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#103">SYSCON_SYSPLLCLKUEN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#231">SYSCON_SYSPLLCLKUEN_ENA</a></span><span class="symbol">;</span>
+<span class="linenum">114:</span> 
+<span class="linenum">115:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#97">SYSCON_SYSPLLCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> psel </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> msel </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">116:</span> 
+<span class="linenum">117:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#98">SYSCON_SYSPLLSTAT</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#184">SYSCON_SYSPLLSTAT_LOCK</a></span><span class="symbol">))</span>
+<span class="linenum">118:</span> <span class="normal">                </span><span class="symbol">;</span>
+<span class="linenum">119:</span> <span class="cbracket">}</span>
+<span class="linenum">120:</span> 
+<span class="linenum">121:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="121">syscon_disable_pll</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">122:</span> <span class="cbracket">{</span>
+<span class="linenum">123:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#97">SYSCON_SYSPLLCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">124:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#392">SYSCON_PDRUNCFG_SYSPLL_PD</a></span><span class="symbol">;</span>
+<span class="linenum">125:</span> <span class="cbracket">}</span>
+<span class="linenum">126:</span> 
+<span class="linenum">127:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="127">syscon_enable_sys_osc</a></span><span class="symbol">(</span><span class="type">bool</span><span class="normal"> bypass</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#420">syscon_range</a></span><span class="normal"> freq</span><span class="symbol">)</span>
+<span class="linenum">128:</span> <span class="cbracket">{</span>
+<span class="linenum">129:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#394">SYSCON_PDRUNCFG_SYSOSC_PD</a></span><span class="symbol">;</span>
+<span class="linenum">130:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#99">SYSCON_SYSOSCCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> freq </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bypass </span><span class="symbol">?</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#189">SYSCON_SYSOSCCTRL_BYPASS</a></span><span class="normal"> </span><span class="symbol">:</span><span class="normal"> </span><span class="number">0</span><span class="symbol">);</span>
+<span class="linenum">131:</span> <span class="cbracket">}</span>
+<span class="linenum">132:</span> 
+<span class="linenum">133:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="133">syscon_disable_sys_osc</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">134:</span> <span class="cbracket">{</span>
+<span class="linenum">135:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#394">SYSCON_PDRUNCFG_SYSOSC_PD</a></span><span class="symbol">;</span>
+<span class="linenum">136:</span> <span class="cbracket">}</span>
+<span class="linenum">137:</span> 
+<span class="linenum">138:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="138">syscon_enable_wdt_osc</a></span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#426">syscon_fclkana</a></span><span class="normal"> fclkana</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> divsel</span><span class="symbol">)</span>
+<span class="linenum">139:</span> <span class="cbracket">{</span>
+<span class="linenum">140:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#393">SYSCON_PDRUNCFG_WDTOSC_PD</a></span><span class="symbol">;</span>
+<span class="linenum">141:</span> 
+<span class="linenum">142:</span> <span class="normal">        </span><span class="comment">/* wdt_osc_clk = Fclkana / (2 * (1 + DIVSEL)) */</span>
+<span class="linenum">143:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#100">SYSCON_WDTOSCCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> fclkana </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">divsel </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x1f</span><span class="symbol">);</span>
+<span class="linenum">144:</span> <span class="cbracket">}</span>
+<span class="linenum">145:</span> 
+<span class="linenum">146:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="146">syscon_disable_wdt_osc</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">147:</span> <span class="cbracket">{</span>
+<span class="linenum">148:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#100">SYSCON_WDTOSCCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">149:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#393">SYSCON_PDRUNCFG_WDTOSC_PD</a></span><span class="symbol">;</span>
+<span class="linenum">150:</span> <span class="cbracket">}</span>
+<span class="linenum">151:</span> 
+<span class="linenum">152:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="152">syscon_get_reset_status</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> reset</span><span class="symbol">)</span>
+<span class="linenum">153:</span> <span class="cbracket">{</span>
+<span class="linenum">154:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#101">SYSCON_SYSRSTSTAT</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> reset</span><span class="symbol">;</span>
+<span class="linenum">155:</span> <span class="cbracket">}</span>
+<span class="linenum">156:</span> 
+<span class="linenum">157:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="157">syscon_clear_reset_status</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> reset</span><span class="symbol">)</span>
+<span class="linenum">158:</span> <span class="cbracket">{</span>
+<span class="linenum">159:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#101">SYSCON_SYSRSTSTAT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> reset </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#217">SYSCON_SYSRSTSTAT_SYSRST</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">160:</span> <span class="normal">                                     </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#218">SYSCON_SYSRSTSTAT_BOD</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">161:</span> <span class="normal">                                     </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#219">SYSCON_SYSRSTSTAT_WDT</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">162:</span> <span class="normal">                                     </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#220">SYSCON_SYSRSTSTAT_EXTRST</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">163:</span> <span class="normal">                                     </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#221">SYSCON_SYSRSTSTAT_POR</a></span><span class="symbol">);</span>
+<span class="linenum">164:</span> <span class="cbracket">}</span>
+<span class="linenum">165:</span> 
+<span class="linenum">166:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="166">syscon_set_system_clock</a></span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#454">syscon_osc</a></span><span class="normal"> source</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> div</span><span class="symbol">)</span>
+<span class="linenum">167:</span> <span class="cbracket">{</span>
+<span class="linenum">168:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> osc</span><span class="symbol">;</span>
+<span class="linenum">169:</span> 
+<span class="linenum">170:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">source</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">171:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#455">SYSCON_IRC</a></span><span class="symbol">:</span>
+<span class="linenum">172:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#235">SYSCON_MAINCLKSEL_SEL_IRC</a></span><span class="symbol">;</span>
+<span class="linenum">173:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">174:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#459">SYSCON_PLL_IN</a></span><span class="symbol">:</span>
+<span class="linenum">175:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#236">SYSCON_MAINCLKSEL_SEL_PLL_IN</a></span><span class="symbol">;</span>
+<span class="linenum">176:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">177:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#458">SYSCON_WDT_OSC</a></span><span class="symbol">:</span>
+<span class="linenum">178:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#237">SYSCON_MAINCLKSEL_SEL_WDT_OSC</a></span><span class="symbol">;</span>
+<span class="linenum">179:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">180:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#460">SYSCON_PLL_OUT</a></span><span class="symbol">:</span>
+<span class="linenum">181:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#238">SYSCON_MAINCLKSEL_SEL_PLL_OUT</a></span><span class="symbol">;</span>
+<span class="linenum">182:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">183:</span> <span class="label">        default:</span>
+<span class="linenum">184:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">185:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">186:</span> 
+<span class="linenum">187:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">div </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> div </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">255</span><span class="symbol">)</span>
+<span class="linenum">188:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">189:</span> 
+<span class="linenum">190:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#104">SYSCON_MAINCLKSEL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> osc</span><span class="symbol">;</span>
+<span class="linenum">191:</span> 
+<span class="linenum">192:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#105">SYSCON_MAINCLKUEN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">193:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#105">SYSCON_MAINCLKUEN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#242">SYSCON_MAINCLKUEN_ENA</a></span><span class="symbol">;</span>
+<span class="linenum">194:</span> 
+<span class="linenum">195:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#106">SYSCON_SYSAHBCLKDIV</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> div</span><span class="symbol">;</span>
+<span class="linenum">196:</span> <span class="cbracket">}</span>
+<span class="linenum">197:</span> 
+<span class="linenum">198:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="198">syscon_enable_clock</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> peripheral</span><span class="symbol">)</span>
+<span class="linenum">199:</span> <span class="cbracket">{</span>
+<span class="linenum">200:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#107">SYSCON_SYSAHBCLKCTRL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> peripheral </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xfffff</span><span class="symbol">;</span>
+<span class="linenum">201:</span> <span class="cbracket">}</span>
+<span class="linenum">202:</span> 
+<span class="linenum">203:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="203">syscon_disable_clock</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> peripheral</span><span class="symbol">)</span>
+<span class="linenum">204:</span> <span class="cbracket">{</span>
+<span class="linenum">205:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#107">SYSCON_SYSAHBCLKCTRL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal">peripheral </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xfffff</span><span class="symbol">);</span>
+<span class="linenum">206:</span> <span class="cbracket">}</span>
+<span class="linenum">207:</span> 
+<span class="linenum">208:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="208">syscon_set_usart_clock</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> main_clock</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> u_pclk</span><span class="symbol">)</span>
+<span class="linenum">209:</span> <span class="cbracket">{</span>
+<span class="linenum">210:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="linenum">211:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> t</span><span class="symbol">;</span>
+<span class="linenum">212:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> mult</span><span class="symbol">;</span>
+<span class="linenum">213:</span> 
+<span class="linenum">214:</span> <span class="normal">        </span><span class="comment">/*</span>
+<span class="linenum">215:</span> <span class="comment">         * U_PCLK = main clock / UARTCLKDIV / (1 + MULT / 256)</span>
+<span class="linenum">216:</span> <span class="comment">         * MULT = 256 * (main clock / (UARTCLKDIV * U_PCLK) - 1)</span>
+<span class="linenum">217:</span> <span class="comment">         */</span>
+<span class="linenum">218:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">u_pclk </span><span class="symbol">&lt;=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">219:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">220:</span> <span class="normal">        n </span><span class="symbol">=</span><span class="normal"> main_clock </span><span class="symbol">/</span><span class="normal"> u_pclk</span><span class="symbol">;</span>
+<span class="linenum">221:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">255</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> n </span><span class="symbol">&lt;=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">222:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">223:</span> <span class="normal">        t </span><span class="symbol">=</span><span class="normal"> u_pclk </span><span class="symbol">*</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="linenum">224:</span> <span class="normal">        mult </span><span class="symbol">=</span><span class="normal"> </span><span class="number">256</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">main_clock </span><span class="symbol">-</span><span class="normal"> t</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> t</span><span class="symbol">;</span>
+<span class="linenum">225:</span> 
+<span class="linenum">226:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#108">SYSCON_UARTCLKDIV</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="linenum">227:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">mult</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">228:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#112">SYSCON_UARTFRGDIV</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">;</span>
+<span class="linenum">229:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#113">SYSCON_UARTFRGMULT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> mult</span><span class="symbol">;</span>
+<span class="linenum">230:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">231:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#112">SYSCON_UARTFRGDIV</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">232:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#113">SYSCON_UARTFRGMULT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">233:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">234:</span> <span class="cbracket">}</span>
+<span class="linenum">235:</span> 
+<span class="linenum">236:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="236">syscon_set_clockout</a></span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#454">syscon_osc</a></span><span class="normal"> source</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> div</span><span class="symbol">)</span>
+<span class="linenum">237:</span> <span class="cbracket">{</span>
+<span class="linenum">238:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> osc</span><span class="symbol">;</span>
+<span class="linenum">239:</span> 
+<span class="linenum">240:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">source</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">241:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#455">SYSCON_IRC</a></span><span class="symbol">:</span>
+<span class="linenum">242:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#279">SYSCON_CLKOUTSEL_SEL_IRC</a></span><span class="symbol">;</span>
+<span class="linenum">243:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">244:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#456">SYSCON_XTAL</a></span><span class="symbol">:</span>
+<span class="linenum">245:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#280">SYSCON_CLKOUTSEL_SEL_SYSOSC</a></span><span class="symbol">;</span>
+<span class="linenum">246:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">247:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#458">SYSCON_WDT_OSC</a></span><span class="symbol">:</span>
+<span class="linenum">248:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#281">SYSCON_CLKOUTSEL_SEL_WDT_OSC</a></span><span class="symbol">;</span>
+<span class="linenum">249:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">250:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#461">SYSCON_MAIN</a></span><span class="symbol">:</span>
+<span class="linenum">251:</span> <span class="normal">                osc </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#282">SYSCON_CLKOUTSEL_SEL_MAIN</a></span><span class="symbol">;</span>
+<span class="linenum">252:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">253:</span> <span class="label">        default:</span>
+<span class="linenum">254:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">255:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">256:</span> 
+<span class="linenum">257:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">div </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> div </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">255</span><span class="symbol">)</span>
+<span class="linenum">258:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">259:</span> 
+<span class="linenum">260:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#109">SYSCON_CLKOUTSEL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> osc</span><span class="symbol">;</span>
+<span class="linenum">261:</span> 
+<span class="linenum">262:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#110">SYSCON_CLKOUTUEN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">263:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#110">SYSCON_CLKOUTUEN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#286">SYSCON_CLKOUTUEN_ENA</a></span><span class="symbol">;</span>
+<span class="linenum">264:</span> 
+<span class="linenum">265:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#111">SYSCON_CLKOUTDIV</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> div</span><span class="symbol">;</span>
+<span class="linenum">266:</span> <span class="cbracket">}</span>
+<span class="linenum">267:</span> 
+<span class="linenum">268:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="268">syscon_set_external_trace_buffer_command</a></span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#490">syscon_exttracecmd</a></span><span class="normal"> command</span><span class="symbol">)</span>
+<span class="linenum">269:</span> <span class="cbracket">{</span>
+<span class="linenum">270:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#114">SYSCON_EXTTRACECMD</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> command</span><span class="symbol">;</span>
+<span class="linenum">271:</span> <span class="cbracket">}</span>
+<span class="linenum">272:</span> 
+<span class="linenum">273:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="273">syscon_get_pio0_status_at_por</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">274:</span> <span class="cbracket">{</span>
+<span class="linenum">275:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#115">SYSCON_PIOPORCAP0</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3ffff</span><span class="symbol">;</span>
+<span class="linenum">276:</span> <span class="cbracket">}</span>
+<span class="linenum">277:</span> 
+<span class="linenum">278:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="278">syscon_set_ioconclkdiv</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> num</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> div</span><span class="symbol">)</span>
+<span class="linenum">279:</span> <span class="cbracket">{</span>
+<span class="linenum">280:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">num </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">6</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> num </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">281:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">282:</span> 
+<span class="linenum">283:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#116">SYSCON_IOCONCLKDIV</a></span><span class="symbol">(</span><span class="normal">num</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> div</span><span class="symbol">;</span>
+<span class="linenum">284:</span> <span class="cbracket">}</span>
+<span class="linenum">285:</span> 
+<span class="linenum">286:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="286">syscon_set_bod_interrupt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> level</span><span class="symbol">)</span>
+<span class="linenum">287:</span> <span class="cbracket">{</span>
+<span class="linenum">288:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">289:</span> 
+<span class="linenum">290:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#125">SYSCON_BODCTRL</a></span><span class="symbol">;</span>
+<span class="linenum">291:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#318">SYSCON_BODCTRL_BODINTVAL1</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#319">SYSCON_BODCTRL_BODINTVAL0</a></span><span class="symbol">);</span>
+<span class="linenum">292:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#125">SYSCON_BODCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">level </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#318">SYSCON_BODCTRL_BODINTVAL1</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">293:</span> <span class="normal">                                              </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#319">SYSCON_BODCTRL_BODINTVAL0</a></span><span class="symbol">));</span>
+<span class="linenum">294:</span> <span class="cbracket">}</span>
+<span class="linenum">295:</span> 
+<span class="linenum">296:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="296">syscon_enable_bod_reset</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> level</span><span class="symbol">)</span>
+<span class="linenum">297:</span> <span class="cbracket">{</span>
+<span class="linenum">298:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">299:</span> 
+<span class="linenum">300:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#125">SYSCON_BODCTRL</a></span><span class="symbol">;</span>
+<span class="linenum">301:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#320">SYSCON_BODCTRL_BODRSTLEV1</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#321">SYSCON_BODCTRL_BODRSTLEV0</a></span><span class="symbol">);</span>
+<span class="linenum">302:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#125">SYSCON_BODCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#317">SYSCON_BODCTRL_BODRSTENA</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">303:</span> <span class="normal">                </span><span class="symbol">(</span><span class="normal">level </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#320">SYSCON_BODCTRL_BODRSTLEV1</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">304:</span> <span class="normal">                          </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#321">SYSCON_BODCTRL_BODRSTLEV0</a></span><span class="symbol">));</span>
+<span class="linenum">305:</span> <span class="cbracket">}</span>
+<span class="linenum">306:</span> 
+<span class="linenum">307:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="307">syscon_disable_bod_reset</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">308:</span> <span class="cbracket">{</span>
+<span class="linenum">309:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#125">SYSCON_BODCTRL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#317">SYSCON_BODCTRL_BODRSTENA</a></span><span class="symbol">;</span>
+<span class="linenum">310:</span> <span class="cbracket">}</span>
+<span class="linenum">311:</span> 
+<span class="linenum">312:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="312">syscon_get_systick_calibration</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">313:</span> <span class="cbracket">{</span>
+<span class="linenum">314:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#126">SYSCON_SYSTCKCAL</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x03ffffff</span><span class="symbol">;</span>
+<span class="linenum">315:</span> <span class="cbracket">}</span>
+<span class="linenum">316:</span> 
+<span class="linenum">317:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="317">syscon_set_irq_latency</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> latency</span><span class="symbol">)</span>
+<span class="linenum">318:</span> <span class="cbracket">{</span>
+<span class="linenum">319:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#127">SYSCON_IRQLATENCY</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> latency </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">;</span>
+<span class="linenum">320:</span> <span class="cbracket">}</span>
+<span class="linenum">321:</span> 
+<span class="linenum">322:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="322">syscon_enable_nmi</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> source</span><span class="symbol">)</span>
+<span class="linenum">323:</span> <span class="cbracket">{</span>
+<span class="linenum">324:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#128">SYSCON_NMISRC</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#343">SYSCON_NMISRC_NMIEN</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">source </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x1f</span><span class="symbol">);</span>
+<span class="linenum">325:</span> <span class="cbracket">}</span>
+<span class="linenum">326:</span> 
+<span class="linenum">327:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="327">syscon_disable_nmi</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">328:</span> <span class="cbracket">{</span>
+<span class="linenum">329:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#128">SYSCON_NMISRC</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#343">SYSCON_NMISRC_NMIEN</a></span><span class="symbol">;</span>
+<span class="linenum">330:</span> <span class="cbracket">}</span>
+<span class="linenum">331:</span> 
+<span class="linenum">332:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="332">syscon_select_pins</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> offset</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">)</span>
+<span class="linenum">333:</span> <span class="cbracket">{</span>
+<span class="linenum">334:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">335:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> j</span><span class="symbol">;</span>
+<span class="linenum">336:</span> 
+<span class="linenum">337:</span> <span class="normal">        j </span><span class="symbol">=</span><span class="normal"> offset</span><span class="symbol">;</span>
+<span class="linenum">338:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">j </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">339:</span> <span class="normal">                </span><span class="keyword">return</span><span class="symbol">;</span>
+<span class="linenum">340:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">18</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">341:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">pins </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">342:</span> <span class="normal">                        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#129">SYSCON_PINTSEL</a></span><span class="symbol">(</span><span class="normal">j</span><span class="symbol">++)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">343:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">j </span><span class="symbol">&gt;=</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">344:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">345:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">346:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">347:</span> <span class="cbracket">}</span>
+<span class="linenum">348:</span> 
+<span class="linenum">349:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="349">syscon_set_wakeup_interrupt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">)</span>
+<span class="linenum">350:</span> <span class="cbracket">{</span>
+<span class="linenum">351:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#138">SYSCON_STARTERP0</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">;</span>
+<span class="linenum">352:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#139">SYSCON_STARTERP1</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xb13b</span><span class="symbol">;</span>
+<span class="linenum">353:</span> <span class="cbracket">}</span>
+<span class="linenum">354:</span> 
+<span class="linenum">355:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="355">syscon_disable_deep_sleep_power_down</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pd</span><span class="symbol">)</span>
+<span class="linenum">356:</span> <span class="cbracket">{</span>
+<span class="linenum">357:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#140">SYSCON_PDSLEEPCFG</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal">pd </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#376">SYSCON_PDSLEEPCFG_BOD_PD</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">358:</span> <span class="normal">                                     </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#375">SYSCON_PDSLEEPCFG_WDTOSC_PD</a></span><span class="symbol">));</span>
+<span class="linenum">359:</span> <span class="cbracket">}</span>
+<span class="linenum">360:</span> 
+<span class="linenum">361:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="361">syscon_enable_deep_sleep_power_down</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pd</span><span class="symbol">)</span>
+<span class="linenum">362:</span> <span class="cbracket">{</span>
+<span class="linenum">363:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#140">SYSCON_PDSLEEPCFG</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> pd </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#376">SYSCON_PDSLEEPCFG_BOD_PD</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">364:</span> <span class="normal">                                   </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#375">SYSCON_PDSLEEPCFG_WDTOSC_PD</a></span><span class="symbol">);</span>
+<span class="linenum">365:</span> <span class="cbracket">}</span>
+<span class="linenum">366:</span> 
+<span class="linenum">367:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="367">syscon_disable_wakeup_power_down</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pd</span><span class="symbol">)</span>
+<span class="linenum">368:</span> <span class="cbracket">{</span>
+<span class="linenum">369:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#141">SYSCON_PDAWAKECFG</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal">pd </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x80ef</span><span class="symbol">);</span>
+<span class="linenum">370:</span> <span class="cbracket">}</span>
+<span class="linenum">371:</span> 
+<span class="linenum">372:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="372">syscon_enable_wakeup_power_down</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pd</span><span class="symbol">)</span>
+<span class="linenum">373:</span> <span class="cbracket">{</span>
+<span class="linenum">374:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#141">SYSCON_PDAWAKECFG</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> pd </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x80ef</span><span class="symbol">;</span>
+<span class="linenum">375:</span> <span class="cbracket">}</span>
+<span class="linenum">376:</span> 
+<span class="linenum">377:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="377">syscon_disable_power_down</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pd</span><span class="symbol">)</span>
+<span class="linenum">378:</span> <span class="cbracket">{</span>
+<span class="linenum">379:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal">pd </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x80ef</span><span class="symbol">);</span>
+<span class="linenum">380:</span> <span class="cbracket">}</span>
+<span class="linenum">381:</span> 
+<span class="linenum">382:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="382">syscon_enable_power_down</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pd</span><span class="symbol">)</span>
+<span class="linenum">383:</span> <span class="cbracket">{</span>
+<span class="linenum">384:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#142">SYSCON_PDRUNCFG</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> pd </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x80ef</span><span class="symbol">;</span>
+<span class="linenum">385:</span> <span class="cbracket">}</span>
+<span class="linenum">386:</span> 
+<span class="linenum">387:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="387">syscon_get_device_id</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">388:</span> <span class="cbracket">{</span>
+<span class="linenum">389:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/syscon.h.html#143">SYSCON_DEVICE_ID</a></span><span class="symbol">;</span>
+<span class="linenum">390:</span> <span class="cbracket">}</span>
+<span class="linenum">391:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

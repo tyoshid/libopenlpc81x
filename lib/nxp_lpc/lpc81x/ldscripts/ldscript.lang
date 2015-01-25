@@ -1,0 +1,63 @@
+# definitions for linker script
+
+# Copyright 2015 Toshiaki Yoshida <yoshida@mpc.net>
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+environment comment delim "/*" "*/" multiline begin
+  include "url.lang"
+  include "todo.lang"
+end
+
+number = '\<[+-]?((((0x|0X)[[:xdigit:]]+)|([[:digit:]]*[hHoObBdD]?))[KM]?)?\>'
+
+include "c_string.lang"
+
+keyword = "SECTIONS|ENTRY|INCLUDE|INPUT|GROUP",
+	"AS_NEEDED|SEARCH_DIR|STARTUP",
+	"OUTPUT_FORMAT|TARGET",
+	"REGION_ALIAS",
+	"ASSERT|EXTERN|FORCE_COMMON_ALLOCATION|INHIBIT_COMMON_ALLOCATION",
+	"INSERT|AFTER|BEFORE",
+	"NOCROSSREFS|OUTPUT_ARCH|LD_FEATURE",
+	"OUTPUT",
+	"PROVIDE_HIDDEN|HIDDEN|PROVIDE",
+	"DISCARD",
+	"EXCLUDE_FILE|INPUT_SECTION_FLAGS",
+	"SORT_BY_NAME|SORT_BY_ALIGNMENT|SORT_BY_INIT_PRIORITY|SORT_NONE|SORT",
+	"KEEP",
+	"BYTE|SHORT|LONG|QUAD|SQUAD|FILL",
+	"CREATE_OBJECT_SYMBOLS|CONSTRUCTORS",
+	"NOLOAD|DSECT|COPY|INFO|OVERLAY",
+	"ALIGN|SUBALIGN|ONLY_IF_RO|ONLY_IF_RW",
+	"PHDRS|FILEHDR|FLAGS|PT_NULL|PT_LOAD|PT_DYNAMIC|PT_INTERP|PT_NOTE",
+	"PT_SHLIB|PT_PHDR",
+	"PHDR|NONE",
+	"MEMORY|ORIGIN|org|o|LENGTH|len|l",
+	"VERSION",
+	"CONSTANT|MAXPAGESIZE|COMMONPAGESIZE",
+	"COMMON",
+	"ABSOLUTE|ALIGNOF|BLOCK|DATA_SEGMENT_ALIGN",
+	"DATA_SEGMENT_END|DATA_SEGMENT_RELRO_END|DEFINED|LOADADDR",
+	"ADDR",
+	"MAX|MIN|NEXT|SEGMENT_START",
+	"SIZEOF_HEADERS|sizeof_headers|SIZEOF",
+	"AT"
+
+# file and section name
+normal = '([[:word:]-]*)\.([[:word:]-]+)'
+
+include "symbols.lang"
+
+cbracket = "{|}"

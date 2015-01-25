@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>pinint.c</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+lib/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+pinint.c</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * Pin interrupt/pattern match engine functions</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;pinint.h&gt;</span>
+<span class="linenum">021:</span> 
+<span class="linenum">022:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="22">pinint_set_interrupt_mode</a></span><span class="symbol">(</span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#179">pinint_mode_t</a></span><span class="normal"> mode</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">023:</span> <span class="cbracket">{</span>
+<span class="linenum">024:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">mode</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">025:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#172">PININT_DISABLE</a></span><span class="symbol">:</span>
+<span class="linenum">026:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#62">PININT_CIENR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">027:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#65">PININT_CIENF</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">028:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">029:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#173">PININT_RISING</a></span><span class="symbol">:</span>
+<span class="linenum">030:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal">pinints</span><span class="symbol">;</span>
+<span class="linenum">031:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#61">PININT_SIENR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">032:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#65">PININT_CIENF</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">033:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">034:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#174">PININT_FALLING</a></span><span class="symbol">:</span>
+<span class="linenum">035:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal">pinints</span><span class="symbol">;</span>
+<span class="linenum">036:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#62">PININT_CIENR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">037:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#64">PININT_SIENF</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">038:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">039:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#175">PININT_BOTH</a></span><span class="symbol">:</span>
+<span class="linenum">040:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal">pinints</span><span class="symbol">;</span>
+<span class="linenum">041:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#61">PININT_SIENR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">042:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#64">PININT_SIENF</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">043:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">044:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#176">PININT_LOW</a></span><span class="symbol">:</span>
+<span class="linenum">045:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">046:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#65">PININT_CIENF</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">047:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#61">PININT_SIENR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">048:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">049:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#177">PININT_HIGH</a></span><span class="symbol">:</span>
+<span class="linenum">050:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">051:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#64">PININT_SIENF</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">052:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#61">PININT_SIENR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">053:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">054:</span> <span class="label">        default:</span>
+<span class="linenum">055:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">056:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">057:</span> <span class="cbracket">}</span>
+<span class="linenum">058:</span> 
+<span class="linenum">059:</span> <span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#179">pinint_mode_t</a></span><span class="normal"> </span><span class="function"><a name="59">pinint_get_interrupt_mode</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">060:</span> <span class="cbracket">{</span>
+<span class="linenum">061:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">062:</span> <span class="normal">                </span><span class="comment">/* Level sensitive */</span>
+<span class="linenum">063:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#60">PININT_IENR</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">064:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#63">PININT_IENF</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">065:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#177">PININT_HIGH</a></span><span class="symbol">;</span>
+<span class="linenum">066:</span> <span class="normal">                        </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#63">PININT_IENF</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">067:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#176">PININT_LOW</a></span><span class="symbol">;</span>
+<span class="linenum">068:</span> <span class="normal">                        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#172">PININT_DISABLE</a></span><span class="symbol">;</span>
+<span class="linenum">069:</span> <span class="normal">                </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#60">PININT_IENR</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">070:</span> <span class="normal">                        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#172">PININT_DISABLE</a></span><span class="symbol">;</span>
+<span class="linenum">071:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">072:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#178">PININT_UNKNOWN</a></span><span class="symbol">;</span>
+<span class="linenum">073:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#59">PININT_ISEL</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">074:</span> <span class="normal">                </span><span class="comment">/* Edge sensitive */</span>
+<span class="linenum">075:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#60">PININT_IENR</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">076:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#63">PININT_IENF</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">077:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#175">PININT_BOTH</a></span><span class="symbol">;</span>
+<span class="linenum">078:</span> <span class="normal">                        </span><span class="keyword">else</span>
+<span class="linenum">079:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#173">PININT_RISING</a></span><span class="symbol">;</span>
+<span class="linenum">080:</span> <span class="normal">                </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#60">PININT_IENR</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">081:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="type">int</span><span class="symbol">)(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#63">PININT_IENF</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">==</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">082:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#174">PININT_FALLING</a></span><span class="symbol">;</span>
+<span class="linenum">083:</span> <span class="normal">                        </span><span class="keyword">else</span>
+<span class="linenum">084:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#172">PININT_DISABLE</a></span><span class="symbol">;</span>
+<span class="linenum">085:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">086:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">087:</span> 
+<span class="linenum">088:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#178">PININT_UNKNOWN</a></span><span class="symbol">;</span>
+<span class="linenum">089:</span> <span class="cbracket">}</span>
+<span class="linenum">090:</span> 
+<span class="linenum">091:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="91">pinint_get_interrupt_status</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">092:</span> <span class="cbracket">{</span>
+<span class="linenum">093:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#68">PININT_IST</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">094:</span> <span class="cbracket">}</span>
+<span class="linenum">095:</span> 
+<span class="linenum">096:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="96">pinint_clear_interrupt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">097:</span> <span class="cbracket">{</span>
+<span class="linenum">098:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#68">PININT_IST</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">099:</span> <span class="cbracket">}</span>
+<span class="linenum">100:</span> 
+<span class="linenum">101:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="101">pinint_rising_edge_detected</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">102:</span> <span class="cbracket">{</span>
+<span class="linenum">103:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#66">PININT_RISE</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">104:</span> <span class="cbracket">}</span>
+<span class="linenum">105:</span> 
+<span class="linenum">106:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="106">pinint_falling_edge_detected</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">107:</span> <span class="cbracket">{</span>
+<span class="linenum">108:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#67">PININT_FALL</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">109:</span> <span class="cbracket">}</span>
+<span class="linenum">110:</span> 
+<span class="linenum">111:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="111">pinint_clear_rising_edge</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">112:</span> <span class="cbracket">{</span>
+<span class="linenum">113:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#66">PININT_RISE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">114:</span> <span class="cbracket">}</span>
+<span class="linenum">115:</span> 
+<span class="linenum">116:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="116">pinint_clear_falling_edge</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">117:</span> <span class="cbracket">{</span>
+<span class="linenum">118:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#67">PININT_FALL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">119:</span> <span class="cbracket">}</span>
+<span class="linenum">120:</span> 
+<span class="linenum">121:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="121">pinint_set_bit_slice</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> bitslice</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> pinint</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#191">pinint_match_t</a></span><span class="normal"> match</span><span class="symbol">,</span>
+<span class="linenum">122:</span> <span class="normal">                          </span><span class="type">bool</span><span class="normal"> endpoint</span><span class="symbol">)</span>
+<span class="linenum">123:</span> <span class="cbracket">{</span>
+<span class="linenum">124:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">125:</span> 
+<span class="linenum">126:</span> <span class="normal">        bitslice </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="number">7</span><span class="symbol">;</span>
+<span class="linenum">127:</span> 
+<span class="linenum">128:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#70">PININT_PMSRC</a></span><span class="symbol">;</span>
+<span class="linenum">129:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">7</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bitslice </span><span class="symbol">*</span><span class="normal"> </span><span class="number">3</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">8</span><span class="symbol">));</span>
+<span class="linenum">130:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#70">PININT_PMSRC</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">pinint </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">7</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bitslice </span><span class="symbol">*</span><span class="normal"> </span><span class="number">3</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">8</span><span class="symbol">));</span>
+<span class="linenum">131:</span> 
+<span class="linenum">132:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#71">PININT_PMCFG</a></span><span class="symbol">;</span>
+<span class="linenum">133:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">7</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bitslice </span><span class="symbol">*</span><span class="normal"> </span><span class="number">3</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">8</span><span class="symbol">));</span>
+<span class="linenum">134:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bitslice </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">7</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">135:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">endpoint</span><span class="symbol">)</span>
+<span class="linenum">136:</span> <span class="normal">                        r </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> bitslice</span><span class="symbol">;</span>
+<span class="linenum">137:</span> <span class="normal">                </span><span class="keyword">else</span>
+<span class="linenum">138:</span> <span class="normal">                        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> bitslice</span><span class="symbol">);</span>
+<span class="linenum">139:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">140:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#71">PININT_PMCFG</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">match </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">bitslice </span><span class="symbol">*</span><span class="normal"> </span><span class="number">3</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">8</span><span class="symbol">));</span>
+<span class="linenum">141:</span> <span class="cbracket">}</span>
+<span class="linenum">142:</span> 
+<span class="linenum">143:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="143">pinint_enable_pattern_match</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">144:</span> <span class="cbracket">{</span>
+<span class="linenum">145:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#69">PININT_PMCTRL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#130">PININT_PMCTRL_SEL_PMATCH</a></span><span class="symbol">;</span>
+<span class="linenum">146:</span> <span class="cbracket">}</span>
+<span class="linenum">147:</span> 
+<span class="linenum">148:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="148">pinint_disable_pattern_match</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">149:</span> <span class="cbracket">{</span>
+<span class="linenum">150:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#69">PININT_PMCTRL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#130">PININT_PMCTRL_SEL_PMATCH</a></span><span class="symbol">;</span>
+<span class="linenum">151:</span> <span class="cbracket">}</span>
+<span class="linenum">152:</span> 
+<span class="linenum">153:</span> <span class="type">bool</span><span class="normal"> </span><span class="function"><a name="153">pinint_pattern_match_enabled</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">154:</span> <span class="cbracket">{</span>
+<span class="linenum">155:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#69">PININT_PMCTRL</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#130">PININT_PMCTRL_SEL_PMATCH</a></span><span class="symbol">;</span>
+<span class="linenum">156:</span> <span class="cbracket">}</span>
+<span class="linenum">157:</span> 
+<span class="linenum">158:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="158">pinint_enable_rxev</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">159:</span> <span class="cbracket">{</span>
+<span class="linenum">160:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#69">PININT_PMCTRL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#129">PININT_PMCTRL_ENA_RXEV</a></span><span class="symbol">;</span>
+<span class="linenum">161:</span> <span class="cbracket">}</span>
+<span class="linenum">162:</span> 
+<span class="linenum">163:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="163">pinint_disable_rxev</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">164:</span> <span class="cbracket">{</span>
+<span class="linenum">165:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#69">PININT_PMCTRL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#129">PININT_PMCTRL_ENA_RXEV</a></span><span class="symbol">;</span>
+<span class="linenum">166:</span> <span class="cbracket">}</span>
+<span class="linenum">167:</span> 
+<span class="linenum">168:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="168">pinint_get_pattern_match_state</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pinints</span><span class="symbol">)</span>
+<span class="linenum">169:</span> <span class="cbracket">{</span>
+<span class="linenum">170:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/pinint.h.html#69">PININT_PMCTRL</a></span><span class="normal"> </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">24</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> pinints</span><span class="symbol">;</span>
+<span class="linenum">171:</span> <span class="cbracket">}</span>
+<span class="linenum">172:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

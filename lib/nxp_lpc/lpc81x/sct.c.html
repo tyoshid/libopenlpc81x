@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>sct.c</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+lib/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+sct.c</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * SCT functions</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;sct.h&gt;</span>
+<span class="linenum">021:</span> 
+<span class="linenum">022:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="22">sct_config</a></span><span class="symbol">(</span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#567">sct_clock_t</a></span><span class="normal"> clkmode</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#579">sct_input_t</a></span><span class="normal"> cksel</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> config</span><span class="symbol">)</span>
+<span class="linenum">023:</span> <span class="cbracket">{</span>
+<span class="linenum">024:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#154">SCT_CONFIG</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">clkmode </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">cksel </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> config</span><span class="symbol">;</span>
+<span class="linenum">025:</span> <span class="cbracket">}</span>
+<span class="linenum">026:</span> 
+<span class="linenum">027:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="27">sct_clear_counter</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">028:</span> <span class="cbracket">{</span>
+<span class="linenum">029:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#342">SCT_CTRL_CLRCTR_L</a></span><span class="symbol">;</span>
+<span class="linenum">030:</span> <span class="cbracket">}</span>
+<span class="linenum">031:</span> 
+<span class="linenum">032:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="32">sct_clear_counter_l</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">033:</span> <span class="cbracket">{</span>
+<span class="linenum">034:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#342">SCT_CTRL_CLRCTR_L</a></span><span class="symbol">;</span>
+<span class="linenum">035:</span> <span class="cbracket">}</span>
+<span class="linenum">036:</span> 
+<span class="linenum">037:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="37">sct_clear_counter_h</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">038:</span> <span class="cbracket">{</span>
+<span class="linenum">039:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#342">SCT_CTRL_CLRCTR_L</a></span><span class="symbol">;</span>
+<span class="linenum">040:</span> <span class="cbracket">}</span>
+<span class="linenum">041:</span> 
+<span class="linenum">042:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="42">sct_set_prescaler</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> prescaler</span><span class="symbol">)</span>
+<span class="linenum">043:</span> <span class="cbracket">{</span>
+<span class="linenum">044:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">045:</span> 
+<span class="linenum">046:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="symbol">;</span>
+<span class="linenum">047:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">0xff</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">);</span>
+<span class="linenum">048:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">prescaler </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">;</span>
+<span class="linenum">049:</span> <span class="cbracket">}</span>
+<span class="linenum">050:</span> 
+<span class="linenum">051:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="51">sct_set_prescaler_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> prescaler</span><span class="symbol">)</span>
+<span class="linenum">052:</span> <span class="cbracket">{</span>
+<span class="linenum">053:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">054:</span> 
+<span class="linenum">055:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="symbol">;</span>
+<span class="linenum">056:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">0xff</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">);</span>
+<span class="linenum">057:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">prescaler </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">;</span>
+<span class="linenum">058:</span> <span class="cbracket">}</span>
+<span class="linenum">059:</span> 
+<span class="linenum">060:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="60">sct_set_prescaler_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> prescaler</span><span class="symbol">)</span>
+<span class="linenum">061:</span> <span class="cbracket">{</span>
+<span class="linenum">062:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">063:</span> 
+<span class="linenum">064:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="symbol">;</span>
+<span class="linenum">065:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">0xff</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">);</span>
+<span class="linenum">066:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">prescaler </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">;</span>
+<span class="linenum">067:</span> <span class="cbracket">}</span>
+<span class="linenum">068:</span> 
+<span class="linenum">069:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="69">sct_start_counter</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">070:</span> <span class="cbracket">{</span>
+<span class="linenum">071:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">);</span>
+<span class="linenum">072:</span> <span class="cbracket">}</span>
+<span class="linenum">073:</span> 
+<span class="linenum">074:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="74">sct_start_counter_l</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">075:</span> <span class="cbracket">{</span>
+<span class="linenum">076:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">);</span>
+<span class="linenum">077:</span> <span class="cbracket">}</span>
+<span class="linenum">078:</span> 
+<span class="linenum">079:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="79">sct_start_counter_h</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">080:</span> <span class="cbracket">{</span>
+<span class="linenum">081:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">);</span>
+<span class="linenum">082:</span> <span class="cbracket">}</span>
+<span class="linenum">083:</span> 
+<span class="linenum">084:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="84">sct_stop_counter</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">085:</span> <span class="cbracket">{</span>
+<span class="linenum">086:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">087:</span> 
+<span class="linenum">088:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="symbol">;</span>
+<span class="linenum">089:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">;</span>
+<span class="linenum">090:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="symbol">;</span>
+<span class="linenum">091:</span> <span class="cbracket">}</span>
+<span class="linenum">092:</span> 
+<span class="linenum">093:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="93">sct_stop_counter_l</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">094:</span> <span class="cbracket">{</span>
+<span class="linenum">095:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">096:</span> 
+<span class="linenum">097:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="symbol">;</span>
+<span class="linenum">098:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">;</span>
+<span class="linenum">099:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="symbol">;</span>
+<span class="linenum">100:</span> <span class="cbracket">}</span>
+<span class="linenum">101:</span> 
+<span class="linenum">102:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="102">sct_stop_counter_h</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">103:</span> <span class="cbracket">{</span>
+<span class="linenum">104:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">105:</span> 
+<span class="linenum">106:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="symbol">;</span>
+<span class="linenum">107:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">;</span>
+<span class="linenum">108:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="symbol">;</span>
+<span class="linenum">109:</span> <span class="cbracket">}</span>
+<span class="linenum">110:</span> 
+<span class="linenum">111:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="111">sct_halt_counter</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">112:</span> <span class="cbracket">{</span>
+<span class="linenum">113:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">114:</span> 
+<span class="linenum">115:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="symbol">;</span>
+<span class="linenum">116:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="symbol">;</span>
+<span class="linenum">117:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">;</span>
+<span class="linenum">118:</span> <span class="cbracket">}</span>
+<span class="linenum">119:</span> 
+<span class="linenum">120:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="120">sct_halt_counter_l</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">121:</span> <span class="cbracket">{</span>
+<span class="linenum">122:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">123:</span> 
+<span class="linenum">124:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="symbol">;</span>
+<span class="linenum">125:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="symbol">;</span>
+<span class="linenum">126:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">;</span>
+<span class="linenum">127:</span> <span class="cbracket">}</span>
+<span class="linenum">128:</span> 
+<span class="linenum">129:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="129">sct_halt_counter_h</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">130:</span> <span class="cbracket">{</span>
+<span class="linenum">131:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">132:</span> 
+<span class="linenum">133:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="symbol">;</span>
+<span class="linenum">134:</span> <span class="normal">        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#344">SCT_CTRL_STOP_L</a></span><span class="symbol">;</span>
+<span class="linenum">135:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#343">SCT_CTRL_HALT_L</a></span><span class="symbol">;</span>
+<span class="linenum">136:</span> <span class="cbracket">}</span>
+<span class="linenum">137:</span> 
+<span class="linenum">138:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="138">sct_set_counter_mode</a></span><span class="symbol">(</span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#601">sct_counter_t</a></span><span class="normal"> mode</span><span class="symbol">)</span>
+<span class="linenum">139:</span> <span class="cbracket">{</span>
+<span class="linenum">140:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">141:</span> 
+<span class="linenum">142:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="symbol">;</span>
+<span class="linenum">143:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">mode</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">144:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#598">SCT_COUNT_UP</a></span><span class="symbol">:</span>
+<span class="linenum">145:</span> <span class="normal">                r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">);</span>
+<span class="linenum">146:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">147:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#599">SCT_COUNT_BIDIR_UP</a></span><span class="symbol">:</span>
+<span class="linenum">148:</span> <span class="normal">                r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">;</span>
+<span class="linenum">149:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="symbol">;</span>
+<span class="linenum">150:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">151:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#600">SCT_COUNT_BIDIR_DOWN</a></span><span class="symbol">:</span>
+<span class="linenum">152:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">;</span>
+<span class="linenum">153:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">154:</span> <span class="label">        default:</span>
+<span class="linenum">155:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">156:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">157:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#155">SCT_CTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">158:</span> <span class="cbracket">}</span>
+<span class="linenum">159:</span> 
+<span class="linenum">160:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="160">sct_set_counter_mode_l</a></span><span class="symbol">(</span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#601">sct_counter_t</a></span><span class="normal"> mode</span><span class="symbol">)</span>
+<span class="linenum">161:</span> <span class="cbracket">{</span>
+<span class="linenum">162:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">163:</span> 
+<span class="linenum">164:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="symbol">;</span>
+<span class="linenum">165:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">mode</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">166:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#598">SCT_COUNT_UP</a></span><span class="symbol">:</span>
+<span class="linenum">167:</span> <span class="normal">                r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">);</span>
+<span class="linenum">168:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">169:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#599">SCT_COUNT_BIDIR_UP</a></span><span class="symbol">:</span>
+<span class="linenum">170:</span> <span class="normal">                r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">;</span>
+<span class="linenum">171:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="symbol">;</span>
+<span class="linenum">172:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">173:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#600">SCT_COUNT_BIDIR_DOWN</a></span><span class="symbol">:</span>
+<span class="linenum">174:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">;</span>
+<span class="linenum">175:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">176:</span> <span class="label">        default:</span>
+<span class="linenum">177:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">178:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">179:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#156">SCT_CTRL_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">180:</span> <span class="cbracket">}</span>
+<span class="linenum">181:</span> 
+<span class="linenum">182:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="182">sct_set_counter_mode_h</a></span><span class="symbol">(</span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#601">sct_counter_t</a></span><span class="normal"> mode</span><span class="symbol">)</span>
+<span class="linenum">183:</span> <span class="cbracket">{</span>
+<span class="linenum">184:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">185:</span> 
+<span class="linenum">186:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="symbol">;</span>
+<span class="linenum">187:</span> <span class="normal">        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">mode</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">188:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#598">SCT_COUNT_UP</a></span><span class="symbol">:</span>
+<span class="linenum">189:</span> <span class="normal">                r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">);</span>
+<span class="linenum">190:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">191:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#599">SCT_COUNT_BIDIR_UP</a></span><span class="symbol">:</span>
+<span class="linenum">192:</span> <span class="normal">                r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">;</span>
+<span class="linenum">193:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="symbol">;</span>
+<span class="linenum">194:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">195:</span> <span class="normal">        </span><span class="keyword">case</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#600">SCT_COUNT_BIDIR_DOWN</a></span><span class="symbol">:</span>
+<span class="linenum">196:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#341">SCT_CTRL_BIDIR_L</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#345">SCT_CTRL_DOWN_L</a></span><span class="symbol">;</span>
+<span class="linenum">197:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">198:</span> <span class="label">        default:</span>
+<span class="linenum">199:</span> <span class="normal">                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">200:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">201:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#157">SCT_CTRL_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">202:</span> <span class="cbracket">}</span>
+<span class="linenum">203:</span> 
+<span class="linenum">204:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="204">sct_set_limit</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">205:</span> <span class="cbracket">{</span>
+<span class="linenum">206:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#158">SCT_LIMIT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">207:</span> <span class="cbracket">}</span>
+<span class="linenum">208:</span> 
+<span class="linenum">209:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="209">sct_set_limit_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">210:</span> <span class="cbracket">{</span>
+<span class="linenum">211:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#159">SCT_LIMIT_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">212:</span> <span class="cbracket">}</span>
+<span class="linenum">213:</span> 
+<span class="linenum">214:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="214">sct_set_limit_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">215:</span> <span class="cbracket">{</span>
+<span class="linenum">216:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#160">SCT_LIMIT_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">217:</span> <span class="cbracket">}</span>
+<span class="linenum">218:</span> 
+<span class="linenum">219:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="219">sct_set_halt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">220:</span> <span class="cbracket">{</span>
+<span class="linenum">221:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#161">SCT_HALT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">222:</span> <span class="cbracket">}</span>
+<span class="linenum">223:</span> 
+<span class="linenum">224:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="224">sct_set_halt_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">225:</span> <span class="cbracket">{</span>
+<span class="linenum">226:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#162">SCT_HALT_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">227:</span> <span class="cbracket">}</span>
+<span class="linenum">228:</span> 
+<span class="linenum">229:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="229">sct_set_halt_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">230:</span> <span class="cbracket">{</span>
+<span class="linenum">231:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#163">SCT_HALT_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">232:</span> <span class="cbracket">}</span>
+<span class="linenum">233:</span> 
+<span class="linenum">234:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="234">sct_set_stop</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">235:</span> <span class="cbracket">{</span>
+<span class="linenum">236:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#164">SCT_STOP</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">237:</span> <span class="cbracket">}</span>
+<span class="linenum">238:</span> 
+<span class="linenum">239:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="239">sct_set_stop_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">240:</span> <span class="cbracket">{</span>
+<span class="linenum">241:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#165">SCT_STOP_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">242:</span> <span class="cbracket">}</span>
+<span class="linenum">243:</span> 
+<span class="linenum">244:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="244">sct_set_stop_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">245:</span> <span class="cbracket">{</span>
+<span class="linenum">246:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#166">SCT_STOP_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">247:</span> <span class="cbracket">}</span>
+<span class="linenum">248:</span> 
+<span class="linenum">249:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="249">sct_set_start</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">250:</span> <span class="cbracket">{</span>
+<span class="linenum">251:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#167">SCT_START</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">252:</span> <span class="cbracket">}</span>
+<span class="linenum">253:</span> 
+<span class="linenum">254:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="254">sct_set_start_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">255:</span> <span class="cbracket">{</span>
+<span class="linenum">256:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#168">SCT_START_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">257:</span> <span class="cbracket">}</span>
+<span class="linenum">258:</span> 
+<span class="linenum">259:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="259">sct_set_start_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">260:</span> <span class="cbracket">{</span>
+<span class="linenum">261:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#169">SCT_START_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">262:</span> <span class="cbracket">}</span>
+<span class="linenum">263:</span> 
+<span class="linenum">264:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="264">sct_set_counter</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">265:</span> <span class="cbracket">{</span>
+<span class="linenum">266:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#170">SCT_COUNT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">267:</span> <span class="cbracket">}</span>
+<span class="linenum">268:</span> 
+<span class="linenum">269:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="269">sct_set_counter_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">270:</span> <span class="cbracket">{</span>
+<span class="linenum">271:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#171">SCT_COUNT_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">272:</span> <span class="cbracket">}</span>
+<span class="linenum">273:</span> 
+<span class="linenum">274:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="274">sct_set_counter_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">275:</span> <span class="cbracket">{</span>
+<span class="linenum">276:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#172">SCT_COUNT_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">277:</span> <span class="cbracket">}</span>
+<span class="linenum">278:</span> 
+<span class="linenum">279:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="279">sct_get_counter</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">280:</span> <span class="cbracket">{</span>
+<span class="linenum">281:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#170">SCT_COUNT</a></span><span class="symbol">;</span>
+<span class="linenum">282:</span> <span class="cbracket">}</span>
+<span class="linenum">283:</span> 
+<span class="linenum">284:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="284">sct_get_counter_l</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">285:</span> <span class="cbracket">{</span>
+<span class="linenum">286:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#171">SCT_COUNT_L</a></span><span class="symbol">;</span>
+<span class="linenum">287:</span> <span class="cbracket">}</span>
+<span class="linenum">288:</span> 
+<span class="linenum">289:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="289">sct_get_counter_h</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">290:</span> <span class="cbracket">{</span>
+<span class="linenum">291:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#172">SCT_COUNT_H</a></span><span class="symbol">;</span>
+<span class="linenum">292:</span> <span class="cbracket">}</span>
+<span class="linenum">293:</span> 
+<span class="linenum">294:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="294">sct_set_state</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> state</span><span class="symbol">)</span>
+<span class="linenum">295:</span> <span class="cbracket">{</span>
+<span class="linenum">296:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#173">SCT_STATE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> state</span><span class="symbol">;</span>
+<span class="linenum">297:</span> <span class="cbracket">}</span>
+<span class="linenum">298:</span> 
+<span class="linenum">299:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="299">sct_set_state_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> state</span><span class="symbol">)</span>
+<span class="linenum">300:</span> <span class="cbracket">{</span>
+<span class="linenum">301:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#174">SCT_STATE_L</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> state</span><span class="symbol">;</span>
+<span class="linenum">302:</span> <span class="cbracket">}</span>
+<span class="linenum">303:</span> 
+<span class="linenum">304:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="304">sct_set_state_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> state</span><span class="symbol">)</span>
+<span class="linenum">305:</span> <span class="cbracket">{</span>
+<span class="linenum">306:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#175">SCT_STATE_H</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> state</span><span class="symbol">;</span>
+<span class="linenum">307:</span> <span class="cbracket">}</span>
+<span class="linenum">308:</span> 
+<span class="linenum">309:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="309">sct_get_state</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">310:</span> <span class="cbracket">{</span>
+<span class="linenum">311:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#173">SCT_STATE</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x001f001f</span><span class="symbol">;</span>
+<span class="linenum">312:</span> <span class="cbracket">}</span>
+<span class="linenum">313:</span> 
+<span class="linenum">314:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="314">sct_get_state_l</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">315:</span> <span class="cbracket">{</span>
+<span class="linenum">316:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#174">SCT_STATE_L</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x001f</span><span class="symbol">;</span>
+<span class="linenum">317:</span> <span class="cbracket">}</span>
+<span class="linenum">318:</span> 
+<span class="linenum">319:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="319">sct_get_state_h</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">320:</span> <span class="cbracket">{</span>
+<span class="linenum">321:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#175">SCT_STATE_H</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x001f</span><span class="symbol">;</span>
+<span class="linenum">322:</span> <span class="cbracket">}</span>
+<span class="linenum">323:</span> 
+<span class="linenum">324:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="324">sct_get_input</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">325:</span> <span class="cbracket">{</span>
+<span class="linenum">326:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#176">SCT_INPUT</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x000f000f</span><span class="symbol">;</span>
+<span class="linenum">327:</span> <span class="cbracket">}</span>
+<span class="linenum">328:</span> 
+<span class="linenum">329:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="329">sct_enable_capture</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> registers</span><span class="symbol">)</span>
+<span class="linenum">330:</span> <span class="cbracket">{</span>
+<span class="linenum">331:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#177">SCT_REGMODE</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> registers</span><span class="symbol">;</span>
+<span class="linenum">332:</span> <span class="cbracket">}</span>
+<span class="linenum">333:</span> 
+<span class="linenum">334:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="334">sct_enable_capture_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> registers</span><span class="symbol">)</span>
+<span class="linenum">335:</span> <span class="cbracket">{</span>
+<span class="linenum">336:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#178">SCT_REGMODE_L</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> registers</span><span class="symbol">;</span>
+<span class="linenum">337:</span> <span class="cbracket">}</span>
+<span class="linenum">338:</span> 
+<span class="linenum">339:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="339">sct_enable_capture_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> registers</span><span class="symbol">)</span>
+<span class="linenum">340:</span> <span class="cbracket">{</span>
+<span class="linenum">341:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#179">SCT_REGMODE_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> registers</span><span class="symbol">;</span>
+<span class="linenum">342:</span> <span class="cbracket">}</span>
+<span class="linenum">343:</span> 
+<span class="linenum">344:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="344">sct_disable_capture</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> registers</span><span class="symbol">)</span>
+<span class="linenum">345:</span> <span class="cbracket">{</span>
+<span class="linenum">346:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#177">SCT_REGMODE</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal">registers</span><span class="symbol">;</span>
+<span class="linenum">347:</span> <span class="cbracket">}</span>
+<span class="linenum">348:</span> 
+<span class="linenum">349:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="349">sct_disable_capture_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> registers</span><span class="symbol">)</span>
+<span class="linenum">350:</span> <span class="cbracket">{</span>
+<span class="linenum">351:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#178">SCT_REGMODE_L</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal">registers</span><span class="symbol">;</span>
+<span class="linenum">352:</span> <span class="cbracket">}</span>
+<span class="linenum">353:</span> 
+<span class="linenum">354:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="354">sct_disable_capture_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> registers</span><span class="symbol">)</span>
+<span class="linenum">355:</span> <span class="cbracket">{</span>
+<span class="linenum">356:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#179">SCT_REGMODE_H</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~</span><span class="normal">registers</span><span class="symbol">;</span>
+<span class="linenum">357:</span> <span class="cbracket">}</span>
+<span class="linenum">358:</span> 
+<span class="linenum">359:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="359">sct_set_output</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> output</span><span class="symbol">)</span>
+<span class="linenum">360:</span> <span class="cbracket">{</span>
+<span class="linenum">361:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#180">SCT_OUTPUT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> output</span><span class="symbol">;</span>
+<span class="linenum">362:</span> <span class="cbracket">}</span>
+<span class="linenum">363:</span> 
+<span class="linenum">364:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="364">sct_get_output</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">365:</span> <span class="cbracket">{</span>
+<span class="linenum">366:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#180">SCT_OUTPUT</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">;</span>
+<span class="linenum">367:</span> <span class="cbracket">}</span>
+<span class="linenum">368:</span> 
+<span class="linenum">369:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="369">sct_enable_output_counter_control</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> output</span><span class="symbol">)</span>
+<span class="linenum">370:</span> <span class="cbracket">{</span>
+<span class="linenum">371:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">372:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">373:</span> 
+<span class="linenum">374:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="symbol">;</span>
+<span class="linenum">375:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">376:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">output </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">377:</span> <span class="normal">                        r </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">;</span>
+<span class="linenum">378:</span> <span class="normal">                        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">);</span>
+<span class="linenum">379:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">380:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">381:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">382:</span> <span class="cbracket">}</span>
+<span class="linenum">383:</span> 
+<span class="linenum">384:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="384">sct_enable_output_counter_h_control</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> output</span><span class="symbol">)</span>
+<span class="linenum">385:</span> <span class="cbracket">{</span>
+<span class="linenum">386:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">387:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">388:</span> 
+<span class="linenum">389:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="symbol">;</span>
+<span class="linenum">390:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">391:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">output </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">392:</span> <span class="normal">                        r </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">;</span>
+<span class="linenum">393:</span> <span class="normal">                        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">);</span>
+<span class="linenum">394:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">395:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">396:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">397:</span> <span class="cbracket">}</span>
+<span class="linenum">398:</span> 
+<span class="linenum">399:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="399">sct_disable_output_counter_control</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> output</span><span class="symbol">)</span>
+<span class="linenum">400:</span> <span class="cbracket">{</span>
+<span class="linenum">401:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">402:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">403:</span> 
+<span class="linenum">404:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="symbol">;</span>
+<span class="linenum">405:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">406:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">output </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i</span><span class="symbol">))</span>
+<span class="linenum">407:</span> <span class="normal">                        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">);</span>
+<span class="linenum">408:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">409:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">410:</span> <span class="cbracket">}</span>
+<span class="linenum">411:</span> 
+<span class="linenum">412:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="412">sct_set_conflict_resolution</a></span><span class="symbol">(</span><span class="usertype"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#644">sct_res_t</a></span><span class="normal"> res</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> output</span><span class="symbol">)</span>
+<span class="linenum">413:</span> <span class="cbracket">{</span>
+<span class="linenum">414:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">415:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">416:</span> 
+<span class="linenum">417:</span> <span class="normal">        r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#182">SCT_RES</a></span><span class="symbol">;</span>
+<span class="linenum">418:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">419:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">output </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">420:</span> <span class="normal">                        r </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">);</span>
+<span class="linenum">421:</span> <span class="normal">                        r </span><span class="symbol">|=</span><span class="normal"> res </span><span class="symbol">&lt;&lt;</span><span class="normal"> i </span><span class="symbol">*</span><span class="normal"> </span><span class="number">2</span><span class="symbol">;</span>
+<span class="linenum">422:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">423:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">424:</span> <span class="normal">        </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#181">SCT_OUTPUTDIRCTRL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">425:</span> <span class="cbracket">}</span>
+<span class="linenum">426:</span> 
+<span class="linenum">427:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="427">sct_enable_interrupt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">)</span>
+<span class="linenum">428:</span> <span class="cbracket">{</span>
+<span class="linenum">429:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">)</span>
+<span class="linenum">430:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#183">SCT_EVEN</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">;</span>
+<span class="linenum">431:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">)</span>
+<span class="linenum">432:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#185">SCT_CONEN</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">;</span>
+<span class="linenum">433:</span> <span class="cbracket">}</span>
+<span class="linenum">434:</span> 
+<span class="linenum">435:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="435">sct_disable_interrupt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">)</span>
+<span class="linenum">436:</span> <span class="cbracket">{</span>
+<span class="linenum">437:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">)</span>
+<span class="linenum">438:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#183">SCT_EVEN</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">);</span>
+<span class="linenum">439:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">)</span>
+<span class="linenum">440:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#185">SCT_CONEN</a></span><span class="normal"> </span><span class="symbol">&amp;=</span><span class="normal"> </span><span class="symbol">~((</span><span class="normal">interrupt </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">);</span>
+<span class="linenum">441:</span> <span class="cbracket">}</span>
+<span class="linenum">442:</span> 
+<span class="linenum">443:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="443">sct_get_interrupt_mask</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">)</span>
+<span class="linenum">444:</span> <span class="cbracket">{</span>
+<span class="linenum">445:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">446:</span> 
+<span class="linenum">447:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">)</span>
+<span class="linenum">448:</span> <span class="normal">                r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#183">SCT_EVEN</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">);</span>
+<span class="linenum">449:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">)</span>
+<span class="linenum">450:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#185">SCT_CONEN</a></span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">);</span>
+<span class="linenum">451:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">452:</span> <span class="cbracket">}</span>
+<span class="linenum">453:</span> 
+<span class="linenum">454:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="454">sct_get_interrupt_status</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">)</span>
+<span class="linenum">455:</span> <span class="cbracket">{</span>
+<span class="linenum">456:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">457:</span> 
+<span class="linenum">458:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">)</span>
+<span class="linenum">459:</span> <span class="normal">                r </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#184">SCT_EVFLAG</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">);</span>
+<span class="linenum">460:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">)</span>
+<span class="linenum">461:</span> <span class="normal">                r </span><span class="symbol">|=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#186">SCT_CONFLAG</a></span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">);</span>
+<span class="linenum">462:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">463:</span> <span class="cbracket">}</span>
+<span class="linenum">464:</span> 
+<span class="linenum">465:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="465">sct_clear_interrupt</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">)</span>
+<span class="linenum">466:</span> <span class="cbracket">{</span>
+<span class="linenum">467:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">)</span>
+<span class="linenum">468:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#184">SCT_EVFLAG</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x3f</span><span class="symbol">;</span>
+<span class="linenum">469:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf00</span><span class="symbol">)</span>
+<span class="linenum">470:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#186">SCT_CONFLAG</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">interrupt </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">;</span>
+<span class="linenum">471:</span> <span class="cbracket">}</span>
+<span class="linenum">472:</span> 
+<span class="linenum">473:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="473">sct_set_match</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">474:</span> <span class="cbracket">{</span>
+<span class="linenum">475:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#188">SCT_MATCH</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">476:</span> <span class="cbracket">}</span>
+<span class="linenum">477:</span> 
+<span class="linenum">478:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="478">sct_set_match_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">479:</span> <span class="cbracket">{</span>
+<span class="linenum">480:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#194">SCT_MATCH_L</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">481:</span> <span class="cbracket">}</span>
+<span class="linenum">482:</span> 
+<span class="linenum">483:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="483">sct_set_match_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">484:</span> <span class="cbracket">{</span>
+<span class="linenum">485:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#200">SCT_MATCH_H</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">486:</span> <span class="cbracket">}</span>
+<span class="linenum">487:</span> 
+<span class="linenum">488:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="488">sct_set_match_reload</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">489:</span> <span class="cbracket">{</span>
+<span class="linenum">490:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#226">SCT_MATCHREL</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">491:</span> <span class="cbracket">}</span>
+<span class="linenum">492:</span> 
+<span class="linenum">493:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="493">sct_set_match_reload_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">494:</span> <span class="cbracket">{</span>
+<span class="linenum">495:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#232">SCT_MATCHREL_L</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">496:</span> <span class="cbracket">}</span>
+<span class="linenum">497:</span> 
+<span class="linenum">498:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="498">sct_set_match_reload_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">499:</span> <span class="cbracket">{</span>
+<span class="linenum">500:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#238">SCT_MATCHREL_H</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">501:</span> <span class="cbracket">}</span>
+<span class="linenum">502:</span> 
+<span class="linenum">503:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="503">sct_set_match_and_reload</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">504:</span> <span class="cbracket">{</span>
+<span class="linenum">505:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#188">SCT_MATCH</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">506:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#226">SCT_MATCHREL</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">507:</span> <span class="cbracket">}</span>
+<span class="linenum">508:</span> 
+<span class="linenum">509:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="509">sct_set_match_and_reload_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">510:</span> <span class="cbracket">{</span>
+<span class="linenum">511:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#194">SCT_MATCH_L</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">512:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#232">SCT_MATCHREL_L</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">513:</span> <span class="cbracket">}</span>
+<span class="linenum">514:</span> 
+<span class="linenum">515:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="515">sct_set_match_and_reload_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> value</span><span class="symbol">)</span>
+<span class="linenum">516:</span> <span class="cbracket">{</span>
+<span class="linenum">517:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#200">SCT_MATCH_H</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">518:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#238">SCT_MATCHREL_H</a></span><span class="symbol">(</span><span class="normal">match</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> value</span><span class="symbol">;</span>
+<span class="linenum">519:</span> <span class="cbracket">}</span>
+<span class="linenum">520:</span> 
+<span class="linenum">521:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="521">sct_get_capture</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> cap</span><span class="symbol">)</span>
+<span class="linenum">522:</span> <span class="cbracket">{</span>
+<span class="linenum">523:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#207">SCT_CAP</a></span><span class="symbol">(</span><span class="normal">cap</span><span class="symbol">);</span>
+<span class="linenum">524:</span> <span class="cbracket">}</span>
+<span class="linenum">525:</span> 
+<span class="linenum">526:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="526">sct_get_capture_l</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> cap</span><span class="symbol">)</span>
+<span class="linenum">527:</span> <span class="cbracket">{</span>
+<span class="linenum">528:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#213">SCT_CAP_L</a></span><span class="symbol">(</span><span class="normal">cap</span><span class="symbol">);</span>
+<span class="linenum">529:</span> <span class="cbracket">}</span>
+<span class="linenum">530:</span> 
+<span class="linenum">531:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="531">sct_get_capture_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> cap</span><span class="symbol">)</span>
+<span class="linenum">532:</span> <span class="cbracket">{</span>
+<span class="linenum">533:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#219">SCT_CAP_H</a></span><span class="symbol">(</span><span class="normal">cap</span><span class="symbol">);</span>
+<span class="linenum">534:</span> <span class="cbracket">}</span>
+<span class="linenum">535:</span> 
+<span class="linenum">536:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="536">sct_set_capture</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> cap</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">537:</span> <span class="cbracket">{</span>
+<span class="linenum">538:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#251">SCT_CAPCTRL_L</a></span><span class="symbol">(</span><span class="normal">cap</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">539:</span> <span class="cbracket">}</span>
+<span class="linenum">540:</span> 
+<span class="linenum">541:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="541">sct_set_capture_h</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> cap</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">542:</span> <span class="cbracket">{</span>
+<span class="linenum">543:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#257">SCT_CAPCTRL_H</a></span><span class="symbol">(</span><span class="normal">cap</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">544:</span> <span class="cbracket">}</span>
+<span class="linenum">545:</span> 
+<span class="linenum">546:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="546">sct_setup_event</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> ev</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> match</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> io</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> op</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> action</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> state</span><span class="symbol">)</span>
+<span class="linenum">547:</span> <span class="cbracket">{</span>
+<span class="linenum">548:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#681">SCT_EV_LIMIT</a></span><span class="symbol">)</span>
+<span class="linenum">549:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#158">SCT_LIMIT</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">550:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#682">SCT_EV_LIMIT_H</a></span><span class="symbol">)</span>
+<span class="linenum">551:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#160">SCT_LIMIT_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">552:</span> 
+<span class="linenum">553:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#683">SCT_EV_HALT</a></span><span class="symbol">)</span>
+<span class="linenum">554:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#161">SCT_HALT</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">555:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#684">SCT_EV_HALT_H</a></span><span class="symbol">)</span>
+<span class="linenum">556:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#163">SCT_HALT_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">557:</span> 
+<span class="linenum">558:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#685">SCT_EV_STOP</a></span><span class="symbol">)</span>
+<span class="linenum">559:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#164">SCT_STOP</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">560:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#686">SCT_EV_STOP_H</a></span><span class="symbol">)</span>
+<span class="linenum">561:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#166">SCT_STOP_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">562:</span> 
+<span class="linenum">563:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#687">SCT_EV_START</a></span><span class="symbol">)</span>
+<span class="linenum">564:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#167">SCT_START</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">565:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#688">SCT_EV_START_H</a></span><span class="symbol">)</span>
+<span class="linenum">566:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#169">SCT_START_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">567:</span> 
+<span class="linenum">568:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#689">SCT_EV_INT</a></span><span class="symbol">)</span>
+<span class="linenum">569:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#183">SCT_EVEN</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">570:</span> 
+<span class="linenum">571:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#690">SCT_EV_OUT0_SET</a></span><span class="symbol">)</span>
+<span class="linenum">572:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#281">SCT_OUT0_SET</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">573:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#691">SCT_EV_OUT0_CLR</a></span><span class="symbol">)</span>
+<span class="linenum">574:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#287">SCT_OUT0_CLR</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">575:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#692">SCT_EV_OUT1_SET</a></span><span class="symbol">)</span>
+<span class="linenum">576:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#282">SCT_OUT1_SET</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">577:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#693">SCT_EV_OUT1_CLR</a></span><span class="symbol">)</span>
+<span class="linenum">578:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#288">SCT_OUT1_CLR</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">579:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#694">SCT_EV_OUT2_SET</a></span><span class="symbol">)</span>
+<span class="linenum">580:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#283">SCT_OUT2_SET</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">581:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#695">SCT_EV_OUT2_CLR</a></span><span class="symbol">)</span>
+<span class="linenum">582:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#289">SCT_OUT2_CLR</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">583:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#696">SCT_EV_OUT3_SET</a></span><span class="symbol">)</span>
+<span class="linenum">584:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#284">SCT_OUT3_SET</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">585:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#697">SCT_EV_OUT3_CLR</a></span><span class="symbol">)</span>
+<span class="linenum">586:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#290">SCT_OUT3_CLR</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">587:</span> 
+<span class="linenum">588:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#698">SCT_EV_CAP0</a></span><span class="symbol">)</span>
+<span class="linenum">589:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#208">SCT_CAP0</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">590:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#699">SCT_EV_CAP0_H</a></span><span class="symbol">)</span>
+<span class="linenum">591:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#220">SCT_CAP0_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">592:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#700">SCT_EV_CAP1</a></span><span class="symbol">)</span>
+<span class="linenum">593:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#209">SCT_CAP1</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">594:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#701">SCT_EV_CAP1_H</a></span><span class="symbol">)</span>
+<span class="linenum">595:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#221">SCT_CAP1_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">596:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#702">SCT_EV_CAP2</a></span><span class="symbol">)</span>
+<span class="linenum">597:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#210">SCT_CAP2</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">598:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#703">SCT_EV_CAP2_H</a></span><span class="symbol">)</span>
+<span class="linenum">599:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#222">SCT_CAP2_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">600:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#704">SCT_EV_CAP3</a></span><span class="symbol">)</span>
+<span class="linenum">601:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#211">SCT_CAP3</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">602:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#705">SCT_EV_CAP3_H</a></span><span class="symbol">)</span>
+<span class="linenum">603:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#223">SCT_CAP3_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">604:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#706">SCT_EV_CAP4</a></span><span class="symbol">)</span>
+<span class="linenum">605:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#212">SCT_CAP4</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">606:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#707">SCT_EV_CAP4_H</a></span><span class="symbol">)</span>
+<span class="linenum">607:</span> <span class="normal">                </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#224">SCT_CAP4_H</a></span><span class="normal"> </span><span class="symbol">|=</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> ev</span><span class="symbol">;</span>
+<span class="linenum">608:</span> 
+<span class="linenum">609:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#272">SCT_EV_CTRL</a></span><span class="symbol">(</span><span class="normal">ev</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">match </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">io </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">6</span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">610:</span> <span class="normal">                </span><span class="symbol">(</span><span class="normal">state </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0x1f</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">15</span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">611:</span> <span class="normal">                </span><span class="symbol">((</span><span class="normal">action </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#709">SCT_EV_STATE_LOAD</a></span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">?</span><span class="normal"> </span><span class="normal"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#514">SCT_EV_CTRL_STATELD</a></span><span class="normal"> </span><span class="symbol">:</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">612:</span> <span class="normal">                </span><span class="symbol">(</span><span class="normal">op </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="symbol">~</span><span class="number">0xfc3cf</span><span class="symbol">);</span>
+<span class="linenum">613:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#264">SCT_EV_STATE</a></span><span class="symbol">(</span><span class="normal">ev</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> op </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">;</span>
+<span class="linenum">614:</span> <span class="cbracket">}</span>
+<span class="linenum">615:</span> 
+<span class="linenum">616:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="616">sct_set_output_set</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> out</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">617:</span> <span class="cbracket">{</span>
+<span class="linenum">618:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#280">SCT_OUT_SET</a></span><span class="symbol">(</span><span class="normal">out</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">619:</span> <span class="cbracket">}</span>
+<span class="linenum">620:</span> 
+<span class="linenum">621:</span> <span class="type">void</span><span class="normal"> </span><span class="function"><a name="621">sct_set_output_clear</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> out</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> event</span><span class="symbol">)</span>
+<span class="linenum">622:</span> <span class="cbracket">{</span>
+<span class="linenum">623:</span> <span class="normal">        </span><span class="function"><a href="../../../include/nxp_lpc/lpc81x/sct.h.html#286">SCT_OUT_CLR</a></span><span class="symbol">(</span><span class="normal">out</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> event</span><span class="symbol">;</span>
+<span class="linenum">624:</span> <span class="cbracket">}</span>
+<span class="linenum">625:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
