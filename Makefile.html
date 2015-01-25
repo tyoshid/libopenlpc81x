@@ -80,21 +80,21 @@ http://www.gnu.org/software/src-highlite -->
 <span class="linenum">46:</span> <span class="variable"><a name="46">EXAMPLEGOAL</a></span><span class="variable">     </span><span class="symbol">=</span><span class="normal"> clean</span>
 <span class="linenum">47:</span> <span class="keyword">endif</span>
 <span class="linenum">48:</span> 
-<span class="linenum">49:</span> <span class="string">.PHONY</span><span class="normal">: all clean $(</span><span class="variable"><a href="#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="#19">TOOLS</a></span><span class="normal">)</span>
+<span class="linenum">49:</span> <span class="string">.PHONY</span><span class="normal">: all clean $(</span><span class="variable"><a href="Makefile.html#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#19">TOOLS</a></span><span class="normal">)</span>
 <span class="linenum">50:</span> 
-<span class="linenum">51:</span> <span class="symbol">all clean</span><span class="normal">: $(</span><span class="variable"><a href="#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="#19">TOOLS</a></span><span class="normal">)</span>
+<span class="linenum">51:</span> <span class="symbol">all clean</span><span class="normal">: $(</span><span class="variable"><a href="Makefile.html#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#19">TOOLS</a></span><span class="normal">)</span>
 <span class="linenum">52:</span> 
-<span class="linenum">53:</span> <span class="normal">$(</span><span class="variable"><a href="#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="#19">TOOLS</a></span><span class="normal">):</span>
+<span class="linenum">53:</span> <span class="normal">$(</span><span class="variable"><a href="Makefile.html#18">LIBS</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#19">TOOLS</a></span><span class="normal">):</span>
 <span class="linenum">54:</span> <span class="type">        @</span><span class="normal">echo "-- </span><span class="preproc">$@</span><span class="normal"> --"</span>
 <span class="linenum">55:</span> <span class="type">        @</span><span class="normal">$(</span><span class="usertype">MAKE</span><span class="normal">) -C </span><span class="preproc">$@</span><span class="normal"> -s $(</span><span class="usertype">MAKECMDGOALS</span><span class="normal">)</span>
 <span class="linenum">56:</span> 
-<span class="linenum">57:</span> <span class="string">.PHONY</span><span class="normal">: example clean_example $(</span><span class="variable"><a href="#21">EXAMPLES</a></span><span class="normal">)</span>
+<span class="linenum">57:</span> <span class="string">.PHONY</span><span class="normal">: example clean_example $(</span><span class="variable"><a href="Makefile.html#21">EXAMPLES</a></span><span class="normal">)</span>
 <span class="linenum">58:</span> 
-<span class="linenum">59:</span> <span class="symbol">example clean_example</span><span class="normal">: $(</span><span class="variable"><a href="#21">EXAMPLES</a></span><span class="normal">)</span>
+<span class="linenum">59:</span> <span class="symbol">example clean_example</span><span class="normal">: $(</span><span class="variable"><a href="Makefile.html#21">EXAMPLES</a></span><span class="normal">)</span>
 <span class="linenum">60:</span> 
-<span class="linenum">61:</span> <span class="normal">$(</span><span class="variable"><a href="#21">EXAMPLES</a></span><span class="normal">):</span>
+<span class="linenum">61:</span> <span class="normal">$(</span><span class="variable"><a href="Makefile.html#21">EXAMPLES</a></span><span class="normal">):</span>
 <span class="linenum">62:</span> <span class="type">        @</span><span class="normal">echo "-- </span><span class="preproc">$@</span><span class="normal"> --"</span>
-<span class="linenum">63:</span> <span class="type">        @</span><span class="normal">$(</span><span class="usertype">MAKE</span><span class="normal">) -C </span><span class="preproc">$@</span><span class="normal"> -s $(</span><span class="variable"><a href="#46">EXAMPLEGOAL</a></span><span class="normal">)</span>
+<span class="linenum">63:</span> <span class="type">        @</span><span class="normal">$(</span><span class="usertype">MAKE</span><span class="normal">) -C </span><span class="preproc">$@</span><span class="normal"> -s $(</span><span class="variable"><a href="Makefile.html#46">EXAMPLEGOAL</a></span><span class="normal">)</span>
 <span class="linenum">64:</span> </tt></pre>
       </section>
     </div>

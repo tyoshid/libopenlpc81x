@@ -49,10 +49,17 @@ EXAMPLES	= examples/nxp_lpc/lpc81x/lpc810m021fn8/miniblink \
 all: $(HDRS) $(LIBS) $(LDSCRIPTS) $(TOOLS) $(EXAMPLES) Makefile.html directory_tree.html
 
 clean: $(HDRS) $(LIBS) $(LDSCRIPTS) $(TOOLS) $(EXAMPLES)
-	rm -f Makefile.html directory_tree.html tags mkfile
+	rm -f Makefile.html directory_tree.html tmp tags mkfile
 
 Makefile.html: $(LIBDIR)/Makefile
 	echo "  $(<F)"
+	expand $< > mkfile
+	ctags -n --language-force=Make mkfile
+	source-highlight --no-doc -n --gen-references=inline --ctags= \
+	--css=default.css --src-lang=makefile -i mkfile -o $@
+	mv $@ tmp
+	rm tags
+	rm mkfile
 	echo -e "<!DOCTYPE html>\n<html>\n<head>" > $@
 	echo "<title>$(<F)</title>" >> $@
 	echo -n "<link href=\"stylesheets/stylesheet.css\" " >> $@
@@ -61,12 +68,8 @@ Makefile.html: $(LIBDIR)/Makefile
 	echo "rel=\"stylesheet\" type=\"text/css\">" >> $@
 	cat page_header >> $@
 	./make_header $(<F) >> $@
-	expand $< > mkfile
-	ctags -n --language-force=Make mkfile
-	source-highlight --no-doc -n --gen-references=inline --ctags= \
-	--css=default.css --src-lang=makefile -i mkfile >> $@
-	rm tags
-	rm mkfile
+	cat tmp >> $@
+	rm tmp
 	cat page_footer >> $@
 
 directory_tree.html:
