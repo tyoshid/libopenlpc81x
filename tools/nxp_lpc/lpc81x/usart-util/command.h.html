@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>command.h</title>
+<link href="../../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../../libopenlpc81x.html">libopenlpc81x</a>/
+tools/
+nxp_lpc/
+lpc81x/
+<a href="usart-util.html">usart-util</a>/
+command.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">01:</span> <span class="comment">/*</span>
+<span class="linenum">02:</span> <span class="comment"> * command.h</span>
+<span class="linenum">03:</span> <span class="comment"> *</span>
+<span class="linenum">04:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">05:</span> <span class="comment"> *</span>
+<span class="linenum">06:</span> <span class="comment"> * This file is part of usart-util.</span>
+<span class="linenum">07:</span> <span class="comment"> *</span>
+<span class="linenum">08:</span> <span class="comment"> * usart-util is free software: you can redistribute it and/or modify</span>
+<span class="linenum">09:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">10:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">11:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">12:</span> <span class="comment"> *</span>
+<span class="linenum">13:</span> <span class="comment"> * usart-util is distributed in the hope that it will be useful,</span>
+<span class="linenum">14:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">15:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">16:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">17:</span> <span class="comment"> *</span>
+<span class="linenum">18:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">19:</span> <span class="comment"> * along with Foobar.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">20:</span> <span class="comment"> */</span>
+<span class="linenum">21:</span> 
+<span class="linenum">22:</span> <span class="comment">/* UART ISP commands */</span>
+<span class="linenum">23:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="23">COM_UNLOCK</a></span><span class="normal">                                      </span><span class="string">'U'</span>
+<span class="linenum">24:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="24">COM_SET_BAUD_RATE</a></span><span class="normal">                               </span><span class="string">'B'</span>
+<span class="linenum">25:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="25">COM_ECHO</a></span><span class="normal">                                        </span><span class="string">'A'</span>
+<span class="linenum">26:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="26">COM_WRITE_RAM</a></span><span class="normal">                                   </span><span class="string">'W'</span>
+<span class="linenum">27:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="27">COM_READ_MEMORY</a></span><span class="normal">                                 </span><span class="string">'R'</span>
+<span class="linenum">28:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="28">COM_PREPARE_SECTORS_FOR_WRITE_OPERATION</a></span><span class="normal">         </span><span class="string">'P'</span>
+<span class="linenum">29:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="29">COM_COPY_RAM_TO_FLASH</a></span><span class="normal">                           </span><span class="string">'C'</span>
+<span class="linenum">30:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="30">COM_GO</a></span><span class="normal">                                          </span><span class="string">'G'</span>
+<span class="linenum">31:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="31">COM_ERASE_SECTORS</a></span><span class="normal">                               </span><span class="string">'E'</span>
+<span class="linenum">32:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="32">COM_BLANK_CHECK_SECTORS</a></span><span class="normal">                         </span><span class="string">'I'</span>
+<span class="linenum">33:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="33">COM_READ_PART_ID</a></span><span class="normal">                                </span><span class="string">'J'</span>
+<span class="linenum">34:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="34">COM_READ_BOOT_CODE_VERSION</a></span><span class="normal">                      </span><span class="string">'K'</span>
+<span class="linenum">35:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="35">COM_COMPARE</a></span><span class="normal">                                     </span><span class="string">'M'</span>
+<span class="linenum">36:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="36">COM_RAED_UID</a></span><span class="normal">                                    </span><span class="string">'N'</span>
+<span class="linenum">37:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="37">COM_READ_CRC_CHECKSUM</a></span><span class="normal">                           </span><span class="string">'S'</span>
+<span class="linenum">38:</span> 
+<span class="linenum">39:</span> <span class="comment">/* UART ISP Return Codes */</span>
+<span class="linenum">40:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="40">RESULT_CMD_SUCCESS</a></span><span class="normal">                              </span><span class="number">0</span>
+<span class="linenum">41:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="41">RESULT_INVALID_COMMAND</a></span><span class="normal">                          </span><span class="number">1</span>
+<span class="linenum">42:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="42">RESULT_SRC_ADDR_ERROR</a></span><span class="normal">                           </span><span class="number">2</span>
+<span class="linenum">43:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="43">RESULT_DST_ADDR_ERROR</a></span><span class="normal">                           </span><span class="number">3</span>
+<span class="linenum">44:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="44">RESULT_SRC_ADDR_NOT_MAPPED</a></span><span class="normal">                      </span><span class="number">4</span>
+<span class="linenum">45:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="45">RESULT_DST_ADDR_NOT_MAPPED</a></span><span class="normal">                      </span><span class="number">5</span>
+<span class="linenum">46:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="46">RESULT_COUNT_ERROR</a></span><span class="normal">                              </span><span class="number">6</span>
+<span class="linenum">47:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="47">RESULT_INVALID_SECTOR</a></span><span class="normal">                           </span><span class="number">7</span>
+<span class="linenum">48:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="48">RESULT_SECTOR_NOT_BLANK</a></span><span class="normal">                         </span><span class="number">8</span>
+<span class="linenum">49:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="49">RESULT_SECTOR_NOT_PREPARED_FOR_WRITE_OPERATION</a></span><span class="normal">  </span><span class="number">9</span>
+<span class="linenum">50:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="50">RESULT_COMPARE_ERROR</a></span><span class="normal">                            </span><span class="number">10</span>
+<span class="linenum">51:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="51">RESULT_BUSY</a></span><span class="normal">                                     </span><span class="number">11</span>
+<span class="linenum">52:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="52">RESULT_PARAM_ERROR</a></span><span class="normal">                              </span><span class="number">12</span>
+<span class="linenum">53:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="53">RESULT_ADDR_ERROR</a></span><span class="normal">                               </span><span class="number">13</span>
+<span class="linenum">54:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="54">RESULT_ADDR_NOT_MAPPED</a></span><span class="normal">                          </span><span class="number">14</span>
+<span class="linenum">55:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="55">RESULT_CMD_LOCKED</a></span><span class="normal">                               </span><span class="number">15</span>
+<span class="linenum">56:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="56">RESULT_INVALID_CODE</a></span><span class="normal">                             </span><span class="number">16</span>
+<span class="linenum">57:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="57">RESULT_INVALID_BAUD_RATE</a></span><span class="normal">                        </span><span class="number">17</span>
+<span class="linenum">58:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="58">RESULT_INVALID_STOP_BIT</a></span><span class="normal">                         </span><span class="number">18</span>
+<span class="linenum">59:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="59">RESULT_CODE_READ_PROTECTION_ENABLED</a></span><span class="normal">             </span><span class="number">19</span>
+<span class="linenum">60:</span> 
+<span class="linenum">61:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="61">ERROR_TIMEOUT</a></span><span class="normal">                                   </span><span class="number">32</span>
+<span class="linenum">62:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="62">ERROR_INVALID_VALUE</a></span><span class="normal">                             </span><span class="number">33</span>
+<span class="linenum">63:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="63">ERROR_SIZE</a></span><span class="normal">                                      </span><span class="number">34</span>
+<span class="linenum">64:</span> 
+<span class="linenum">65:</span> <span class="comment">/* Part identification numbers */</span>
+<span class="linenum">66:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="66">PID_LPC810M021FN8</a></span><span class="normal">       </span><span class="number">0x8100</span>
+<span class="linenum">67:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="67">PID_LPC811M001JDH16</a></span><span class="normal">     </span><span class="number">0x8110</span>
+<span class="linenum">68:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="68">PID_LPC812M101JDH16</a></span><span class="normal">     </span><span class="number">0x8120</span>
+<span class="linenum">69:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="69">PID_LPC812M101JD20</a></span><span class="normal">      </span><span class="number">0x8121</span>
+<span class="linenum">70:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="70">PID_LPC812M101JDH20</a></span><span class="normal">     </span><span class="number">0x8122</span>
+<span class="linenum">71:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="71">PID_LPC812M101JTB16</a></span><span class="normal">     </span><span class="number">0x8122</span>
+<span class="linenum">72:</span> 
+<span class="linenum">73:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="73">PAGE_SIZE</a></span><span class="normal">               </span><span class="number">64</span>
+<span class="linenum">74:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="74">SECTOR_SIZE</a></span><span class="normal">             </span><span class="number">1024</span>
+<span class="linenum">75:</span> 
+<span class="linenum">76:</span> <span class="type">int</span><span class="normal"> </span><span class="function">isp_init</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> retry</span><span class="symbol">);</span>
+<span class="linenum">77:</span> <span class="type">int</span><span class="normal"> </span><span class="function">unlock</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">);</span>
+<span class="linenum">78:</span> <span class="type">int</span><span class="normal"> </span><span class="function">set_baud_rate</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">baud</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> stop</span><span class="symbol">);</span>
+<span class="linenum">79:</span> <span class="type">int</span><span class="normal"> </span><span class="function">echo</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> setting</span><span class="symbol">);</span>
+<span class="linenum">80:</span> <span class="type">int</span><span class="normal"> </span><span class="function">write_to_ram</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> addr</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> bytes</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">data</span><span class="symbol">);</span>
+<span class="linenum">81:</span> <span class="type">int</span><span class="normal"> </span><span class="function">read_memory</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> addr</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> bytes</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">data</span><span class="symbol">);</span>
+<span class="linenum">82:</span> <span class="type">int</span><span class="normal"> </span><span class="function">prepare_sectors</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> start</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> end</span><span class="symbol">);</span>
+<span class="linenum">83:</span> <span class="type">int</span><span class="normal"> </span><span class="function">copy_ram_to_flash</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> flash</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> ram</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> bytes</span><span class="symbol">);</span>
+<span class="linenum">84:</span> <span class="type">int</span><span class="normal"> </span><span class="function">go</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> addr</span><span class="symbol">);</span>
+<span class="linenum">85:</span> <span class="type">int</span><span class="normal"> </span><span class="function">erase_sectors</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> start</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> end</span><span class="symbol">);</span>
+<span class="linenum">86:</span> <span class="type">int</span><span class="normal"> </span><span class="function">blank_check_sectors</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> start</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> end</span><span class="symbol">);</span>
+<span class="linenum">87:</span> <span class="type">int</span><span class="normal"> </span><span class="function">read_boot_code_version</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">version</span><span class="symbol">);</span>
+<span class="linenum">88:</span> <span class="type">int</span><span class="normal"> </span><span class="function">read_part_id</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">pid</span><span class="symbol">);</span>
+<span class="linenum">89:</span> <span class="type">int</span><span class="normal"> </span><span class="function">compare</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> addr1</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> addr2</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> bytes</span><span class="symbol">);</span>
+<span class="linenum">90:</span> <span class="type">int</span><span class="normal"> </span><span class="function">read_uid</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">uid</span><span class="symbol">);</span>
+<span class="linenum">91:</span> <span class="type">int</span><span class="normal"> </span><span class="function">read_crc_checksum</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> fd</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> addr</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> bytes</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">checksum</span><span class="symbol">);</span>
+<span class="linenum">92:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
