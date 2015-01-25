@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>scb.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+scb.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * System Control Block (SCB)</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">021:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">022:</span> 
+<span class="linenum">023:</span> <span class="comment">/* --- System control and ID registers ------------------------------------- */</span>
+<span class="linenum">024:</span> <span class="comment">/*</span>
+<span class="linenum">025:</span> <span class="comment"> * Offset       Register</span>
+<span class="linenum">026:</span> <span class="comment"> * 0xe000e008   SCB_ACTLR               Auxiliary Control Register</span>
+<span class="linenum">027:</span> <span class="comment"> *</span>
+<span class="linenum">028:</span> <span class="comment"> * 0x000        SCB_CPUID               CPUID Base Register</span>
+<span class="linenum">029:</span> <span class="comment"> * 0x004        SCB_ICSR                Interrupt Control State Register</span>
+<span class="linenum">030:</span> <span class="comment"> * 0x008        SCB_VTOR                Vector Table Offset Register</span>
+<span class="linenum">031:</span> <span class="comment"> * 0x00c        SCB_AIRCR               Application Interrupt and Reset Control</span>
+<span class="linenum">032:</span> <span class="comment"> *                                      Register</span>
+<span class="linenum">033:</span> <span class="comment"> * 0x010        SCB_SCR                 Optional System Control Register</span>
+<span class="linenum">034:</span> <span class="comment"> * 0x014        SCB_CCR                 Configuration and Control Register</span>
+<span class="linenum">035:</span> <span class="comment"> * 0x01c        SCB_SHPR2               System Handler Priority Register 2</span>
+<span class="linenum">036:</span> <span class="comment"> * 0x020        SCB_SHPR3               System Handler Priority Register 3</span>
+<span class="linenum">037:</span> <span class="comment"> * 0x024        SCB_SHCSR               System Handler Control and State</span>
+<span class="linenum">038:</span> <span class="comment"> *                                      Register</span>
+<span class="linenum">039:</span> <span class="comment"> * 0x030        SCB_DFSR                Debug Fault Status Register</span>
+<span class="linenum">040:</span> <span class="comment"> */</span>
+<span class="linenum">041:</span> 
+<span class="linenum">042:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="42">SCB_ACTLR</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#67">SCS_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">043:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="43">SCB_CPUID</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x000</span><span class="symbol">)</span>
+<span class="linenum">044:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="44">SCB_ICSR</a></span><span class="normal">                        </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x004</span><span class="symbol">)</span>
+<span class="linenum">045:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="45">SCB_VTOR</a></span><span class="normal">                        </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">046:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="46">SCB_AIRCR</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x00c</span><span class="symbol">)</span>
+<span class="linenum">047:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="47">SCB_SCR</a></span><span class="normal">                         </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x010</span><span class="symbol">)</span>
+<span class="linenum">048:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="48">SCB_CCR</a></span><span class="normal">                         </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x014</span><span class="symbol">)</span>
+<span class="linenum">049:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="49">SCB_SHPR2</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x01c</span><span class="symbol">)</span>
+<span class="linenum">050:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="50">SCB_SHPR3</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x020</span><span class="symbol">)</span>
+<span class="linenum">051:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="51">SCB_SHCSR</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x024</span><span class="symbol">)</span>
+<span class="linenum">052:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="52">SCB_DFSR</a></span><span class="normal">                        </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#72">SCB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x030</span><span class="symbol">)</span>
+<span class="linenum">053:</span> 
+<span class="linenum">054:</span> <span class="comment">/* --- SCB_ACTLR values ---------------------------------------------------- */</span>
+<span class="linenum">055:</span> 
+<span class="linenum">056:</span> <span class="comment">/* --- SCB_CPUID values ---------------------------------------------------- */</span>
+<span class="linenum">057:</span> 
+<span class="linenum">058:</span> <span class="comment">/* SCB_CPUID[21:24]: IMPLEMENTER (0x41  ARM Limited.) */</span>
+<span class="linenum">059:</span> <span class="comment">/* SCB_CPUID[23:20]: VARIANT */</span>
+<span class="linenum">060:</span> <span class="comment">/* SCB_CPUID[19:16]: ARCHITECTURE (0xc  ARMv6-M) */</span>
+<span class="linenum">061:</span> <span class="comment">/* SCB_CPUID[15:4]: PARTNO */</span>
+<span class="linenum">062:</span> <span class="comment">/* SCB_CPUID[3:0]: REVISION */</span>
+<span class="linenum">063:</span> 
+<span class="linenum">064:</span> <span class="comment">/* --- SCB_ICSR values ----------------------------------------------------- */</span>
+<span class="linenum">065:</span> 
+<span class="linenum">066:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="66">SCB_ICSR_NMIPENDSET</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">31</span><span class="symbol">)</span>
+<span class="linenum">067:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="67">SCB_ICSR_PENDSVSET</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">28</span><span class="symbol">)</span>
+<span class="linenum">068:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="68">SCB_ICSR_PENDSVCLR</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">27</span><span class="symbol">)</span>
+<span class="linenum">069:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="69">SCB_ICSR_PENDSTSET</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">26</span><span class="symbol">)</span>
+<span class="linenum">070:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="70">SCB_ICSR_PENDSTCLR</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">25</span><span class="symbol">)</span>
+<span class="linenum">071:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="71">SCB_ICSR_ISRPREEMPT</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">23</span><span class="symbol">)</span>
+<span class="linenum">072:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="72">SCB_ICSR_ISRPENDING</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">22</span><span class="symbol">)</span>
+<span class="linenum">073:</span> <span class="comment">/* SCB_ICSR[20:12]: VECTPENDING */</span>
+<span class="linenum">074:</span> <span class="comment">/* SCB_ICSR[8:0]: VECTACTIVE */</span>
+<span class="linenum">075:</span> 
+<span class="linenum">076:</span> <span class="comment">/* --- SCB_VTOR values ----------------------------------------------------- */</span>
+<span class="linenum">077:</span> 
+<span class="linenum">078:</span> <span class="comment">/* SCB_VTOR[31:7]: TBLOFF */</span>
+<span class="linenum">079:</span> 
+<span class="linenum">080:</span> <span class="comment">/* --- SCB_AIRCR values ---------------------------------------------------- */</span>
+<span class="linenum">081:</span> 
+<span class="linenum">082:</span> <span class="comment">/* SCB_AIRCR[31:16]: VECTKEY */</span>
+<span class="linenum">083:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="83">SCB_AIRCR_VECTKEY</a></span><span class="normal">               </span><span class="symbol">(</span><span class="number">0x05fa</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">)</span>
+<span class="linenum">084:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="84">SCB_AIRCR_ENDIANNESS</a></span><span class="normal">            </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">15</span><span class="symbol">)</span>
+<span class="linenum">085:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="85">SCB_AIRCR_SYSRESETREQ</a></span><span class="normal">           </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">086:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="86">SCB_AIRCR_VECTCLRACTIVE</a></span><span class="normal">         </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">087:</span> 
+<span class="linenum">088:</span> <span class="comment">/* --- SCB_SCR values ------------------------------------------------------ */</span>
+<span class="linenum">089:</span> 
+<span class="linenum">090:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="90">SCB_SCR_SEVONPEND</a></span><span class="normal">               </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">091:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="91">SCB_SCR_SLEEPDEEP</a></span><span class="normal">               </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">092:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="92">SCB_SCR_SLEEPONEXIT</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">093:</span> 
+<span class="linenum">094:</span> <span class="comment">/* --- SCB_CCR values ------------------------------------------------------ */</span>
+<span class="linenum">095:</span> 
+<span class="linenum">096:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="96">SCB_CCR_STKALIGN</a></span><span class="normal">                </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">9</span><span class="symbol">)</span>
+<span class="linenum">097:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="97">SCB_CCR_UNALIGN_TRP</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">098:</span> 
+<span class="linenum">099:</span> <span class="comment">/* --- SCB_SHPR2 values ---------------------------------------------------- */</span>
+<span class="linenum">100:</span> 
+<span class="linenum">101:</span> <span class="comment">/* SCB_SHPR2[31:30]: PRI_11 (SVCall) */</span>
+<span class="linenum">102:</span> 
+<span class="linenum">103:</span> <span class="comment">/* --- SCB_SHPR3 values ---------------------------------------------------- */</span>
+<span class="linenum">104:</span> 
+<span class="linenum">105:</span> <span class="comment">/* SCB_SHPR3[31:30]: PRI_15 (SysTick) */</span>
+<span class="linenum">106:</span> <span class="comment">/* SCB_SHPR3[23:22]: PRI_14 (PendSV) */</span>
+<span class="linenum">107:</span> 
+<span class="linenum">108:</span> <span class="comment">/* --- SCB_SHCSR values ---------------------------------------------------- */</span>
+<span class="linenum">109:</span> 
+<span class="linenum">110:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="110">SCB_SHCSR_SVCALLPENDED</a></span><span class="normal">          </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">15</span><span class="symbol">)</span>
+<span class="linenum">111:</span> 
+<span class="linenum">112:</span> <span class="comment">/* --- SCB_DFSR values ----------------------------------------------------- */</span>
+<span class="linenum">113:</span> 
+<span class="linenum">114:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="114">SCB_DFSR_EXTERNAL</a></span><span class="normal">               </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">115:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="115">SCB_DFSR_VCATCH</a></span><span class="normal">                 </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">116:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="116">SCB_DFSR_DWTTRAP</a></span><span class="normal">                </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">117:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="117">SCB_DFSR_BKPT</a></span><span class="normal">                   </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">118:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="118">SCB_DFSR_HALTED</a></span><span class="normal">                 </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">119:</span> 
+<span class="linenum">120:</span> <span class="comment">/* --- Function prototypes ------------------------------------------------- */</span>
+<span class="linenum">121:</span> 
+<span class="linenum">122:</span> <span class="comment">/* Sleep */</span>
+<span class="linenum">123:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">124:</span> <span class="normal">        </span><span class="normal"><a name="124">SCB_SEVONPEND</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">),</span>
+<span class="linenum">125:</span> <span class="normal">        </span><span class="normal"><a name="125">SCB_SLEEPDEEP</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">),</span>
+<span class="linenum">126:</span> <span class="normal">        </span><span class="normal"><a name="126">SCB_SLEEPONEXIT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">127:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">128:</span> 
+<span class="linenum">129:</span> <span class="type">void</span><span class="normal"> </span><span class="function">scb_reset_system</span><span class="symbol">(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">130:</span> <span class="type">void</span><span class="normal"> </span><span class="function">scb_set_sleep</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> sleep</span><span class="symbol">);</span>
+<span class="linenum">131:</span> <span class="type">int</span><span class="normal"> </span><span class="function">scb_get_sleep</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> sleep</span><span class="symbol">);</span>
+<span class="linenum">132:</span> <span class="type">void</span><span class="normal"> </span><span class="function">scb_set_vector_table_offset</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> tbloff</span><span class="symbol">);</span>
+<span class="linenum">133:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>rom_api.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+rom_api.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * ROM API</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="comment">/*</span>
+<span class="linenum">021:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">022:</span> <span class="comment"> *</span>
+<span class="linenum">023:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">024:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">025:</span> <span class="comment"> *</span>
+<span class="linenum">026:</span> <span class="comment"> * Chapter 23: LPC81x Power profile API ROM driver</span>
+<span class="linenum">027:</span> <span class="comment"> * Chapter 24: LPC81x I2C-bus ROM API</span>
+<span class="linenum">028:</span> <span class="comment"> * Chapter 25: LPC81x USART API ROM driver routines</span>
+<span class="linenum">029:</span> <span class="comment"> */</span>
+<span class="linenum">030:</span> 
+<span class="linenum">031:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">032:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">033:</span> 
+<span class="linenum">034:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="34">ROM_DRIVER_BASE</a></span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#37">BOOT_ROM_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x1ff8</span><span class="symbol">)</span>
+<span class="linenum">035:</span> 
+<span class="linenum">036:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="36">LPC_PWRD_API</a></span><span class="normal">    </span><span class="symbol">((*(</span><span class="normal"><a href="rom_api.h.html#213">rom_api_t</a></span><span class="normal"> </span><span class="symbol">**)(</span><span class="normal"><a href="rom_api.h.html#34">ROM_DRIVER_BASE</a></span><span class="symbol">))-&gt;</span><span class="normal"><a href="rom_api.h.html#206">p_pwrd</a></span><span class="symbol">)</span>
+<span class="linenum">037:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="37">LPC_I2CD_API</a></span><span class="normal">    </span><span class="symbol">((*(</span><span class="normal"><a href="rom_api.h.html#213">rom_api_t</a></span><span class="normal"> </span><span class="symbol">**)(</span><span class="normal"><a href="rom_api.h.html#34">ROM_DRIVER_BASE</a></span><span class="symbol">))-&gt;</span><span class="normal"><a href="rom_api.h.html#208">p_i2cd</a></span><span class="symbol">)</span>
+<span class="linenum">038:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="38">LPC_UARTD_API</a></span><span class="normal">   </span><span class="symbol">((*(</span><span class="normal"><a href="rom_api.h.html#213">rom_api_t</a></span><span class="normal"> </span><span class="symbol">**)(</span><span class="normal"><a href="rom_api.h.html#34">ROM_DRIVER_BASE</a></span><span class="symbol">))-&gt;</span><span class="normal"><a href="rom_api.h.html#212">p_uartd</a></span><span class="symbol">)</span>
+<span class="linenum">039:</span> 
+<span class="linenum">040:</span> <span class="comment">/* --- Error codes --------------------------------------------------------- */</span>
+<span class="linenum">041:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">042:</span> <span class="normal">        </span><span class="normal"><a name="42">API_OK</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">043:</span> <span class="normal">        </span><span class="normal"><a name="43">API_ERROR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">,</span>
+<span class="linenum">044:</span> 
+<span class="linenum">045:</span> <span class="normal">        </span><span class="normal"><a name="45">API_ERR_PLL_INVALID_FREQ</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">,</span>
+<span class="linenum">046:</span> <span class="normal">        </span><span class="normal"><a name="46">API_ERR_PLL_INVALID_MODE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">2</span><span class="symbol">,</span>
+<span class="linenum">047:</span> <span class="normal">        </span><span class="normal"><a name="47">API_ERR_PLL_FREQ_NOT_FOUND</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">3</span><span class="symbol">,</span>
+<span class="linenum">048:</span> <span class="normal">        </span><span class="normal"><a name="48">API_ERR_PLL_NOT_LOCKED</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">4</span><span class="symbol">,</span>
+<span class="linenum">049:</span> 
+<span class="linenum">050:</span> <span class="normal">        </span><span class="normal"><a name="50">API_ERR_PWR_INVALID_FREQ</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">,</span>
+<span class="linenum">051:</span> <span class="normal">        </span><span class="normal"><a name="51">API_ERR_PWR_INVALID_MODE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">2</span><span class="symbol">,</span>
+<span class="linenum">052:</span> 
+<span class="linenum">053:</span> <span class="normal">        </span><span class="normal"><a name="53">API_ERR_I2C_NAK</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60001</span><span class="symbol">,</span>
+<span class="linenum">054:</span> <span class="normal">        </span><span class="normal"><a name="54">API_ERR_I2C_BUFFER_OVERFLOW</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60002</span><span class="symbol">,</span>
+<span class="linenum">055:</span> <span class="normal">        </span><span class="normal"><a name="55">API_ERR_I2C_BYTE_COUNT_ERR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60003</span><span class="symbol">,</span>
+<span class="linenum">056:</span> <span class="normal">        </span><span class="normal"><a name="56">API_ERR_I2C_LOSS_OF_ARBITRATION</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60004</span><span class="symbol">,</span>
+<span class="linenum">057:</span> <span class="normal">        </span><span class="normal"><a name="57">API_ERR_I2C_SLAVE_NOT_ADDRESSED</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60005</span><span class="symbol">,</span>
+<span class="linenum">058:</span> <span class="normal">        </span><span class="normal"><a name="58">API_ERR_I2C_LOSS_OF_ARBITRATION_NAK_BIT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60006</span><span class="symbol">,</span>
+<span class="linenum">059:</span> <span class="normal">        </span><span class="normal"><a name="59">API_ERR_I2C_GENERAL_FAILURE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60007</span><span class="symbol">,</span>
+<span class="linenum">060:</span> <span class="normal">        </span><span class="normal"><a name="60">API_ERR_I2C_REGS_SET_TO_DEFAULT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x60008</span><span class="symbol">,</span>
+<span class="linenum">061:</span> 
+<span class="linenum">062:</span> <span class="normal">        </span><span class="normal"><a name="62">API_ERR_UART_RXD_BUSY</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x80001</span><span class="symbol">,</span>
+<span class="linenum">063:</span> <span class="normal">        </span><span class="normal"><a name="63">API_ERR_UART_TXD_BUSY</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x80002</span><span class="symbol">,</span>
+<span class="linenum">064:</span> <span class="normal">        </span><span class="normal"><a name="64">API_ERR_UART_OVERRUN_FRAME_PARITY_NOISE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x80003</span><span class="symbol">,</span>
+<span class="linenum">065:</span> <span class="normal">        </span><span class="normal"><a name="65">API_ERR_UART_UNDERRUN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x80004</span><span class="symbol">,</span>
+<span class="linenum">066:</span> <span class="normal">        </span><span class="normal"><a name="66">API_ERR_UART_RARAM</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x80005</span><span class="symbol">,</span>
+<span class="linenum">067:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">068:</span> 
+<span class="linenum">069:</span> <span class="comment">/* --- Power profile API --------------------------------------------------- */</span>
+<span class="linenum">070:</span> 
+<span class="linenum">071:</span> <span class="comment">/* set_pll mode options */</span>
+<span class="linenum">072:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">073:</span> <span class="normal">        </span><span class="normal"><a name="73">API_CPU_FREQ_EQU</a></span><span class="symbol">,</span>
+<span class="linenum">074:</span> <span class="normal">        </span><span class="normal"><a name="74">API_CPU_FREQ_LTE</a></span><span class="symbol">,</span>
+<span class="linenum">075:</span> <span class="normal">        </span><span class="normal"><a name="75">API_CPU_FREQ_GTE</a></span><span class="symbol">,</span>
+<span class="linenum">076:</span> <span class="normal">        </span><span class="normal"><a name="76">API_CPU_FREQ_APPROX</a></span>
+<span class="linenum">077:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">078:</span> 
+<span class="linenum">079:</span> <span class="comment">/* set_power mode options */</span>
+<span class="linenum">080:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">081:</span> <span class="normal">        </span><span class="normal"><a name="81">API_PWR_DEFAULT</a></span><span class="symbol">,</span>
+<span class="linenum">082:</span> <span class="normal">        </span><span class="normal"><a name="82">API_PWR_CPU_PERFORMANCE</a></span><span class="symbol">,</span>
+<span class="linenum">083:</span> <span class="normal">        </span><span class="normal"><a name="83">API_PWR_EFFICIENCY</a></span><span class="symbol">,</span>
+<span class="linenum">084:</span> <span class="normal">        </span><span class="normal"><a name="84">API_PWR_LOW_CURRENT</a></span>
+<span class="linenum">085:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">086:</span> 
+<span class="linenum">087:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">088:</span> <span class="normal">        </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="88">set_pll</a></span><span class="symbol">)(</span><span class="type">unsigned</span><span class="normal"> </span><span class="type">int</span><span class="normal"> cmd</span><span class="symbol">[],</span><span class="normal"> </span><span class="type">unsigned</span><span class="normal"> </span><span class="type">int</span><span class="normal"> resp</span><span class="symbol">[]);</span>
+<span class="linenum">089:</span> <span class="normal">        </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="89">set_power</a></span><span class="symbol">)(</span><span class="type">unsigned</span><span class="normal"> </span><span class="type">int</span><span class="normal"> cmd</span><span class="symbol">[],</span><span class="normal"> </span><span class="type">unsigned</span><span class="normal"> </span><span class="type">int</span><span class="normal"> resp</span><span class="symbol">[]);</span>
+<span class="linenum">090:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="90">pwrd_api_t</a></span><span class="symbol">;</span>
+<span class="linenum">091:</span> 
+<span class="linenum">092:</span> <span class="comment">/* --- I2C API ------------------------------------------------------------- */</span>
+<span class="linenum">093:</span> 
+<span class="linenum">094:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="94">api_i2c_handle_t</a></span><span class="symbol">;</span>
+<span class="linenum">095:</span> 
+<span class="linenum">096:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="96">api_i2c_callbk_t</a></span><span class="symbol">)(</span><span class="usertype">uint32_t</span><span class="normal"> err_code</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> n</span><span class="symbol">);</span>
+<span class="linenum">097:</span> 
+<span class="linenum">098:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">099:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="99">num_bytes_send</a></span><span class="symbol">;</span>
+<span class="linenum">100:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="100">num_bytes_rec</a></span><span class="symbol">;</span>
+<span class="linenum">101:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="101">buffer_ptr_send</a></span><span class="symbol">;</span>
+<span class="linenum">102:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="102">buffer_ptr_rec</a></span><span class="symbol">;</span>
+<span class="linenum">103:</span> <span class="normal">        </span><span class="usertype"><a href="rom_api.h.html#96">api_i2c_callbk_t</a></span><span class="normal"> </span><span class="normal"><a name="103">func_pt</a></span><span class="symbol">;</span>
+<span class="linenum">104:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="normal"><a name="104">stop_flag</a></span><span class="symbol">;</span>
+<span class="linenum">105:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="normal"><a name="105">dummy</a></span><span class="symbol">[</span><span class="number">3</span><span class="symbol">];</span>
+<span class="linenum">106:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="106">api_i2c_param_t</a></span><span class="symbol">;</span>
+<span class="linenum">107:</span> 
+<span class="linenum">108:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">109:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="109">n_bytes_sent</a></span><span class="symbol">;</span>
+<span class="linenum">110:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="110">n_bytes_recd</a></span><span class="symbol">;</span>
+<span class="linenum">111:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="111">api_i2c_result_t</a></span><span class="symbol">;</span>
+<span class="linenum">112:</span> 
+<span class="linenum">113:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">114:</span> <span class="normal">        </span><span class="normal"><a name="114">API_I2C_IDLE</a></span><span class="symbol">,</span>
+<span class="linenum">115:</span> <span class="normal">        </span><span class="normal"><a name="115">API_I2C_MASTER_SEND</a></span><span class="symbol">,</span>
+<span class="linenum">116:</span> <span class="normal">        </span><span class="normal"><a name="116">API_I2C_MASTER_RECEIVE</a></span><span class="symbol">,</span>
+<span class="linenum">117:</span> <span class="normal">        </span><span class="normal"><a name="117">API_I2C_SLAVE_SEND</a></span><span class="symbol">,</span>
+<span class="linenum">118:</span> <span class="normal">        </span><span class="normal"><a name="118">API_I2C_SLAVE_RECEIVE</a></span>
+<span class="linenum">119:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="119">api_i2c_mode_t</a></span><span class="symbol">;</span>
+<span class="linenum">120:</span> 
+<span class="linenum">121:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">122:</span> <span class="normal">        </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="122">i2c_isr_handler</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">);</span>
+<span class="linenum">123:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="123">i2c_master_transmit_poll</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">124:</span> <span class="normal">                                             </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">125:</span> <span class="normal">                                             </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">126:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="126">i2c_master_receive_poll</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">127:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">128:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">129:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="129">i2c_master_tx_rx_poll</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">130:</span> <span class="normal">                                          </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">131:</span> <span class="normal">                                          </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">132:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="132">i2c_master_transmit_intr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">133:</span> <span class="normal">                                             </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">134:</span> <span class="normal">                                             </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">135:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="135">i2c_master_receive_intr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">136:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">137:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">138:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="138">i2c_master_tx_rx_intr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">139:</span> <span class="normal">                                          </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">140:</span> <span class="normal">                                          </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">141:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="141">i2c_slave_receive_poll</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">142:</span> <span class="normal">                                           </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">143:</span> <span class="normal">                                           </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">144:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="144">i2c_slave_transmit_poll</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">145:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">146:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">147:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="147">i2c_slave_receive_intr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">148:</span> <span class="normal">                                           </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">149:</span> <span class="normal">                                           </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">150:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="150">i2c_slave_transmit_intr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">151:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#106">api_i2c_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptp</span><span class="symbol">,</span>
+<span class="linenum">152:</span> <span class="normal">                                            </span><span class="usertype"><a href="rom_api.h.html#111">api_i2c_result_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ptr</span><span class="symbol">);</span>
+<span class="linenum">153:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="153">i2c_set_slave_addr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">154:</span> <span class="normal">                                       </span><span class="usertype">uint32_t</span><span class="normal"> slave_addr_0_3</span><span class="symbol">,</span>
+<span class="linenum">155:</span> <span class="normal">                                       </span><span class="usertype">uint32_t</span><span class="normal"> slave_mask_0_3</span><span class="symbol">);</span>
+<span class="linenum">156:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="156">i2c_get_mem_size</a></span><span class="symbol">)(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">157:</span> <span class="normal">        </span><span class="function"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="157">i2c_setup</a></span><span class="symbol">)(</span><span class="usertype">uint32_t</span><span class="normal"> i2c_base_addr</span><span class="symbol">,</span>
+<span class="linenum">158:</span> <span class="normal">                                      </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">start_of_ram</span><span class="symbol">);</span>
+<span class="linenum">159:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="159">i2c_set_bitrate</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">,</span>
+<span class="linenum">160:</span> <span class="normal">                                    </span><span class="usertype">uint32_t</span><span class="normal"> p_clk_in_hz</span><span class="symbol">,</span>
+<span class="linenum">161:</span> <span class="normal">                                    </span><span class="usertype">uint32_t</span><span class="normal"> bitrate_in_bps</span><span class="symbol">);</span>
+<span class="linenum">162:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="162">i2c_get_firmware_version</a></span><span class="symbol">)(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">163:</span> <span class="normal">        </span><span class="function"><a href="rom_api.h.html#119">api_i2c_mode_t</a></span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="163">i2c_get_status</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#94">api_i2c_handle_t</a></span><span class="normal"> h_i2c</span><span class="symbol">);</span>
+<span class="linenum">164:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="164">i2cd_api_t</a></span><span class="symbol">;</span>
+<span class="linenum">165:</span> 
+<span class="linenum">166:</span> <span class="comment">/* --- UART API ------------------------------------------------------------ */</span>
+<span class="linenum">167:</span> 
+<span class="linenum">168:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="168">api_uart_handle_t</a></span><span class="symbol">;</span>
+<span class="linenum">169:</span> 
+<span class="linenum">170:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">171:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="171">sys_clk_in_hz</a></span><span class="symbol">;</span>
+<span class="linenum">172:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="172">baudrate_in_hz</a></span><span class="symbol">;</span>
+<span class="linenum">173:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="normal"><a name="173">config</a></span><span class="symbol">;</span>
+<span class="linenum">174:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="normal"><a name="174">sync_mode</a></span><span class="symbol">;</span>
+<span class="linenum">175:</span> <span class="normal">        </span><span class="usertype">uint16_t</span><span class="normal"> </span><span class="normal"><a name="175">error_en</a></span><span class="symbol">;</span>
+<span class="linenum">176:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="176">api_uart_config_t</a></span><span class="symbol">;</span>
+<span class="linenum">177:</span> 
+<span class="linenum">178:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="178">api_uart_callbk_t</a></span><span class="symbol">)(</span><span class="usertype">uint32_t</span><span class="normal"> err_code</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint32_t</span><span class="normal"> n</span><span class="symbol">);</span>
+<span class="linenum">179:</span> 
+<span class="linenum">180:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">181:</span> <span class="normal">        </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="181">buffer</a></span><span class="symbol">;</span>
+<span class="linenum">182:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="182">size</a></span><span class="symbol">;</span>
+<span class="linenum">183:</span> <span class="normal">        </span><span class="usertype">uint16_t</span><span class="normal"> </span><span class="normal"><a name="183">transfer_mode</a></span><span class="symbol">;</span>
+<span class="linenum">184:</span> <span class="normal">        </span><span class="usertype">uint16_t</span><span class="normal"> </span><span class="normal"><a name="184">driver_mode</a></span><span class="symbol">;</span>
+<span class="linenum">185:</span> <span class="normal">        </span><span class="usertype"><a href="rom_api.h.html#178">api_uart_callbk_t</a></span><span class="normal"> </span><span class="normal"><a name="185">callback_func_pt</a></span><span class="symbol">;</span>
+<span class="linenum">186:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="186">api_uart_param_t</a></span><span class="symbol">;</span>
+<span class="linenum">187:</span> 
+<span class="linenum">188:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">189:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="189">uart_get_mem_size</a></span><span class="symbol">)(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">190:</span> <span class="normal">        </span><span class="function"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="190">uart_setup</a></span><span class="symbol">)(</span><span class="usertype">uint32_t</span><span class="normal"> base_addr</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint8_t</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">ram</span><span class="symbol">);</span>
+<span class="linenum">191:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="191">uart_init</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> handle</span><span class="symbol">,</span>
+<span class="linenum">192:</span> <span class="normal">                              </span><span class="usertype"><a href="rom_api.h.html#176">api_uart_config_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">set</span><span class="symbol">);</span>
+<span class="linenum">193:</span> <span class="normal">        </span><span class="function">uint8_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="193">uart_get_char</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> handle</span><span class="symbol">);</span>
+<span class="linenum">194:</span> <span class="normal">        </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="194">uart_put_char</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> handle</span><span class="symbol">,</span><span class="normal"> </span><span class="usertype">uint8_t</span><span class="normal"> data</span><span class="symbol">);</span>
+<span class="linenum">195:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="195">uart_get_line</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> handle</span><span class="symbol">,</span>
+<span class="linenum">196:</span> <span class="normal">                                  </span><span class="usertype"><a href="rom_api.h.html#186">api_uart_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">param</span><span class="symbol">);</span>
+<span class="linenum">197:</span> <span class="normal">        </span><span class="function">uint32_t</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="197">uart_put_line</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> handle</span><span class="symbol">,</span>
+<span class="linenum">198:</span> <span class="normal">                                  </span><span class="usertype"><a href="rom_api.h.html#186">api_uart_param_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal">param</span><span class="symbol">);</span>
+<span class="linenum">199:</span> <span class="normal">        </span><span class="type">void</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal"><a name="199">uart_isr</a></span><span class="symbol">)(</span><span class="usertype"><a href="rom_api.h.html#168">api_uart_handle_t</a></span><span class="normal"> handle</span><span class="symbol">);</span>
+<span class="linenum">200:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="200">uartd_api_t</a></span><span class="symbol">;</span>
+<span class="linenum">201:</span> 
+<span class="linenum">202:</span> <span class="comment">/* --- ROM API ------------------------------------------------------------- */</span>
+<span class="linenum">203:</span> 
+<span class="linenum">204:</span> <span class="keyword">typedef</span><span class="normal"> </span><span class="keyword">struct</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">205:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="205">unused</a></span><span class="symbol">[</span><span class="number">3</span><span class="symbol">];</span>
+<span class="linenum">206:</span> <span class="normal">        </span><span class="usertype"><a href="rom_api.h.html#90">pwrd_api_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="206">p_pwrd</a></span><span class="symbol">;</span>
+<span class="linenum">207:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="207">p_dev1</a></span><span class="symbol">;</span>
+<span class="linenum">208:</span> <span class="normal">        </span><span class="usertype"><a href="rom_api.h.html#164">i2cd_api_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="208">p_i2cd</a></span><span class="symbol">;</span>
+<span class="linenum">209:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="209">p_dev3</a></span><span class="symbol">;</span>
+<span class="linenum">210:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="210">p_dev4</a></span><span class="symbol">;</span>
+<span class="linenum">211:</span> <span class="normal">        </span><span class="usertype">uint32_t</span><span class="normal"> </span><span class="normal"><a name="211">p_dev5</a></span><span class="symbol">;</span>
+<span class="linenum">212:</span> <span class="normal">        </span><span class="usertype"><a href="rom_api.h.html#200">uartd_api_t</a></span><span class="normal"> </span><span class="symbol">*</span><span class="normal"><a name="212">p_uartd</a></span><span class="symbol">;</span>
+<span class="linenum">213:</span> <span class="cbracket">}</span><span class="normal"> </span><span class="normal"><a name="213">rom_api_t</a></span><span class="symbol">;</span>
+<span class="linenum">214:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

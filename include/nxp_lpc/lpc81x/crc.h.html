@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>crc.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+crc.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">01:</span> <span class="comment">/*</span>
+<span class="linenum">02:</span> <span class="comment"> * Cyclic Redundancy Check (CRC)</span>
+<span class="linenum">03:</span> <span class="comment"> *</span>
+<span class="linenum">04:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">05:</span> <span class="comment"> *</span>
+<span class="linenum">06:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">07:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">08:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">09:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">10:</span> <span class="comment"> *</span>
+<span class="linenum">11:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">12:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">13:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">14:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">15:</span> <span class="comment"> *</span>
+<span class="linenum">16:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">17:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">18:</span> <span class="comment"> */</span>
+<span class="linenum">19:</span> 
+<span class="linenum">20:</span> <span class="comment">/*</span>
+<span class="linenum">21:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">22:</span> <span class="comment"> *</span>
+<span class="linenum">23:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">24:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">25:</span> <span class="comment"> *</span>
+<span class="linenum">26:</span> <span class="comment"> * Chapter 19: LPC81x Cyclic Redundancy Check (CRC) engine</span>
+<span class="linenum">27:</span> <span class="comment"> */</span>
+<span class="linenum">28:</span> 
+<span class="linenum">29:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">30:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">31:</span> 
+<span class="linenum">32:</span> <span class="comment">/* --- CRC registers ------------------------------------------------------- */</span>
+<span class="linenum">33:</span> <span class="comment">/*</span>
+<span class="linenum">34:</span> <span class="comment"> * Offset       Register</span>
+<span class="linenum">35:</span> <span class="comment"> * 0x000        CRC_MODE                CRC mode register</span>
+<span class="linenum">36:</span> <span class="comment"> * 0x004        CRC_SEED                CRC seed register</span>
+<span class="linenum">37:</span> <span class="comment"> * 0x008        CRC_SUM                 CRC checksum register</span>
+<span class="linenum">38:</span> <span class="comment"> * 0x008        CRC_WR_DATA             CRC data register</span>
+<span class="linenum">39:</span> <span class="comment"> */</span>
+<span class="linenum">40:</span> 
+<span class="linenum">41:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="41">CRC_MODE</a></span><span class="normal">                        </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#39">CRC_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x000</span><span class="symbol">)</span>
+<span class="linenum">42:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="42">CRC_SEED</a></span><span class="normal">                        </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#39">CRC_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x004</span><span class="symbol">)</span>
+<span class="linenum">43:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="43">CRC_SUM</a></span><span class="normal">                         </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#39">CRC_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">44:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="44">CRC_WR_DATA</a></span><span class="normal">                     </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#39">CRC_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">45:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="45">CRC_WR_DATA16</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#35">MMIO16</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#39">CRC_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">46:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="46">CRC_WR_DATA8</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#34">MMIO8</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#39">CRC_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">47:</span> 
+<span class="linenum">48:</span> <span class="comment">/* --- CRC_MODE values ----------------------------------------------------- */</span>
+<span class="linenum">49:</span> 
+<span class="linenum">50:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="50">CRC_MODE_CMPL_SUM</a></span><span class="normal">               </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">)</span>
+<span class="linenum">51:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="51">CRC_MODE_BIT_RVS_SUM</a></span><span class="normal">            </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">52:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="52">CRC_MODE_CMPL_WR</a></span><span class="normal">                </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">53:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="53">CRC_MODE_BIT_RVS_WR</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">54:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="54">CRC_MODE_CRC_POLY1</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">55:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="55">CRC_MODE_CRC_POLY0</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">56:</span> 
+<span class="linenum">57:</span> <span class="comment">/* CRC_POLY */</span>
+<span class="linenum">58:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="58">CRC_MODE_CRC_POLY_CRC_CCITT</a></span><span class="normal">     </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">59:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="59">CRC_MODE_CRC_POLY_CRC_16</a></span><span class="normal">        </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">60:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="60">CRC_MODE_CRC_POLY_CRC_32</a></span><span class="normal">        </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">61:</span> 
+<span class="linenum">62:</span> <span class="comment">/* --- CRC_SEED values ----------------------------------------------------- */</span>
+<span class="linenum">63:</span> 
+<span class="linenum">64:</span> <span class="comment">/* CRC_SEED[31:0]: CRC_SEED */</span>
+<span class="linenum">65:</span> 
+<span class="linenum">66:</span> <span class="comment">/* --- CRC_SUM values ------------------------------------------------------ */</span>
+<span class="linenum">67:</span> 
+<span class="linenum">68:</span> <span class="comment">/* CRC_SUM[31:0]: CRC_SUM */</span>
+<span class="linenum">69:</span> 
+<span class="linenum">70:</span> <span class="comment">/* --- CRC_WR_DATA values -------------------------------------------------- */</span>
+<span class="linenum">71:</span> 
+<span class="linenum">72:</span> <span class="comment">/* CRC_WR_DATA[31:0]: CRC_WR_DATA */</span>
+<span class="linenum">73:</span> 
+<span class="linenum">74:</span> <span class="comment">/* --- Function prototypes ------------------------------------------------- */</span>
+<span class="linenum">75:</span> 
+<span class="linenum">76:</span> <span class="comment">/* Mode */</span>
+<span class="linenum">77:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">78:</span> <span class="normal">        </span><span class="normal"><a name="78">CRC_CCITT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">),</span>
+<span class="linenum">79:</span> <span class="normal">        </span><span class="normal"><a name="79">CRC_16</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">),</span>
+<span class="linenum">80:</span> <span class="normal">        </span><span class="normal"><a name="80">CRC_32</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">),</span>
+<span class="linenum">81:</span> <span class="normal">        </span><span class="normal"><a name="81">CRC_BIT_RVS_WR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">),</span>
+<span class="linenum">82:</span> <span class="normal">        </span><span class="normal"><a name="82">CRC_CMPL_WR</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">),</span>
+<span class="linenum">83:</span> <span class="normal">        </span><span class="normal"><a name="83">CRC_BIT_RVS_SUM</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">),</span>
+<span class="linenum">84:</span> <span class="normal">        </span><span class="normal"><a name="84">CRC_CMPL_SUM</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">)</span>
+<span class="linenum">85:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">86:</span> 
+<span class="linenum">87:</span> <span class="type">void</span><span class="normal"> </span><span class="function">crc_set_mode</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> mode</span><span class="symbol">);</span>
+<span class="linenum">88:</span> <span class="type">int</span><span class="normal"> </span><span class="function">crc_calc</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> crc</span><span class="symbol">,</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">buffer</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> len</span><span class="symbol">);</span>
+<span class="linenum">89:</span> <span class="type">int</span><span class="normal"> </span><span class="function">crc_calc16</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> crc</span><span class="symbol">,</span><span class="normal"> </span><span class="type">short</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">buffer</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> len</span><span class="symbol">);</span>
+<span class="linenum">90:</span> <span class="type">int</span><span class="normal"> </span><span class="function">crc_calc32</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> crc</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">buffer</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> len</span><span class="symbol">);</span>
+<span class="linenum">91:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

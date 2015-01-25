@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>swm.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+swm.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * Switch matrix</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="comment">/*</span>
+<span class="linenum">021:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">022:</span> <span class="comment"> *</span>
+<span class="linenum">023:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">024:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">025:</span> <span class="comment"> *</span>
+<span class="linenum">026:</span> <span class="comment"> * Chapter 9: LPC81x Switch matrix</span>
+<span class="linenum">027:</span> <span class="comment"> */</span>
+<span class="linenum">028:</span> 
+<span class="linenum">029:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">030:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">031:</span> 
+<span class="linenum">032:</span> <span class="comment">/* --- SWM registers ------------------------------------------------------- */</span>
+<span class="linenum">033:</span> <span class="comment">/*</span>
+<span class="linenum">034:</span> <span class="comment"> * Offset       Register</span>
+<span class="linenum">035:</span> <span class="comment"> * 0x000        SWM_PINASSIGN0          Pin assign register 0</span>
+<span class="linenum">036:</span> <span class="comment"> * 0x004        SWM_PINASSIGN1          Pin assign register 1</span>
+<span class="linenum">037:</span> <span class="comment"> * 0x008        SWM_PINASSIGN2          Pin assign register 2</span>
+<span class="linenum">038:</span> <span class="comment"> * 0x00c        SWM_PINASSIGN3          Pin assign register 3</span>
+<span class="linenum">039:</span> <span class="comment"> * 0x010        SWM_PINASSIGN4          Pin assign register 4</span>
+<span class="linenum">040:</span> <span class="comment"> * 0x014        SWM_PINASSIGN5          Pin assign register 5</span>
+<span class="linenum">041:</span> <span class="comment"> * 0x018        SWM_PINASSIGN6          Pin assign register 6</span>
+<span class="linenum">042:</span> <span class="comment"> * 0x01c        SWM_PINASSIGN7          Pin assign register 7</span>
+<span class="linenum">043:</span> <span class="comment"> * 0x020        SWM_PINASSIGN8          Pin assign register 8</span>
+<span class="linenum">044:</span> <span class="comment"> * 0x1c0        SWM_PINENABLE0          Pin enable register 0</span>
+<span class="linenum">045:</span> <span class="comment"> */</span>
+<span class="linenum">046:</span> 
+<span class="linenum">047:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">)</span><span class="normal">                </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#51">SWM_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">048:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="48">SWM_PINASSIGN0</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">049:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="49">SWM_PINASSIGN1</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">050:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="50">SWM_PINASSIGN2</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">051:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="51">SWM_PINASSIGN3</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">052:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="52">SWM_PINASSIGN4</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">053:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="53">SWM_PINASSIGN5</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">5</span><span class="symbol">)</span>
+<span class="linenum">054:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="54">SWM_PINASSIGN6</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">6</span><span class="symbol">)</span>
+<span class="linenum">055:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="55">SWM_PINASSIGN7</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">7</span><span class="symbol">)</span>
+<span class="linenum">056:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="56">SWM_PINASSIGN8</a></span><span class="normal">                  </span><span class="function"><a href="swm.h.html#47">SWM_PINASSIGN</a></span><span class="symbol">(</span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">057:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="57">SWM_PINENABLE0</a></span><span class="normal">                  </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#51">SWM_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x1c0</span><span class="symbol">)</span>
+<span class="linenum">058:</span> 
+<span class="linenum">059:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="59">SWM_PINASSIGN_REGNUM</a></span><span class="normal">            </span><span class="number">9</span>
+<span class="linenum">060:</span> 
+<span class="linenum">061:</span> <span class="comment">/* --- SWM_PINASSIGN0 values ----------------------------------------------- */</span>
+<span class="linenum">062:</span> 
+<span class="linenum">063:</span> <span class="comment">/* SWM_PINASSIN0[31:24]: U0_CTS_I */</span>
+<span class="linenum">064:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="64">SWM_PINASSIGN0_U0_CTS_I</a></span><span class="normal">         </span><span class="number">24</span>
+<span class="linenum">065:</span> <span class="comment">/* SWM_PINASSIN0[23:16]: U0_RTS_O */</span>
+<span class="linenum">066:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="66">SWM_PINASSIGN0_U0_RTS_O</a></span><span class="normal">         </span><span class="number">16</span>
+<span class="linenum">067:</span> <span class="comment">/* SWM_PINASSIN0[15:8]: U0_RXD_I */</span>
+<span class="linenum">068:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="68">SWM_PINASSIGN0_U0_RXD_I</a></span><span class="normal">         </span><span class="number">8</span>
+<span class="linenum">069:</span> <span class="comment">/* SWM_PINASSIN0[7:0]: U0_TXD_O */</span>
+<span class="linenum">070:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="70">SWM_PINASSIGN0_U0_TXD_O</a></span><span class="normal">         </span><span class="number">0</span>
+<span class="linenum">071:</span> 
+<span class="linenum">072:</span> <span class="comment">/* --- SWM_PINASSIGN1 values ----------------------------------------------- */</span>
+<span class="linenum">073:</span> 
+<span class="linenum">074:</span> <span class="comment">/* SWM_PINASSIN1[31:24]: U1_RTS_O */</span>
+<span class="linenum">075:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="75">SWM_PINASSIGN1_U1_RTS_O</a></span><span class="normal">         </span><span class="number">24</span>
+<span class="linenum">076:</span> <span class="comment">/* SWM_PINASSIN1[23:16]: U1_RXD_I */</span>
+<span class="linenum">077:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="77">SWM_PINASSIGN1_U1_RXD_I</a></span><span class="normal">         </span><span class="number">16</span>
+<span class="linenum">078:</span> <span class="comment">/* SWM_PINASSIN1[15:8]: U1_TXD_O */</span>
+<span class="linenum">079:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="79">SWM_PINASSIGN1_U1_TXD_O</a></span><span class="normal">         </span><span class="number">8</span>
+<span class="linenum">080:</span> <span class="comment">/* SWM_PINASSIN1[7:0]: U0_SCLK_IO */</span>
+<span class="linenum">081:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="81">SWM_PINASSIGN1_U0_SCLK_IO</a></span><span class="normal">       </span><span class="number">0</span>
+<span class="linenum">082:</span> 
+<span class="linenum">083:</span> <span class="comment">/* --- SWM_PINASSIGN2 values ----------------------------------------------- */</span>
+<span class="linenum">084:</span> 
+<span class="linenum">085:</span> <span class="comment">/* SWM_PINASSIN2[31:24]: U2_RXD_I */</span>
+<span class="linenum">086:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="86">SWM_PINASSIGN2_U2_RXD_I</a></span><span class="normal">         </span><span class="number">24</span>
+<span class="linenum">087:</span> <span class="comment">/* SWM_PINASSIN2[23:16]: U2_TXD_O */</span>
+<span class="linenum">088:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="88">SWM_PINASSIGN2_U2_TXD_O</a></span><span class="normal">         </span><span class="number">16</span>
+<span class="linenum">089:</span> <span class="comment">/* SWM_PINASSIN2[15:8]: U1_SCLK_IO */</span>
+<span class="linenum">090:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="90">SWM_PINASSIGN2_U1_SCLK_IO</a></span><span class="normal">       </span><span class="number">8</span>
+<span class="linenum">091:</span> <span class="comment">/* SWM_PINASSIN2[7:0]: U1_CTS_I */</span>
+<span class="linenum">092:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="92">SWM_PINASSIGN2_U1_CTS_I</a></span><span class="normal">         </span><span class="number">0</span>
+<span class="linenum">093:</span> 
+<span class="linenum">094:</span> <span class="comment">/* --- SWM_PINASSIGN3 values ----------------------------------------------- */</span>
+<span class="linenum">095:</span> 
+<span class="linenum">096:</span> <span class="comment">/* SWM_PINASSIN3[31:24]: SPI0_SCK_IO */</span>
+<span class="linenum">097:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="97">SWM_PINASSIGN3_SPI0_SCK_IO</a></span><span class="normal">      </span><span class="number">24</span>
+<span class="linenum">098:</span> <span class="comment">/* SWM_PINASSIN3[23:16]: U2_SCLK_IO */</span>
+<span class="linenum">099:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="99">SWM_PINASSIGN3_U2_SCLK_IO</a></span><span class="normal">       </span><span class="number">16</span>
+<span class="linenum">100:</span> <span class="comment">/* SWM_PINASSIN3[15:8]: U2_CTS_I */</span>
+<span class="linenum">101:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="101">SWM_PINASSIGN3_U2_CTS_I</a></span><span class="normal">         </span><span class="number">8</span>
+<span class="linenum">102:</span> <span class="comment">/* SWM_PINASSIN3[7:0]: U2_RTS_O */</span>
+<span class="linenum">103:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="103">SWM_PINASSIGN3_U2_RTS_O</a></span><span class="normal">         </span><span class="number">0</span>
+<span class="linenum">104:</span> 
+<span class="linenum">105:</span> <span class="comment">/* --- SWM_PINASSIGN4 values ----------------------------------------------- */</span>
+<span class="linenum">106:</span> 
+<span class="linenum">107:</span> <span class="comment">/* SWM_PINASSIN4[31:24]: SPI1_SCK_IO */</span>
+<span class="linenum">108:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="108">SWM_PINASSIGN4_SPI1_SCK_IO</a></span><span class="normal">      </span><span class="number">24</span>
+<span class="linenum">109:</span> <span class="comment">/* SWM_PINASSIN4[23:16]: SPI0_SSEL_IO */</span>
+<span class="linenum">110:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="110">SWM_PINASSIGN4_SPI0_SSEL_IO</a></span><span class="normal">     </span><span class="number">16</span>
+<span class="linenum">111:</span> <span class="comment">/* SWM_PINASSIN4[15:8]: SPI0_MISO_IO */</span>
+<span class="linenum">112:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="112">SWM_PINASSIGN4_SPI0_MISO_IO</a></span><span class="normal">     </span><span class="number">8</span>
+<span class="linenum">113:</span> <span class="comment">/* SWM_PINASSIN4[7:0]: SPI0_MOSI_IO */</span>
+<span class="linenum">114:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="114">SWM_PINASSIGN4_SPI0_MOSI_IO</a></span><span class="normal">     </span><span class="number">0</span>
+<span class="linenum">115:</span> 
+<span class="linenum">116:</span> <span class="comment">/* --- SWM_PINASSIGN5 values ----------------------------------------------- */</span>
+<span class="linenum">117:</span> 
+<span class="linenum">118:</span> <span class="comment">/* SWM_PINASSIN5[31:24]: CTIN_0_I */</span>
+<span class="linenum">119:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="119">SWM_PINASSIGN5_CTIN_0_I</a></span><span class="normal">         </span><span class="number">24</span>
+<span class="linenum">120:</span> <span class="comment">/* SWM_PINASSIN5[23:16]: SPI1_SSEL_IO */</span>
+<span class="linenum">121:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="121">SWM_PINASSIGN5_SPI1_SSEL_IO</a></span><span class="normal">     </span><span class="number">16</span>
+<span class="linenum">122:</span> <span class="comment">/* SWM_PINASSIN5[15:8]: SPI1_MISO_IO */</span>
+<span class="linenum">123:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="123">SWM_PINASSIGN5_SPI1_MISO_IO</a></span><span class="normal">     </span><span class="number">8</span>
+<span class="linenum">124:</span> <span class="comment">/* SWM_PINASSIN5[7:0]: SPI1_MOSI_IO */</span>
+<span class="linenum">125:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="125">SWM_PINASSIGN5_SPI1_MOSI_IO</a></span><span class="normal">     </span><span class="number">0</span>
+<span class="linenum">126:</span> 
+<span class="linenum">127:</span> <span class="comment">/* --- SWM_PINASSIGN6 values ----------------------------------------------- */</span>
+<span class="linenum">128:</span> 
+<span class="linenum">129:</span> <span class="comment">/* SWM_PINASSIN6[31:24]: CTOUT_0_O */</span>
+<span class="linenum">130:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="130">SWM_PINASSIGN6_CTOUT_0_O</a></span><span class="normal">        </span><span class="number">24</span>
+<span class="linenum">131:</span> <span class="comment">/* SWM_PINASSIN6[23:16]: CTIN_3_I */</span>
+<span class="linenum">132:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="132">SWM_PINASSIGN6_CTIN_3_I</a></span><span class="normal">         </span><span class="number">16</span>
+<span class="linenum">133:</span> <span class="comment">/* SWM_PINASSIN6[15:8]: CTIN_2_I */</span>
+<span class="linenum">134:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="134">SWM_PINASSIGN6_CTIN_2_I</a></span><span class="normal">         </span><span class="number">8</span>
+<span class="linenum">135:</span> <span class="comment">/* SWM_PINASSIN6[7:0]: CTIN_1_I */</span>
+<span class="linenum">136:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="136">SWM_PINASSIGN6_CTIN_1_I</a></span><span class="normal">         </span><span class="number">0</span>
+<span class="linenum">137:</span> 
+<span class="linenum">138:</span> <span class="comment">/* --- SWM_PINASSIGN7 values ----------------------------------------------- */</span>
+<span class="linenum">139:</span> 
+<span class="linenum">140:</span> <span class="comment">/* SWM_PINASSIN7[31:24]: I2C_SDA_IO */</span>
+<span class="linenum">141:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="141">SWM_PINASSIGN7_I2C_SDA_IO</a></span><span class="normal">       </span><span class="number">24</span>
+<span class="linenum">142:</span> <span class="comment">/* SWM_PINASSIN7[23:16]: CTOUT_3_O */</span>
+<span class="linenum">143:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="143">SWM_PINASSIGN7_CTOUT_3_O</a></span><span class="normal">        </span><span class="number">16</span>
+<span class="linenum">144:</span> <span class="comment">/* SWM_PINASSIN7[15:8]: CTOUT_2_O */</span>
+<span class="linenum">145:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="145">SWM_PINASSIGN7_CTOUT_2_O</a></span><span class="normal">        </span><span class="number">8</span>
+<span class="linenum">146:</span> <span class="comment">/* SWM_PINASSIN7[7:0]: CTOUT_1_O */</span>
+<span class="linenum">147:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="147">SWM_PINASSIGN7_CTOUT_1_O</a></span><span class="normal">        </span><span class="number">0</span>
+<span class="linenum">148:</span> 
+<span class="linenum">149:</span> <span class="comment">/* --- SWM_PINASSIGN8 values ----------------------------------------------- */</span>
+<span class="linenum">150:</span> 
+<span class="linenum">151:</span> <span class="comment">/* SWM_PINASSIN8[31:24]: GPIO_INT_BMAT_O */</span>
+<span class="linenum">152:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="152">SWM_PINASSIGN8_GPIO_INT_BMAT_O</a></span><span class="normal">  </span><span class="number">24</span>
+<span class="linenum">153:</span> <span class="comment">/* SWM_PINASSIN8[23:16]: CLKOUT_O */</span>
+<span class="linenum">154:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="154">SWM_PINASSIGN8_CLKOUT_O</a></span><span class="normal">         </span><span class="number">16</span>
+<span class="linenum">155:</span> <span class="comment">/* SWM_PINASSIN8[15:8]: ACMP_O_O */</span>
+<span class="linenum">156:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="156">SWM_PINASSIGN8_ACMP_O_O</a></span><span class="normal">         </span><span class="number">8</span>
+<span class="linenum">157:</span> <span class="comment">/* SWM_PINASSIN8[7:0]: I2C_SCL_IO */</span>
+<span class="linenum">158:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="158">SWM_PINASSIGN8_I2C_SCL_IO</a></span><span class="normal">       </span><span class="number">0</span>
+<span class="linenum">159:</span> 
+<span class="linenum">160:</span> <span class="comment">/* --- SWM_PINENABLE0 values ----------------------------------------------- */</span>
+<span class="linenum">161:</span> 
+<span class="linenum">162:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="162">SWM_PINENABLE0_VDDCMP</a></span><span class="normal">           </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_6 */</span>
+<span class="linenum">163:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="163">SWM_PINENABLE0_CLKIN</a></span><span class="normal">            </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">7</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_1 */</span>
+<span class="linenum">164:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="164">SWM_PINENABLE0_RESET_EN</a></span><span class="normal">         </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">6</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_5 */</span>
+<span class="linenum">165:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="165">SWM_PINENABLE0_XTALOUT_EN</a></span><span class="normal">       </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_9 */</span>
+<span class="linenum">166:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="166">SWM_PINENABLE0_XTALIN_EN</a></span><span class="normal">        </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_8 */</span>
+<span class="linenum">167:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="167">SWM_PINENABLE0_SWDIO_EN</a></span><span class="normal">         </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_2 */</span>
+<span class="linenum">168:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="168">SWM_PINENABLE0_SWCLK_EN</a></span><span class="normal">         </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_3 */</span>
+<span class="linenum">169:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="169">SWM_PINENABLE0_ACMP_I2_EN</a></span><span class="normal">       </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_1 */</span>
+<span class="linenum">170:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="170">SWM_PINENABLE0_ACMP_I1_EN</a></span><span class="normal">       </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="comment">/* PIO0_0 */</span>
+<span class="linenum">171:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

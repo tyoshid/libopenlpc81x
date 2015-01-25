@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>memorymap.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+memorymap.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">01:</span> <span class="comment">/*</span>
+<span class="linenum">02:</span> <span class="comment"> * Memory mapping</span>
+<span class="linenum">03:</span> <span class="comment"> *</span>
+<span class="linenum">04:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">05:</span> <span class="comment"> *</span>
+<span class="linenum">06:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">07:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">08:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">09:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">10:</span> <span class="comment"> *</span>
+<span class="linenum">11:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">12:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">13:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">14:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">15:</span> <span class="comment"> *</span>
+<span class="linenum">16:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">17:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">18:</span> <span class="comment"> */</span>
+<span class="linenum">19:</span> 
+<span class="linenum">20:</span> <span class="comment">/*</span>
+<span class="linenum">21:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">22:</span> <span class="comment"> *</span>
+<span class="linenum">23:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">24:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">25:</span> <span class="comment"> *</span>
+<span class="linenum">26:</span> <span class="comment"> * Chapter 2: LPC81x Memory mapping</span>
+<span class="linenum">27:</span> <span class="comment"> */</span>
+<span class="linenum">28:</span> 
+<span class="linenum">29:</span> <span class="preproc">#ifndef</span><span class="normal"> </span><span class="normal"><a href="memorymap.h.html#30">MEMORYMAP_H</a></span>
+<span class="linenum">30:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="30">MEMORYMAP_H</a></span>
+<span class="linenum">31:</span> 
+<span class="linenum">32:</span> <span class="comment">/* --- LPC81x memory map ------------------------------------------------ */</span>
+<span class="linenum">33:</span> 
+<span class="linenum">34:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="34">FLASH_MEMORY_BASE</a></span><span class="normal">               </span><span class="number">0x00000000</span>
+<span class="linenum">35:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="35">SRAM_BASE</a></span><span class="normal">                       </span><span class="number">0x10000000</span>
+<span class="linenum">36:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="36">MTB_BASE</a></span><span class="normal">                        </span><span class="number">0x14000000</span>
+<span class="linenum">37:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="37">BOOT_ROM_BASE</a></span><span class="normal">                   </span><span class="number">0x1fff0000</span>
+<span class="linenum">38:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="38">PERIPH_BASE</a></span><span class="normal">                     </span><span class="number">0x40000000</span>
+<span class="linenum">39:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="39">CRC_BASE</a></span><span class="normal">                        </span><span class="number">0x50000000</span>
+<span class="linenum">40:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="40">SCT_BASE</a></span><span class="normal">                        </span><span class="number">0x50004000</span>
+<span class="linenum">41:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="41">GPIO_BASE</a></span><span class="normal">                       </span><span class="number">0xa0000000</span>
+<span class="linenum">42:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="42">PININT_BASE</a></span><span class="normal">                     </span><span class="number">0xa0004000</span>
+<span class="linenum">43:</span> 
+<span class="linenum">44:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="44">PPB_BASE</a></span><span class="normal">                        </span><span class="number">0xe0000000</span>
+<span class="linenum">45:</span> 
+<span class="linenum">46:</span> <span class="comment">/* --- APB Peripherals ----------------------------------------------------- */</span>
+<span class="linenum">47:</span> 
+<span class="linenum">48:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="48">WWDT_BASE</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x00000</span><span class="symbol">)</span>
+<span class="linenum">49:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="49">MRT_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x04000</span><span class="symbol">)</span>
+<span class="linenum">50:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="50">WKT_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x08000</span><span class="symbol">)</span>
+<span class="linenum">51:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="51">SWM_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x0c000</span><span class="symbol">)</span>
+<span class="linenum">52:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="52">PMU_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x20000</span><span class="symbol">)</span>
+<span class="linenum">53:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="53">ACMP_BASE</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x24000</span><span class="symbol">)</span>
+<span class="linenum">54:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="54">FLASHCON_BASE</a></span><span class="normal">                   </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x40000</span><span class="symbol">)</span>
+<span class="linenum">55:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="55">IOCON_BASE</a></span><span class="normal">                      </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x44000</span><span class="symbol">)</span>
+<span class="linenum">56:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="56">SYSCON_BASE</a></span><span class="normal">                     </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x48000</span><span class="symbol">)</span>
+<span class="linenum">57:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="57">I2C_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x50000</span><span class="symbol">)</span>
+<span class="linenum">58:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="58">SPI0_BASE</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x58000</span><span class="symbol">)</span>
+<span class="linenum">59:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="59">SPI1_BASE</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x5c000</span><span class="symbol">)</span>
+<span class="linenum">60:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="60">USART0_BASE</a></span><span class="normal">                     </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x64000</span><span class="symbol">)</span>
+<span class="linenum">61:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="61">USART1_BASE</a></span><span class="normal">                     </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x68000</span><span class="symbol">)</span>
+<span class="linenum">62:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="62">USART2_BASE</a></span><span class="normal">                     </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#38">PERIPH_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x6c000</span><span class="symbol">)</span>
+<span class="linenum">63:</span> 
+<span class="linenum">64:</span> <span class="comment">/* --- ARM Cortex-M0+ specific definitions --------------------------------- */</span>
+<span class="linenum">65:</span> 
+<span class="linenum">66:</span> <span class="comment">/* Private peripheral bus */</span>
+<span class="linenum">67:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="67">SCS_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#44">PPB_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0xe000</span><span class="symbol">)</span>
+<span class="linenum">68:</span> 
+<span class="linenum">69:</span> <span class="comment">/* System Control Space */</span>
+<span class="linenum">70:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="70">STK_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#67">SCS_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x010</span><span class="symbol">)</span>
+<span class="linenum">71:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="71">NVIC_BASE</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#67">SCS_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x100</span><span class="symbol">)</span>
+<span class="linenum">72:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="72">SCB_BASE</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#67">SCS_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0xd00</span><span class="symbol">)</span>
+<span class="linenum">73:</span> 
+<span class="linenum">74:</span> <span class="preproc">#endif</span>
+<span class="linenum">75:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>iocon.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+iocon.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * I/O configuratio (IOCON)</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="comment">/*</span>
+<span class="linenum">021:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">022:</span> <span class="comment"> *</span>
+<span class="linenum">023:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">024:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">025:</span> <span class="comment"> *</span>
+<span class="linenum">026:</span> <span class="comment"> * Chapter 6: LPC81x I/O configuration (IOCON)</span>
+<span class="linenum">027:</span> <span class="comment"> */</span>
+<span class="linenum">028:</span> 
+<span class="linenum">029:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">030:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">031:</span> 
+<span class="linenum">032:</span> <span class="comment">/* --- IOCON registers ----------------------------------------------------- */</span>
+<span class="linenum">033:</span> <span class="comment">/*</span>
+<span class="linenum">034:</span> <span class="comment"> * Offset       Register</span>
+<span class="linenum">035:</span> <span class="comment"> * 0x000        IOCON_PIO0_17           I/O configuration for pin PIO0_17</span>
+<span class="linenum">036:</span> <span class="comment"> * 0x004        IOCON_PIO0_13           I/O configuration for pin PIO0_13</span>
+<span class="linenum">037:</span> <span class="comment"> * 0x008        IOCON_PIO0_12           I/O configuration for pin PIO0_12</span>
+<span class="linenum">038:</span> <span class="comment"> * 0x00c        IOCON_PIO0_5            I/O configuration for pin PIO0_5</span>
+<span class="linenum">039:</span> <span class="comment"> * 0x010        IOCON_PIO0_4            I/O configuration for pin PIO0_4</span>
+<span class="linenum">040:</span> <span class="comment"> * 0x014        IOCON_PIO0_3            I/O configuration for pin PIO0_3</span>
+<span class="linenum">041:</span> <span class="comment"> * 0x018        IOCON_PIO0_2            I/O configuration for pin PIO0_2</span>
+<span class="linenum">042:</span> <span class="comment"> * 0x01c        IOCON_PIO0_11           I/O configuration for pin PIO0_11</span>
+<span class="linenum">043:</span> <span class="comment"> * 0x020        IOCON_PIO0_10           I/O configuration for pin PIO0_10</span>
+<span class="linenum">044:</span> <span class="comment"> * 0x024        IOCON_PIO0_16           I/O configuration for pin PIO0_16</span>
+<span class="linenum">045:</span> <span class="comment"> * 0x028        IOCON_PIO0_15           I/O configuration for pin PIO0_15</span>
+<span class="linenum">046:</span> <span class="comment"> * 0x02c        IOCON_PIO0_1            I/O configuration for pin PIO0_1</span>
+<span class="linenum">047:</span> <span class="comment"> * 0x034        IOCON_PIO0_9            I/O configuration for pin PIO0_9</span>
+<span class="linenum">048:</span> <span class="comment"> * 0x038        IOCON_PIO0_8            I/O configuration for pin PIO0_8</span>
+<span class="linenum">049:</span> <span class="comment"> * 0x03c        IOCON_PIO0_7            I/O configuration for pin PIO0_7</span>
+<span class="linenum">050:</span> <span class="comment"> * 0x040        IOCON_PIO0_6            I/O configuration for pin PIO0_6</span>
+<span class="linenum">051:</span> <span class="comment"> * 0x044        IOCON_PIO0_0            I/O configuration for pin PIO0_0</span>
+<span class="linenum">052:</span> <span class="comment"> * 0x048        IOCON_PIO0_14           I/O configuration for pin PIO0_14</span>
+<span class="linenum">053:</span> <span class="comment"> */</span>
+<span class="linenum">054:</span> 
+<span class="linenum">055:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="55">IOCON_PIO0_17</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x000</span><span class="symbol">)</span>
+<span class="linenum">056:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="56">IOCON_PIO0_13</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x004</span><span class="symbol">)</span>
+<span class="linenum">057:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="57">IOCON_PIO0_12</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="symbol">)</span>
+<span class="linenum">058:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="58">IOCON_PIO0_5</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x00c</span><span class="symbol">)</span>
+<span class="linenum">059:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="59">IOCON_PIO0_4</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x010</span><span class="symbol">)</span>
+<span class="linenum">060:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="60">IOCON_PIO0_3</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x014</span><span class="symbol">)</span>
+<span class="linenum">061:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="61">IOCON_PIO0_2</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x018</span><span class="symbol">)</span>
+<span class="linenum">062:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="62">IOCON_PIO0_11</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x01c</span><span class="symbol">)</span>
+<span class="linenum">063:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="63">IOCON_PIO0_10</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x020</span><span class="symbol">)</span>
+<span class="linenum">064:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="64">IOCON_PIO0_16</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x024</span><span class="symbol">)</span>
+<span class="linenum">065:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="65">IOCON_PIO0_15</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x028</span><span class="symbol">)</span>
+<span class="linenum">066:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="66">IOCON_PIO0_1</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x02c</span><span class="symbol">)</span>
+<span class="linenum">067:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="67">IOCON_PIO0_9</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x034</span><span class="symbol">)</span>
+<span class="linenum">068:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="68">IOCON_PIO0_8</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x038</span><span class="symbol">)</span>
+<span class="linenum">069:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="69">IOCON_PIO0_7</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x03c</span><span class="symbol">)</span>
+<span class="linenum">070:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="70">IOCON_PIO0_6</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x040</span><span class="symbol">)</span>
+<span class="linenum">071:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="71">IOCON_PIO0_0</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x044</span><span class="symbol">)</span>
+<span class="linenum">072:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="72">IOCON_PIO0_14</a></span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#55">IOCON_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x048</span><span class="symbol">)</span>
+<span class="linenum">073:</span> 
+<span class="linenum">074:</span> <span class="comment">/* --- IOCON_PIO0_x values ------------------------------------------------- */</span>
+<span class="linenum">075:</span> 
+<span class="linenum">076:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="76">IOCON_CLK_DIV2</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">15</span><span class="symbol">)</span>
+<span class="linenum">077:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="77">IOCON_CLK_DIV1</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">14</span><span class="symbol">)</span>
+<span class="linenum">078:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="78">IOCON_CLK_DIV0</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">079:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="79">IOCON_S_MODE1</a></span><span class="normal">                   </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">12</span><span class="symbol">)</span>
+<span class="linenum">080:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="80">IOCON_S_MODE0</a></span><span class="normal">                   </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">081:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="81">IOCON_OD</a></span><span class="normal">                        </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">10</span><span class="symbol">)</span>
+<span class="linenum">082:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="82">IOCON_I2CMODE1</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">9</span><span class="symbol">)</span>
+<span class="linenum">083:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="83">IOCON_I2CMODE0</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">084:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="84">IOCON_INV</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">6</span><span class="symbol">)</span>
+<span class="linenum">085:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="85">IOCON_HYS</a></span><span class="normal">                       </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">)</span>
+<span class="linenum">086:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="86">IOCON_MODE1</a></span><span class="normal">                     </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">087:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="87">IOCON_MODE0</a></span><span class="normal">                     </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">088:</span> 
+<span class="linenum">089:</span> <span class="comment">/* CLK_DIV */</span>
+<span class="linenum">090:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="90">IOCON_CLK_DIV_IOCONCLKDIV0</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">091:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="91">IOCON_CLK_DIV_IOCONCLKDIV1</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">092:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="92">IOCON_CLK_DIV_IOCONCLKDIV2</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">093:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="93">IOCON_CLK_DIV_IOCONCLKDIV3</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">094:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="94">IOCON_CLK_DIV_IOCONCLKDIV4</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">4</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">095:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="95">IOCON_CLK_DIV_IOCONCLKDIV5</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">5</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">096:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="96">IOCON_CLK_DIV_IOCONCLKDIV6</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">6</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">097:</span> 
+<span class="linenum">098:</span> <span class="comment">/* S_MODE */</span>
+<span class="linenum">099:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="99">IOCON_S_MODE_BYPASS</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">100:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="100">IOCON_S_MODE_1CLOCK</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">101:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="101">IOCON_S_MODE_2CLOCK</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">102:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="102">IOCON_S_MODE_3CLOCK</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">103:</span> 
+<span class="linenum">104:</span> <span class="comment">/* I2CMODE */</span>
+<span class="linenum">105:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="105">IOCON_I2CMODE_I2C</a></span><span class="normal">               </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">106:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="106">IOCON_I2CMODE_IO</a></span><span class="normal">                </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">107:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="107">IOCON_I2CMODE_FAST_PLUS</a></span><span class="normal">         </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">108:</span> 
+<span class="linenum">109:</span> <span class="comment">/* MODE */</span>
+<span class="linenum">110:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="110">IOCON_MODE_INACTIVE</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">111:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="111">IOCON_MODE_PULL_DOWN</a></span><span class="normal">            </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">112:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="112">IOCON_MODE_PULL_UP</a></span><span class="normal">              </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">113:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="113">IOCON_MODE_REPEATER</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">114:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

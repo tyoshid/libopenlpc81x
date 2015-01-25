@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>gpio.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+gpio.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * GPIO port</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="comment">/*</span>
+<span class="linenum">021:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">022:</span> <span class="comment"> *</span>
+<span class="linenum">023:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">024:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">025:</span> <span class="comment"> *</span>
+<span class="linenum">026:</span> <span class="comment"> * Chapter 7: LPC81x GPIO port</span>
+<span class="linenum">027:</span> <span class="comment"> */</span>
+<span class="linenum">028:</span> 
+<span class="linenum">029:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">030:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">031:</span> 
+<span class="linenum">032:</span> <span class="comment">/* --- GPIO registers ------------------------------------------------------ */</span>
+<span class="linenum">033:</span> <span class="comment">/*</span>
+<span class="linenum">034:</span> <span class="comment"> * Offset       Register</span>
+<span class="linenum">035:</span> <span class="comment"> * 0x0000       GPIO_B0                 Byte pin register port 0; PIO0_0</span>
+<span class="linenum">036:</span> <span class="comment"> * 0x0001       GPIO_B1                 Byte pin register port 0; PIO0_1</span>
+<span class="linenum">037:</span> <span class="comment"> * 0x0002       GPIO_B2                 Byte pin register port 0; PIO0_2</span>
+<span class="linenum">038:</span> <span class="comment"> * 0x0003       GPIO_B3                 Byte pin register port 0; PIO0_3</span>
+<span class="linenum">039:</span> <span class="comment"> * 0x0004       GPIO_B4                 Byte pin register port 0; PIO0_4</span>
+<span class="linenum">040:</span> <span class="comment"> * 0x0005       GPIO_B5                 Byte pin register port 0; PIO0_5</span>
+<span class="linenum">041:</span> <span class="comment"> * 0x0006       GPIO_B6                 Byte pin register port 0; PIO0_6</span>
+<span class="linenum">042:</span> <span class="comment"> * 0x0007       GPIO_B7                 Byte pin register port 0; PIO0_7</span>
+<span class="linenum">043:</span> <span class="comment"> * 0x0008       GPIO_B8                 Byte pin register port 0; PIO0_8</span>
+<span class="linenum">044:</span> <span class="comment"> * 0x0009       GPIO_B9                 Byte pin register port 0; PIO0_9</span>
+<span class="linenum">045:</span> <span class="comment"> * 0x000a       GPIO_B10                Byte pin register port 0; PIO0_10</span>
+<span class="linenum">046:</span> <span class="comment"> * 0x000b       GPIO_B11                Byte pin register port 0; PIO0_11</span>
+<span class="linenum">047:</span> <span class="comment"> * 0x000c       GPIO_B12                Byte pin register port 0; PIO0_12</span>
+<span class="linenum">048:</span> <span class="comment"> * 0x000d       GPIO_B13                Byte pin register port 0; PIO0_13</span>
+<span class="linenum">049:</span> <span class="comment"> * 0x000e       GPIO_B14                Byte pin register port 0; PIO0_14</span>
+<span class="linenum">050:</span> <span class="comment"> * 0x000f       GPIO_B15                Byte pin register port 0; PIO0_15</span>
+<span class="linenum">051:</span> <span class="comment"> * 0x0010       GPIO_B16                Byte pin register port 0; PIO0_16</span>
+<span class="linenum">052:</span> <span class="comment"> * 0x0011       GPIO_B17                Byte pin register port 0; PIO0_17</span>
+<span class="linenum">053:</span> <span class="comment"> * 0x1000       GPIO_W0                 Word pin register port 0; PIO0_0</span>
+<span class="linenum">054:</span> <span class="comment"> * 0x1004       GPIO_W1                 Word pin register port 0; PIO0_1</span>
+<span class="linenum">055:</span> <span class="comment"> * 0x1008       GPIO_W2                 Word pin register port 0; PIO0_2</span>
+<span class="linenum">056:</span> <span class="comment"> * 0x100c       GPIO_W3                 Word pin register port 0; PIO0_3</span>
+<span class="linenum">057:</span> <span class="comment"> * 0x1010       GPIO_W4                 Word pin register port 0; PIO0_4</span>
+<span class="linenum">058:</span> <span class="comment"> * 0x1014       GPIO_W5                 Word pin register port 0; PIO0_5</span>
+<span class="linenum">059:</span> <span class="comment"> * 0x1018       GPIO_W6                 Word pin register port 0; PIO0_6</span>
+<span class="linenum">060:</span> <span class="comment"> * 0x101c       GPIO_W7                 Word pin register port 0; PIO0_7</span>
+<span class="linenum">061:</span> <span class="comment"> * 0x1020       GPIO_W8                 Word pin register port 0; PIO0_8</span>
+<span class="linenum">062:</span> <span class="comment"> * 0x1024       GPIO_W9                 Word pin register port 0; PIO0_9</span>
+<span class="linenum">063:</span> <span class="comment"> * 0x1028       GPIO_W10                Word pin register port 0; PIO0_10</span>
+<span class="linenum">064:</span> <span class="comment"> * 0x102c       GPIO_W11                Word pin register port 0; PIO0_11</span>
+<span class="linenum">065:</span> <span class="comment"> * 0x1030       GPIO_W12                Word pin register port 0; PIO0_12</span>
+<span class="linenum">066:</span> <span class="comment"> * 0x1034       GPIO_W13                Word pin register port 0; PIO0_13</span>
+<span class="linenum">067:</span> <span class="comment"> * 0x1038       GPIO_W14                Word pin register port 0; PIO0_14</span>
+<span class="linenum">068:</span> <span class="comment"> * 0x103c       GPIO_W15                Word pin register port 0; PIO0_15</span>
+<span class="linenum">069:</span> <span class="comment"> * 0x1040       GPIO_W16                Word pin register port 0; PIO0_16</span>
+<span class="linenum">070:</span> <span class="comment"> * 0x1044       GPIO_W17                Word pin register port 0; PIO0_17</span>
+<span class="linenum">071:</span> <span class="comment"> * 0x2000       GPIO_DIR0               Direction register port 0</span>
+<span class="linenum">072:</span> <span class="comment"> * 0x2080       GPIO_MASK0              Mask register port 0</span>
+<span class="linenum">073:</span> <span class="comment"> * 0x2100       GPIO_PIN0               Port pin register port 0</span>
+<span class="linenum">074:</span> <span class="comment"> * 0x2180       GPIO_MPIN0              Masked port register port 0</span>
+<span class="linenum">075:</span> <span class="comment"> * 0x2200       GPIO_SET0               Write: Set register for port 0</span>
+<span class="linenum">076:</span> <span class="comment"> *                                      Read: Output bits for port 0</span>
+<span class="linenum">077:</span> <span class="comment"> * 0x2280       GPIO_CLR0               Clear port 0</span>
+<span class="linenum">078:</span> <span class="comment"> * 0x2300       GPIO_NOT0               Toggle port 0</span>
+<span class="linenum">079:</span> <span class="comment"> */</span>
+<span class="linenum">080:</span> 
+<span class="linenum">081:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="81">GPIO_B</a></span><span class="symbol">(</span><span class="normal">pin</span><span class="symbol">)</span><span class="normal">                     </span><span class="function"><a href="../../mmio.h.html#34">MMIO8</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">pin</span><span class="symbol">))</span>
+<span class="linenum">082:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="82">GPIO_B0</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">083:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="83">GPIO_B1</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">084:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="84">GPIO_B2</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">085:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="85">GPIO_B3</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">086:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="86">GPIO_B4</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">087:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="87">GPIO_B5</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">5</span><span class="symbol">)</span>
+<span class="linenum">088:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="88">GPIO_B6</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">6</span><span class="symbol">)</span>
+<span class="linenum">089:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="89">GPIO_B7</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">7</span><span class="symbol">)</span>
+<span class="linenum">090:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="90">GPIO_B8</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">091:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="91">GPIO_B9</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">9</span><span class="symbol">)</span>
+<span class="linenum">092:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="92">GPIO_B10</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">10</span><span class="symbol">)</span>
+<span class="linenum">093:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="93">GPIO_B11</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">094:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="94">GPIO_B12</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">12</span><span class="symbol">)</span>
+<span class="linenum">095:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="95">GPIO_B13</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">096:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="96">GPIO_B14</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">14</span><span class="symbol">)</span>
+<span class="linenum">097:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="97">GPIO_B15</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">15</span><span class="symbol">)</span>
+<span class="linenum">098:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="98">GPIO_B16</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">16</span><span class="symbol">)</span>
+<span class="linenum">099:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="99">GPIO_B17</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#81">GPIO_B</a></span><span class="symbol">(</span><span class="number">17</span><span class="symbol">)</span>
+<span class="linenum">100:</span> 
+<span class="linenum">101:</span> <span class="comment">/* GPIO_Wx */</span>
+<span class="linenum">102:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="102">GPIO_W</a></span><span class="symbol">(</span><span class="normal">pin</span><span class="symbol">)</span><span class="normal">                     </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x1000</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">pin</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">103:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="103">GPIO_W0</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">104:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="104">GPIO_W1</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">105:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="105">GPIO_W2</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">106:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="106">GPIO_W3</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">107:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="107">GPIO_W4</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">4</span><span class="symbol">)</span>
+<span class="linenum">108:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="108">GPIO_W5</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">5</span><span class="symbol">)</span>
+<span class="linenum">109:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="109">GPIO_W6</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">6</span><span class="symbol">)</span>
+<span class="linenum">110:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="110">GPIO_W7</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">7</span><span class="symbol">)</span>
+<span class="linenum">111:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="111">GPIO_W8</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">8</span><span class="symbol">)</span>
+<span class="linenum">112:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="112">GPIO_W9</a></span><span class="normal">                         </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">9</span><span class="symbol">)</span>
+<span class="linenum">113:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="113">GPIO_W10</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">10</span><span class="symbol">)</span>
+<span class="linenum">114:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="114">GPIO_W11</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">11</span><span class="symbol">)</span>
+<span class="linenum">115:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="115">GPIO_W12</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">12</span><span class="symbol">)</span>
+<span class="linenum">116:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="116">GPIO_W13</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">13</span><span class="symbol">)</span>
+<span class="linenum">117:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="117">GPIO_W14</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">14</span><span class="symbol">)</span>
+<span class="linenum">118:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="118">GPIO_W15</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">15</span><span class="symbol">)</span>
+<span class="linenum">119:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="119">GPIO_W16</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">16</span><span class="symbol">)</span>
+<span class="linenum">120:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="120">GPIO_W17</a></span><span class="normal">                        </span><span class="function"><a href="gpio.h.html#102">GPIO_W</a></span><span class="symbol">(</span><span class="number">17</span><span class="symbol">)</span>
+<span class="linenum">121:</span> 
+<span class="linenum">122:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="122">GPIO_DIR0</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2000</span><span class="symbol">)</span>
+<span class="linenum">123:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="123">GPIO_MASK0</a></span><span class="normal">                      </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2080</span><span class="symbol">)</span>
+<span class="linenum">124:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="124">GPIO_PIN0</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2100</span><span class="symbol">)</span>
+<span class="linenum">125:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="125">GPIO_MPIN0</a></span><span class="normal">                      </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2180</span><span class="symbol">)</span>
+<span class="linenum">126:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="126">GPIO_SET0</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2200</span><span class="symbol">)</span>
+<span class="linenum">127:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="127">GPIO_CLR0</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2280</span><span class="symbol">)</span>
+<span class="linenum">128:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="128">GPIO_NOT0</a></span><span class="normal">                       </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#41">GPIO_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x2300</span><span class="symbol">)</span>
+<span class="linenum">129:</span> 
+<span class="linenum">130:</span> 
+<span class="linenum">131:</span> <span class="comment">/* --- GPIO_Bx values ------------------------------------------------------ */</span>
+<span class="linenum">132:</span> 
+<span class="linenum">133:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="133">GPIO_B_PBYTE_LOW</a></span><span class="normal">                </span><span class="number">0</span>
+<span class="linenum">134:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="134">GPIO_B_PBYTE_HIGH</a></span><span class="normal">               </span><span class="number">1</span>
+<span class="linenum">135:</span> 
+<span class="linenum">136:</span> <span class="comment">/* --- GPIO_Wx values ------------------------------------------------------ */</span>
+<span class="linenum">137:</span> 
+<span class="linenum">138:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="138">GPIO_W_PWORD_LOW</a></span><span class="normal">                </span><span class="number">0</span>
+<span class="linenum">139:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="139">GPIO_W_PWORD_HIGH</a></span><span class="normal">               </span><span class="number">0xffffffff</span>
+<span class="linenum">140:</span> 
+<span class="linenum">141:</span> <span class="comment">/* --- GPIO_DIR0 values ---------------------------------------------------- */</span>
+<span class="linenum">142:</span> 
+<span class="linenum">143:</span> <span class="comment">/* GPIO_DIR0[17:0]: DIRP0 */</span>
+<span class="linenum">144:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="144">GPIO_DIR0_INPUT</a></span><span class="normal">                 </span><span class="number">0</span>
+<span class="linenum">145:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="145">GPIO_DIR0_OUTPUT</a></span><span class="normal">                </span><span class="number">1</span>
+<span class="linenum">146:</span> 
+<span class="linenum">147:</span> <span class="comment">/* --- GPIO_MASK0 values --------------------------------------------------- */</span>
+<span class="linenum">148:</span> 
+<span class="linenum">149:</span> <span class="comment">/* GPIO_MASK0[17:0]: MASKP0 */</span>
+<span class="linenum">150:</span> 
+<span class="linenum">151:</span> <span class="comment">/* --- GPIO_PIN0 values ---------------------------------------------------- */</span>
+<span class="linenum">152:</span> 
+<span class="linenum">153:</span> <span class="comment">/* GPIO_PIN0[17:0]: PORT0 */</span>
+<span class="linenum">154:</span> 
+<span class="linenum">155:</span> <span class="comment">/* --- GPIO_MPIN0 values --------------------------------------------------- */</span>
+<span class="linenum">156:</span> 
+<span class="linenum">157:</span> <span class="comment">/* GPIO_MPIN0[17:0]: MPORTP0 */</span>
+<span class="linenum">158:</span> 
+<span class="linenum">159:</span> <span class="comment">/* --- GPIO_SET0 values ---------------------------------------------------- */</span>
+<span class="linenum">160:</span> 
+<span class="linenum">161:</span> <span class="comment">/* GPIO_SET0[17:0]: SETP0 */</span>
+<span class="linenum">162:</span> 
+<span class="linenum">163:</span> <span class="comment">/* --- GPIO_CLR0 values ---------------------------------------------------- */</span>
+<span class="linenum">164:</span> 
+<span class="linenum">165:</span> <span class="comment">/* GPIO_CLR0[17:0]: CLRP0 */</span>
+<span class="linenum">166:</span> 
+<span class="linenum">167:</span> <span class="comment">/* --- GPIO_NOT0 values ---------------------------------------------------- */</span>
+<span class="linenum">168:</span> 
+<span class="linenum">169:</span> <span class="comment">/* GPIO_NOT0[17:0]: NOTP0 */</span>
+<span class="linenum">170:</span> 
+<span class="linenum">171:</span> <span class="comment">/* --- GPIO pins definition ------------------------------------------------ */</span>
+<span class="linenum">172:</span> 
+<span class="linenum">173:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="173">GPIO_MAXPIN</a></span><span class="normal">                     </span><span class="number">18</span>
+<span class="linenum">174:</span> 
+<span class="linenum">175:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">176:</span> <span class="normal">        </span><span class="normal"><a name="176">PIO0_0</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">),</span>
+<span class="linenum">177:</span> <span class="normal">        </span><span class="normal"><a name="177">PIO0_1</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">),</span>
+<span class="linenum">178:</span> <span class="normal">        </span><span class="normal"><a name="178">PIO0_2</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">),</span>
+<span class="linenum">179:</span> <span class="normal">        </span><span class="normal"><a name="179">PIO0_3</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">),</span>
+<span class="linenum">180:</span> <span class="normal">        </span><span class="normal"><a name="180">PIO0_4</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">),</span>
+<span class="linenum">181:</span> <span class="normal">        </span><span class="normal"><a name="181">PIO0_5</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">),</span>
+<span class="linenum">182:</span> <span class="normal">        </span><span class="normal"><a name="182">PIO0_6</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">6</span><span class="symbol">),</span>
+<span class="linenum">183:</span> <span class="normal">        </span><span class="normal"><a name="183">PIO0_7</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">7</span><span class="symbol">),</span>
+<span class="linenum">184:</span> <span class="normal">        </span><span class="normal"><a name="184">PIO0_8</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">),</span>
+<span class="linenum">185:</span> <span class="normal">        </span><span class="normal"><a name="185">PIO0_9</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">9</span><span class="symbol">),</span>
+<span class="linenum">186:</span> <span class="normal">        </span><span class="normal"><a name="186">PIO0_10</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">10</span><span class="symbol">),</span>
+<span class="linenum">187:</span> <span class="normal">        </span><span class="normal"><a name="187">PIO0_11</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">),</span>
+<span class="linenum">188:</span> <span class="normal">        </span><span class="normal"><a name="188">PIO0_12</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">12</span><span class="symbol">),</span>
+<span class="linenum">189:</span> <span class="normal">        </span><span class="normal"><a name="189">PIO0_13</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">190:</span> <span class="normal">        </span><span class="normal"><a name="190">PIO0_14</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">14</span><span class="symbol">),</span>
+<span class="linenum">191:</span> <span class="normal">        </span><span class="normal"><a name="191">PIO0_15</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">15</span><span class="symbol">),</span>
+<span class="linenum">192:</span> <span class="normal">        </span><span class="normal"><a name="192">PIO0_16</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">),</span>
+<span class="linenum">193:</span> <span class="normal">        </span><span class="normal"><a name="193">PIO0_17</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">17</span><span class="symbol">),</span>
+<span class="linenum">194:</span> <span class="normal">        </span><span class="normal"><a name="194">PIO0_ALL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0x3ffff</span><span class="symbol">,</span>
+<span class="linenum">195:</span> <span class="normal">        </span><span class="normal"><a name="195">PIO0_NONE</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span>
+<span class="linenum">196:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">197:</span> 
+<span class="linenum">198:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="198">GPIO_OR</a></span><span class="symbol">(</span><span class="normal">p0</span><span class="symbol">,</span><span class="normal"> p1</span><span class="symbol">,</span><span class="normal"> p2</span><span class="symbol">,</span><span class="normal"> p3</span><span class="symbol">,</span><span class="normal"> p4</span><span class="symbol">,</span><span class="normal"> p5</span><span class="symbol">,</span><span class="normal"> p6</span><span class="symbol">,</span><span class="normal"> p7</span><span class="symbol">,</span><span class="normal"> p8</span><span class="symbol">,</span><span class="normal"> p9</span><span class="symbol">,</span><span class="normal"> p10</span><span class="symbol">,</span><span class="normal"> p11</span><span class="symbol">,</span><span class="normal"> p12</span><span class="symbol">,</span><span class="normal"> p13</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">199:</span> <span class="normal">                p14</span><span class="symbol">,</span><span class="normal"> p15</span><span class="symbol">,</span><span class="normal"> p16</span><span class="symbol">,</span><span class="normal"> p17</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">...)</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">200:</span> <span class="normal">        </span><span class="symbol">(</span><span class="normal">PIO0_##p0 </span><span class="symbol">|</span><span class="normal"> PIO0_##p1 </span><span class="symbol">|</span><span class="normal"> PIO0_##p2 </span><span class="symbol">|</span><span class="normal"> PIO0_##p3 </span><span class="symbol">|</span><span class="normal"> PIO0_##p4 </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">201:</span> <span class="normal">         PIO0_##p5 </span><span class="symbol">|</span><span class="normal"> PIO0_##p6 </span><span class="symbol">|</span><span class="normal"> PIO0_##p7 </span><span class="symbol">|</span><span class="normal"> PIO0_##p8 </span><span class="symbol">|</span><span class="normal"> PIO0_##p9 </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">202:</span> <span class="normal">         PIO0_##p10 </span><span class="symbol">|</span><span class="normal"> PIO0_##p11 </span><span class="symbol">|</span><span class="normal"> PIO0_##p12 </span><span class="symbol">|</span><span class="normal"> PIO0_##p13 </span><span class="symbol">|</span><span class="normal"> PIO0_##p14 </span><span class="symbol">|</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">203:</span> <span class="normal">         PIO0_##p15 </span><span class="symbol">|</span><span class="normal"> PIO0_##p16 </span><span class="symbol">|</span><span class="normal"> PIO0_##p17</span><span class="symbol">)</span>
+<span class="linenum">204:</span> 
+<span class="linenum">205:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="205">PIO0</a></span><span class="symbol">(...)</span><span class="normal">       </span><span class="function"><a href="gpio.h.html#198">GPIO_OR</a></span><span class="symbol">(</span><span class="normal">__VA_ARGS__</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">206:</span> <span class="normal">                                NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">\</span>
+<span class="linenum">207:</span> <span class="normal">                                NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">,</span><span class="normal"> NONE</span><span class="symbol">)</span>
+<span class="linenum">208:</span> 
+<span class="linenum">209:</span> <span class="comment">/* --- Function prototypes ------------------------------------------------- */</span>
+<span class="linenum">210:</span> 
+<span class="linenum">211:</span> <span class="comment">/* IOCON */</span>
+<span class="linenum">212:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">213:</span> <span class="normal">        </span><span class="normal"><a name="213">GPIO_IOCONCLKDIV0</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">214:</span> <span class="normal">        </span><span class="normal"><a name="214">GPIO_IOCONCLKDIV1</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">215:</span> <span class="normal">        </span><span class="normal"><a name="215">GPIO_IOCONCLKDIV2</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">216:</span> <span class="normal">        </span><span class="normal"><a name="216">GPIO_IOCONCLKDIV3</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">217:</span> <span class="normal">        </span><span class="normal"><a name="217">GPIO_IOCONCLKDIV4</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">4</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">218:</span> <span class="normal">        </span><span class="normal"><a name="218">GPIO_IOCONCLKDIV5</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">5</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">219:</span> <span class="normal">        </span><span class="normal"><a name="219">GPIO_IOCONCLKDIV6</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">6</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">13</span><span class="symbol">),</span>
+<span class="linenum">220:</span> <span class="normal">        </span><span class="normal"><a name="220">GPIO_FILTER_BYPASS</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">),</span>
+<span class="linenum">221:</span> <span class="normal">        </span><span class="normal"><a name="221">GPIO_FILTER_1CLOCK</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">),</span>
+<span class="linenum">222:</span> <span class="normal">        </span><span class="normal"><a name="222">GPIO_FILTER_2CLOCK</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">),</span>
+<span class="linenum">223:</span> <span class="normal">        </span><span class="normal"><a name="223">GPIO_FILTER_3CLOCK</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">11</span><span class="symbol">),</span>
+<span class="linenum">224:</span> <span class="normal">        </span><span class="normal"><a name="224">GPIO_OPENDRAIN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">10</span><span class="symbol">),</span>
+<span class="linenum">225:</span> <span class="normal">        </span><span class="normal"><a name="225">GPIO_PUSHPULL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">226:</span> 
+<span class="linenum">227:</span> <span class="normal">        </span><span class="normal"><a name="227">GPIO_I2C</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">228:</span> <span class="normal">        </span><span class="normal"><a name="228">GPIO_IO</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">),</span>
+<span class="linenum">229:</span> <span class="normal">        </span><span class="normal"><a name="229">GPIO_I2C_FAST_PLUS</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">),</span>
+<span class="linenum">230:</span> 
+<span class="linenum">231:</span> <span class="normal">        </span><span class="normal"><a name="231">GPIO_INVERT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">6</span><span class="symbol">),</span>
+<span class="linenum">232:</span> <span class="normal">        </span><span class="normal"><a name="232">GPIO_HYST</a></span><span class="normal"> </span><span class="symbol">=(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">5</span><span class="symbol">),</span>
+<span class="linenum">233:</span> <span class="normal">        </span><span class="normal"><a name="233">GPIO_PULLDOWN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">),</span>
+<span class="linenum">234:</span> <span class="normal">        </span><span class="normal"><a name="234">GPIO_PULLUP</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">),</span>
+<span class="linenum">235:</span> <span class="normal">        </span><span class="normal"><a name="235">GPIO_REPEATER</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">3</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">),</span>
+<span class="linenum">236:</span> <span class="normal">        </span><span class="normal"><a name="236">GPIO_NOPUPD</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span>
+<span class="linenum">237:</span> <span class="normal">        </span><span class="normal"><a name="237">GPIO_FLOAT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span>
+<span class="linenum">238:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">239:</span> 
+<span class="linenum">240:</span> <span class="keyword">enum</span><span class="normal">  </span><span class="normal"><a name="240">gpio_func</a></span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">241:</span> <span class="normal">        </span><span class="comment">/* Movable functions */</span>
+<span class="linenum">242:</span> <span class="normal">        </span><span class="normal"><a name="242">GPIO_U0_TXD</a></span><span class="symbol">,</span>
+<span class="linenum">243:</span> <span class="normal">        </span><span class="normal"><a name="243">GPIO_U0_RXD</a></span><span class="symbol">,</span>
+<span class="linenum">244:</span> <span class="normal">        </span><span class="normal"><a name="244">GPIO_U0_RTS</a></span><span class="symbol">,</span>
+<span class="linenum">245:</span> <span class="normal">        </span><span class="normal"><a name="245">GPIO_U0_CTS</a></span><span class="symbol">,</span>
+<span class="linenum">246:</span> <span class="normal">        </span><span class="normal"><a name="246">GPIO_U0_SCLK</a></span><span class="symbol">,</span>
+<span class="linenum">247:</span> <span class="normal">        </span><span class="normal"><a name="247">GPIO_U1_TXD</a></span><span class="symbol">,</span>
+<span class="linenum">248:</span> <span class="normal">        </span><span class="normal"><a name="248">GPIO_U1_RXD</a></span><span class="symbol">,</span>
+<span class="linenum">249:</span> <span class="normal">        </span><span class="normal"><a name="249">GPIO_U1_RTS</a></span><span class="symbol">,</span>
+<span class="linenum">250:</span> <span class="normal">        </span><span class="normal"><a name="250">GPIO_U1_CTS</a></span><span class="symbol">,</span>
+<span class="linenum">251:</span> <span class="normal">        </span><span class="normal"><a name="251">GPIO_U1_SCLK</a></span><span class="symbol">,</span>
+<span class="linenum">252:</span> <span class="normal">        </span><span class="normal"><a name="252">GPIO_U2_TXD</a></span><span class="symbol">,</span>
+<span class="linenum">253:</span> <span class="normal">        </span><span class="normal"><a name="253">GPIO_U2_RXD</a></span><span class="symbol">,</span>
+<span class="linenum">254:</span> <span class="normal">        </span><span class="normal"><a name="254">GPIO_U2_RTS</a></span><span class="symbol">,</span>
+<span class="linenum">255:</span> <span class="normal">        </span><span class="normal"><a name="255">GPIO_U2_CTS</a></span><span class="symbol">,</span>
+<span class="linenum">256:</span> <span class="normal">        </span><span class="normal"><a name="256">GPIO_U2_SCLK</a></span><span class="symbol">,</span>
+<span class="linenum">257:</span> <span class="normal">        </span><span class="normal"><a name="257">GPIO_SPI0_SCK</a></span><span class="symbol">,</span>
+<span class="linenum">258:</span> <span class="normal">        </span><span class="normal"><a name="258">GPIO_SPI0_MOSI</a></span><span class="symbol">,</span>
+<span class="linenum">259:</span> <span class="normal">        </span><span class="normal"><a name="259">GPIO_SPI0_MISO</a></span><span class="symbol">,</span>
+<span class="linenum">260:</span> <span class="normal">        </span><span class="normal"><a name="260">GPIO_SPI0_SSEL</a></span><span class="symbol">,</span>
+<span class="linenum">261:</span> <span class="normal">        </span><span class="normal"><a name="261">GPIO_SPI1_SCK</a></span><span class="symbol">,</span>
+<span class="linenum">262:</span> <span class="normal">        </span><span class="normal"><a name="262">GPIO_SPI1_MOSI</a></span><span class="symbol">,</span>
+<span class="linenum">263:</span> <span class="normal">        </span><span class="normal"><a name="263">GPIO_SPI1_MISO</a></span><span class="symbol">,</span>
+<span class="linenum">264:</span> <span class="normal">        </span><span class="normal"><a name="264">GPIO_SPI1_SSEL</a></span><span class="symbol">,</span>
+<span class="linenum">265:</span> <span class="normal">        </span><span class="normal"><a name="265">GPIO_CTIN0</a></span><span class="symbol">,</span>
+<span class="linenum">266:</span> <span class="normal">        </span><span class="normal"><a name="266">GPIO_CTIN1</a></span><span class="symbol">,</span>
+<span class="linenum">267:</span> <span class="normal">        </span><span class="normal"><a name="267">GPIO_CTIN2</a></span><span class="symbol">,</span>
+<span class="linenum">268:</span> <span class="normal">        </span><span class="normal"><a name="268">GPIO_CTIN3</a></span><span class="symbol">,</span>
+<span class="linenum">269:</span> <span class="normal">        </span><span class="normal"><a name="269">GPIO_CTOUT0</a></span><span class="symbol">,</span>
+<span class="linenum">270:</span> <span class="normal">        </span><span class="normal"><a name="270">GPIO_CTOUT1</a></span><span class="symbol">,</span>
+<span class="linenum">271:</span> <span class="normal">        </span><span class="normal"><a name="271">GPIO_CTOUT2</a></span><span class="symbol">,</span>
+<span class="linenum">272:</span> <span class="normal">        </span><span class="normal"><a name="272">GPIO_CTOUT3</a></span><span class="symbol">,</span>
+<span class="linenum">273:</span> <span class="normal">        </span><span class="normal"><a name="273">GPIO_I2C_SDA</a></span><span class="symbol">,</span>
+<span class="linenum">274:</span> <span class="normal">        </span><span class="normal"><a name="274">GPIO_I2C_SCL</a></span><span class="symbol">,</span>
+<span class="linenum">275:</span> <span class="normal">        </span><span class="normal"><a name="275">GPIO_ACMP_O</a></span><span class="symbol">,</span>
+<span class="linenum">276:</span> <span class="normal">        </span><span class="normal"><a name="276">GPIO_CLKOUT</a></span><span class="symbol">,</span>
+<span class="linenum">277:</span> <span class="normal">        </span><span class="normal"><a name="277">GPIO_INT_BMAT</a></span><span class="symbol">,</span>
+<span class="linenum">278:</span> 
+<span class="linenum">279:</span> <span class="normal">        </span><span class="comment">/* Fixed-pin functions */</span>
+<span class="linenum">280:</span> <span class="normal">        </span><span class="normal"><a name="280">GPIO_ACMP_I1</a></span><span class="symbol">,</span>
+<span class="linenum">281:</span> <span class="normal">        </span><span class="normal"><a name="281">GPIO_ACMP_I2</a></span><span class="symbol">,</span>
+<span class="linenum">282:</span> <span class="normal">        </span><span class="normal"><a name="282">GPIO_SWCLK</a></span><span class="symbol">,</span>
+<span class="linenum">283:</span> <span class="normal">        </span><span class="normal"><a name="283">GPIO_SWDIO</a></span><span class="symbol">,</span>
+<span class="linenum">284:</span> <span class="normal">        </span><span class="normal"><a name="284">GPIO_XTALIN</a></span><span class="symbol">,</span>
+<span class="linenum">285:</span> <span class="normal">        </span><span class="normal"><a name="285">GPIO_XTALOUT</a></span><span class="symbol">,</span>
+<span class="linenum">286:</span> <span class="normal">        </span><span class="normal"><a name="286">GPIO_RESET</a></span><span class="symbol">,</span>
+<span class="linenum">287:</span> <span class="normal">        </span><span class="normal"><a name="287">GPIO_CLKIN</a></span><span class="symbol">,</span>
+<span class="linenum">288:</span> <span class="normal">        </span><span class="normal"><a name="288">GPIO_VDDCMP</a></span><span class="symbol">,</span>
+<span class="linenum">289:</span> 
+<span class="linenum">290:</span> <span class="normal">        </span><span class="comment">/* Standard I/O */</span>
+<span class="linenum">291:</span> <span class="normal">        </span><span class="normal"><a name="291">GPIO_OUTPUT</a></span><span class="symbol">,</span>
+<span class="linenum">292:</span> <span class="normal">        </span><span class="normal"><a name="292">GPIO_INPUT</a></span>
+<span class="linenum">293:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">294:</span> 
+<span class="linenum">295:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_config</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="gpio.h.html#240">gpio_func</a></span><span class="normal"> func</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> iocon</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">);</span>
+<span class="linenum">296:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_reconfig</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="gpio.h.html#240">gpio_func</a></span><span class="normal"> func</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> iocon</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">);</span>
+<span class="linenum">297:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_set</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">);</span>
+<span class="linenum">298:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_clear</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">);</span>
+<span class="linenum">299:</span> <span class="type">int</span><span class="normal"> </span><span class="function">gpio_get</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">);</span>
+<span class="linenum">300:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_toggle</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pins</span><span class="symbol">);</span>
+<span class="linenum">301:</span> <span class="type">int</span><span class="normal"> </span><span class="function">gpio_read_port</span><span class="symbol">(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">302:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_write_port</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> data</span><span class="symbol">);</span>
+<span class="linenum">303:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_set_mask</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> mask</span><span class="symbol">);</span>
+<span class="linenum">304:</span> <span class="type">int</span><span class="normal"> </span><span class="function">gpio_read_masked_port</span><span class="symbol">(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">305:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_write_maksed_port</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> data</span><span class="symbol">);</span>
+<span class="linenum">306:</span> <span class="type">int</span><span class="normal"> </span><span class="function">gpio_read_pin_byte</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pin</span><span class="symbol">);</span>
+<span class="linenum">307:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_write_pin_byte</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pin</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> data</span><span class="symbol">);</span>
+<span class="linenum">308:</span> <span class="type">int</span><span class="normal"> </span><span class="function">gpio_read_pin_word</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pin</span><span class="symbol">);</span>
+<span class="linenum">309:</span> <span class="type">void</span><span class="normal"> </span><span class="function">gpio_write_pin_word</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> pin</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> data</span><span class="symbol">);</span>
+<span class="linenum">310:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>

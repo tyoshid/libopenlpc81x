@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>mrt.h</title>
+<link href="../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../libopenlpc81x.html">libopenlpc81x</a>/
+<a href="../../include.html">include</a>/
+nxp_lpc/
+<a href="lpc81x.html">lpc81x</a>/
+mrt.h</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * Multi-Rate Timer (MRT)</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="comment">/*</span>
+<span class="linenum">021:</span> <span class="comment"> * NXP Semiconductors(www.nxp.com)</span>
+<span class="linenum">022:</span> <span class="comment"> *</span>
+<span class="linenum">023:</span> <span class="comment"> * UM10601: LPC81x User manual</span>
+<span class="linenum">024:</span> <span class="comment"> * (Rev.1.6 - 2 April 2014)</span>
+<span class="linenum">025:</span> <span class="comment"> *</span>
+<span class="linenum">026:</span> <span class="comment"> * Chapter 11: LPC81x Multi-Rate Timer (MRT)</span>
+<span class="linenum">027:</span> <span class="comment"> */</span>
+<span class="linenum">028:</span> 
+<span class="linenum">029:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;mmio.h&gt;</span>
+<span class="linenum">030:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;memorymap.h&gt;</span>
+<span class="linenum">031:</span> 
+<span class="linenum">032:</span> <span class="comment">/* --- MRT registers ------------------------------------------------------- */</span>
+<span class="linenum">033:</span> <span class="comment">/*</span>
+<span class="linenum">034:</span> <span class="comment"> * Offset       Register</span>
+<span class="linenum">035:</span> <span class="comment"> * 0x000        MRT_INTVAL0             MRT0 Time interval value register</span>
+<span class="linenum">036:</span> <span class="comment"> * 0x004        MRT_TIMER0              MRT0 Timer register</span>
+<span class="linenum">037:</span> <span class="comment"> * 0x008        MRT_CTRL0               MRT0 Control register</span>
+<span class="linenum">038:</span> <span class="comment"> * 0x00c        MRT_STAT0               MRT0 Status register</span>
+<span class="linenum">039:</span> <span class="comment"> * 0x010        MRT_INTVAL1             MRT1 Time interval value register</span>
+<span class="linenum">040:</span> <span class="comment"> * 0x014        MRT_TIMER1              MRT1 Timer register</span>
+<span class="linenum">041:</span> <span class="comment"> * 0x018        MRT_CTRL1               MRT1 Control register</span>
+<span class="linenum">042:</span> <span class="comment"> * 0x01c        MRT_STAT1               MRT1 Status register</span>
+<span class="linenum">043:</span> <span class="comment"> * 0x020        MRT_INTVAL2             MRT2 Time interval value register</span>
+<span class="linenum">044:</span> <span class="comment"> * 0x024        MRT_TIMER2              MRT2 Timer register</span>
+<span class="linenum">045:</span> <span class="comment"> * 0x028        MRT_CTRL2               MRT2 Control register</span>
+<span class="linenum">046:</span> <span class="comment"> * 0x02c        MRT_STAT2               MRT2 Status register</span>
+<span class="linenum">047:</span> <span class="comment"> * 0x030        MRT_INTVAL3             MRT3 Time interval value register</span>
+<span class="linenum">048:</span> <span class="comment"> * 0x034        MRT_TIMER3              MRT3 Timer register</span>
+<span class="linenum">049:</span> <span class="comment"> * 0x038        MRT_CTRL3               MRT3 Control register</span>
+<span class="linenum">050:</span> <span class="comment"> * 0x03c        MRT_STAT3               MRT3 Status register</span>
+<span class="linenum">051:</span> <span class="comment"> * 0x0f4        MRT_IDLE_CH             Idle channel register</span>
+<span class="linenum">052:</span> <span class="comment"> * 0x0f8        MRT_IRQ_FLAG            Global interrupt flag register</span>
+<span class="linenum">053:</span> <span class="comment"> */</span>
+<span class="linenum">054:</span> 
+<span class="linenum">055:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="55">MRT_INTVAL</a></span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal">                  </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#49">MRT_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x000</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">0x10</span><span class="symbol">)</span>
+<span class="linenum">056:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="56">MRT_INTVAL0</a></span><span class="normal">                     </span><span class="function"><a href="mrt.h.html#55">MRT_INTVAL</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">057:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="57">MRT_INTVAL1</a></span><span class="normal">                     </span><span class="function"><a href="mrt.h.html#55">MRT_INTVAL</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">058:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="58">MRT_INTVAL2</a></span><span class="normal">                     </span><span class="function"><a href="mrt.h.html#55">MRT_INTVAL</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">059:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="59">MRT_INTVAL3</a></span><span class="normal">                     </span><span class="function"><a href="mrt.h.html#55">MRT_INTVAL</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">060:</span> 
+<span class="linenum">061:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="61">MRT_TIMER</a></span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal">                   </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#49">MRT_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x004</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">0x10</span><span class="symbol">)</span>
+<span class="linenum">062:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="62">MRT_TIMER0</a></span><span class="normal">                      </span><span class="function"><a href="mrt.h.html#61">MRT_TIMER</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">063:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="63">MRT_TIMER1</a></span><span class="normal">                      </span><span class="function"><a href="mrt.h.html#61">MRT_TIMER</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">064:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="64">MRT_TIMER2</a></span><span class="normal">                      </span><span class="function"><a href="mrt.h.html#61">MRT_TIMER</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">065:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="65">MRT_TIMER3</a></span><span class="normal">                      </span><span class="function"><a href="mrt.h.html#61">MRT_TIMER</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">066:</span> 
+<span class="linenum">067:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="67">MRT_CTRL</a></span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#49">MRT_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x008</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">0x10</span><span class="symbol">)</span>
+<span class="linenum">068:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="68">MRT_CTRL0</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#67">MRT_CTRL</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">069:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="69">MRT_CTRL1</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#67">MRT_CTRL</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">070:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="70">MRT_CTRL2</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#67">MRT_CTRL</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">071:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="71">MRT_CTRL3</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#67">MRT_CTRL</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">072:</span> 
+<span class="linenum">073:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="73">MRT_STAT</a></span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#49">MRT_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x00c</span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">ch</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">0x10</span><span class="symbol">)</span>
+<span class="linenum">074:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="74">MRT_STAT0</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#73">MRT_STAT</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">075:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="75">MRT_STAT1</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#73">MRT_STAT</a></span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">076:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="76">MRT_STAT2</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#73">MRT_STAT</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">077:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="77">MRT_STAT3</a></span><span class="normal">                       </span><span class="function"><a href="mrt.h.html#73">MRT_STAT</a></span><span class="symbol">(</span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">078:</span> 
+<span class="linenum">079:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="79">MRT_IDLE_CH</a></span><span class="normal">                     </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#49">MRT_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x0f4</span><span class="symbol">)</span>
+<span class="linenum">080:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="usertype"><a name="80">MRT_IRQ_FLAG</a></span><span class="normal">                    </span><span class="function"><a href="../../mmio.h.html#36">MMIO32</a></span><span class="symbol">(</span><span class="normal"><a href="memorymap.h.html#49">MRT_BASE</a></span><span class="normal"> </span><span class="symbol">+</span><span class="normal"> </span><span class="number">0x0f8</span><span class="symbol">)</span>
+<span class="linenum">081:</span> 
+<span class="linenum">082:</span> <span class="comment">/* --- MRT_INTVALx values -------------------------------------------------- */</span>
+<span class="linenum">083:</span> 
+<span class="linenum">084:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="84">MRT_INTVAL_LOAD</a></span><span class="normal">                 </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">31</span><span class="symbol">)</span>
+<span class="linenum">085:</span> 
+<span class="linenum">086:</span> <span class="comment">/* MRT_INTVALx[30:0]: IVALUE */</span>
+<span class="linenum">087:</span> 
+<span class="linenum">088:</span> <span class="comment">/* --- MRT_TIMERx values --------------------------------------------------- */</span>
+<span class="linenum">089:</span> 
+<span class="linenum">090:</span> <span class="comment">/* MRT_TIMERx[30:0]: VALUE */</span>
+<span class="linenum">091:</span> 
+<span class="linenum">092:</span> <span class="comment">/* --- MRT_CTRLx values ---------------------------------------------------- */</span>
+<span class="linenum">093:</span> 
+<span class="linenum">094:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="94">MRT_CTRL_MODE1</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">095:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="95">MRT_CTRL_MODE0</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">096:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="96">MRT_CTRL_INTEN</a></span><span class="normal">                  </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">097:</span> 
+<span class="linenum">098:</span> <span class="comment">/* MODE */</span>
+<span class="linenum">099:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="99">MRT_CTRL_MODE_REPEAT_IRQ</a></span><span class="normal">        </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">100:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="100">MRT_CTRL_MODE_ONE_SHOT_IRQ</a></span><span class="normal">      </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">101:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="101">MRT_CTRL_MODE_ONE_SHOT_STALL</a></span><span class="normal">    </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">102:</span> 
+<span class="linenum">103:</span> <span class="comment">/* --- MRT_STATx values ---------------------------------------------------- */</span>
+<span class="linenum">104:</span> 
+<span class="linenum">105:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="105">MRT_STAT_RUN</a></span><span class="normal">                    </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">106:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="106">MRT_STAT_INTFLAG</a></span><span class="normal">                </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">107:</span> 
+<span class="linenum">108:</span> <span class="comment">/* --- MRT_IDLE_CH values -------------------------------------------------- */</span>
+<span class="linenum">109:</span> 
+<span class="linenum">110:</span> <span class="comment">/* MRT_IDLE_CH[7:4]: CHAN */</span>
+<span class="linenum">111:</span> 
+<span class="linenum">112:</span> <span class="comment">/* --- MRT_IRQ_FLAG values ------------------------------------------------- */</span>
+<span class="linenum">113:</span> 
+<span class="linenum">114:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="114">MRT_IRQ_FLAG_GFLAG3</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">115:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="115">MRT_IRQ_FLAG_GFLAG2</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">)</span>
+<span class="linenum">116:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="116">MRT_IRQ_FLAG_GFLAG1</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">117:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="117">MRT_IRQ_FLAG_GFLAG0</a></span><span class="normal">             </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span>
+<span class="linenum">118:</span> 
+<span class="linenum">119:</span> <span class="comment">/* --- Function prototypes ------------------------------------------------- */</span>
+<span class="linenum">120:</span> 
+<span class="linenum">121:</span> <span class="comment">/* Channel */</span>
+<span class="linenum">122:</span> <span class="keyword">enum</span><span class="normal">  </span><span class="normal"><a name="122">mrt_channel</a></span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">123:</span> <span class="normal">        </span><span class="normal"><a name="123">MRT0</a></span><span class="symbol">,</span>
+<span class="linenum">124:</span> <span class="normal">        </span><span class="normal"><a name="124">MRT1</a></span><span class="symbol">,</span>
+<span class="linenum">125:</span> <span class="normal">        </span><span class="normal"><a name="125">MRT2</a></span><span class="symbol">,</span>
+<span class="linenum">126:</span> <span class="normal">        </span><span class="normal"><a name="126">MRT3</a></span>
+<span class="linenum">127:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">128:</span> 
+<span class="linenum">129:</span> <span class="comment">/* Timer mode */</span>
+<span class="linenum">130:</span> <span class="keyword">enum</span><span class="normal">  </span><span class="normal"><a name="130">mrt_mode</a></span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">131:</span> <span class="normal">        </span><span class="normal"><a name="131">MRT_REPEAT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">0</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">),</span>
+<span class="linenum">132:</span> <span class="normal">        </span><span class="normal"><a name="132">MRT_ONE_SHOT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">),</span>
+<span class="linenum">133:</span> <span class="normal">        </span><span class="normal"><a name="133">MRT_BUS_STALL</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">2</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">134:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">135:</span> 
+<span class="linenum">136:</span> <span class="comment">/* Interrupt */</span>
+<span class="linenum">137:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">138:</span> <span class="normal">        </span><span class="normal"><a name="138">MRT_INT0</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">),</span>
+<span class="linenum">139:</span> <span class="normal">        </span><span class="normal"><a name="139">MRT_INT1</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">),</span>
+<span class="linenum">140:</span> <span class="normal">        </span><span class="normal"><a name="140">MRT_INT2</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">2</span><span class="symbol">),</span>
+<span class="linenum">141:</span> <span class="normal">        </span><span class="normal"><a name="141">MRT_INT3</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">142:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">143:</span> 
+<span class="linenum">144:</span> <span class="comment">/* Channel status */</span>
+<span class="linenum">145:</span> <span class="keyword">enum</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">146:</span> <span class="normal">        </span><span class="normal"><a name="146">MRT_INT</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">),</span>
+<span class="linenum">147:</span> <span class="normal">        </span><span class="normal"><a name="147">MRT_RUN</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="normal"> </span><span class="symbol">&lt;&lt;</span><span class="normal"> </span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">148:</span> <span class="cbracket">}</span><span class="symbol">;</span>
+<span class="linenum">149:</span> 
+<span class="linenum">150:</span> <span class="type">void</span><span class="normal"> </span><span class="function">mrt_set_mode</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="mrt.h.html#122">mrt_channel</a></span><span class="normal"> mrt</span><span class="symbol">,</span><span class="normal"> </span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="mrt.h.html#130">mrt_mode</a></span><span class="normal"> mode</span><span class="symbol">);</span>
+<span class="linenum">151:</span> <span class="type">void</span><span class="normal"> </span><span class="function">mrt_set_interval</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="mrt.h.html#122">mrt_channel</a></span><span class="normal"> mrt</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> ivalue</span><span class="symbol">);</span>
+<span class="linenum">152:</span> <span class="type">int</span><span class="normal"> </span><span class="function">mrt_get_timer</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="mrt.h.html#122">mrt_channel</a></span><span class="normal"> mrt</span><span class="symbol">);</span>
+<span class="linenum">153:</span> <span class="type">void</span><span class="normal"> </span><span class="function">mrt_enable_interrupt</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">);</span>
+<span class="linenum">154:</span> <span class="type">void</span><span class="normal"> </span><span class="function">mrt_disable_interrupt</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">);</span>
+<span class="linenum">155:</span> <span class="type">int</span><span class="normal"> </span><span class="function">mrt_get_interrupt_mask</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">);</span>
+<span class="linenum">156:</span> <span class="type">int</span><span class="normal"> </span><span class="function">mrt_get_interrupt_status</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">);</span>
+<span class="linenum">157:</span> <span class="type">void</span><span class="normal"> </span><span class="function">mrt_clear_interrupt</span><span class="symbol">(</span><span class="type">int</span><span class="normal"> interrupt</span><span class="symbol">);</span>
+<span class="linenum">158:</span> <span class="type">int</span><span class="normal"> </span><span class="function">mrt_get_channel_status</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="mrt.h.html#122">mrt_channel</a></span><span class="normal"> mrt</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> status</span><span class="symbol">);</span>
+<span class="linenum">159:</span> <span class="type">void</span><span class="normal"> </span><span class="function">mrt_clear_channel_status</span><span class="symbol">(</span><span class="keyword">enum</span><span class="normal"> </span><span class="usertype"><a href="mrt.h.html#122">mrt_channel</a></span><span class="normal"> mrt</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> status</span><span class="symbol">);</span>
+<span class="linenum">160:</span> <span class="type">int</span><span class="normal"> </span><span class="function">mrt_get_idle_channel</span><span class="symbol">(</span><span class="type">void</span><span class="symbol">);</span>
+<span class="linenum">161:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
