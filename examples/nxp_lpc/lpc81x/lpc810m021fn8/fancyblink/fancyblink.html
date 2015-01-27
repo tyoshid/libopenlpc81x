@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>fancyblink/</title>
+<meta name="generator" content="Bluefish 2.2.6" >
+<meta name="author" content="Toshiaki Yoshida" >
+<meta name="date" content="2015-01-26T22:10:08+0900" >
+<meta name="copyright" content="Copyright 2015 Toshiaki Yoshida">
+<meta name="keywords" content="LPC810">
+<meta name="description" content="LPC810 example">
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="expires" content="0">
+<link href="../../../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+      
+<!-- header -->
+<h1><a href="../../../../../libopenlpc81x.html">libopenlpc81x</a>/
+examples/
+nxp_lpc/
+lpc81x/
+<a href="../lpc810m021fn8.html#examples">lpc810m021fn8</a>/
+fancyblink/
+</h1>
+
+Blink two LEDs.
+
+<h2>Hardware</h2>
+
+<!-- schematic -->
+<h3><a href="fancyblink.pdf">Schematic</a></h3>
+<p class="picture"><a href="fancyblink.pdf"><img src="schematic.jpg" width="640" height="452" alt="fancyblink schematic"></a></p>
+
+<!-- layout -->
+<h3><a href="layout.jpg">Layout</a></h3>
+<p class="picture"><a href="layout.jpg"><img src="layout.jpg" width="320" height="281" alt="fancyblink layout"></a></p>
+
+<h2>Software</h2>
+
+<!-- source -->
+<h3><a href="fancyblink.c.html">fancyblink.c</a></h3>
+<pre><tt><span class="linenum">01:</span> <span class="comment">/*</span>
+<span class="linenum">02:</span> <span class="comment"> * fancyblink - Blink two LEDs.</span>
+<span class="linenum">03:</span> <span class="comment"> *</span>
+<span class="linenum">04:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">05:</span> <span class="comment"> *</span>
+<span class="linenum">06:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">07:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">08:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">09:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">10:</span> <span class="comment"> *</span>
+<span class="linenum">11:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">12:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">13:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">14:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">15:</span> <span class="comment"> *</span>
+<span class="linenum">16:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">17:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">18:</span> <span class="comment"> */</span>
+<span class="linenum">19:</span> 
+<span class="linenum">20:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;syscon.h&gt;</span>
+<span class="linenum">21:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;gpio.h&gt;</span>
+<span class="linenum">22:</span> 
+<span class="linenum">23:</span> <span class="keyword">volatile</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="normal"><a name="23">dont_delete_loop</a></span><span class="symbol">;</span>
+<span class="linenum">24:</span> 
+<span class="linenum">25:</span> <span class="comment">/* Set LPC810 to 24 MHz. */</span>
+<span class="linenum">26:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="26">clock_setup</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">27:</span> <span class="cbracket">{</span>
+<span class="linenum">28:</span> <span class="normal">        </span><span class="comment">/*</span>
+<span class="linenum">29:</span> <span class="comment">         * Select IRC (12MHz) as PLL source (Fclkin).</span>
+<span class="linenum">30:</span> <span class="comment">         * Main clock (Fclkout) is 24MHz (&lt; 100MHz).</span>
+<span class="linenum">31:</span> <span class="comment">         * M = Fclkout / Fclkin = 2</span>
+<span class="linenum">32:</span> <span class="comment">         * FCCO = 2 * P * Fclkout (156MHz &lt;= FCCO &lt;= 320MHz)</span>
+<span class="linenum">33:</span> <span class="comment">         * P = 4 (FCCO = 192MHz)</span>
+<span class="linenum">34:</span> <span class="comment">         */</span>
+<span class="linenum">35:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#79">syscon_enable_pll</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#455">SYSCON_IRC</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">2</span><span class="symbol">,</span><span class="normal"> </span><span class="number">4</span><span class="symbol">);</span>
+<span class="linenum">36:</span> 
+<span class="linenum">37:</span> <span class="normal">        </span><span class="comment">/*</span>
+<span class="linenum">38:</span> <span class="comment">         * Select PLL as system clock source.</span>
+<span class="linenum">39:</span> <span class="comment">         * Main clock:   24MHz</span>
+<span class="linenum">40:</span> <span class="comment">         * System clock: 24MHz</span>
+<span class="linenum">41:</span> <span class="comment">         */</span>
+<span class="linenum">42:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#166">syscon_set_system_clock</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#460">SYSCON_PLL_OUT</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="linenum">43:</span> <span class="cbracket">}</span>
+<span class="linenum">44:</span> 
+<span class="linenum">45:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="45">gpio_setup</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">46:</span> <span class="cbracket">{</span>
+<span class="linenum">47:</span> <span class="normal">        </span><span class="comment">/* Enable GPIO clock. */</span>
+<span class="linenum">48:</span> <span class="normal">        </span><span class="comment">// syscon_enable_clock(SYSCON_GPIO);</span>
+<span class="linenum">49:</span> 
+<span class="linenum">50:</span> <span class="normal">        </span><span class="comment">/* Enable switch matrix clock. */</span>
+<span class="linenum">51:</span> <span class="normal">        </span><span class="comment">// syscon_enable_clock(SYSCON_SWM);</span>
+<span class="linenum">52:</span> 
+<span class="linenum">53:</span> <span class="normal">        </span><span class="comment">/* Enable IOCON clock. */</span>
+<span class="linenum">54:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#198">syscon_enable_clock</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#468">SYSCON_IOCON</a></span><span class="symbol">);</span>
+<span class="linenum">55:</span> 
+<span class="linenum">56:</span> <span class="normal">        </span><span class="comment">/* Prevent the I2C pins from internally floating. */</span>
+<span class="linenum">57:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#291">GPIO_OUTPUT</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#228">GPIO_IO</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#186">PIO0_10</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#187">PIO0_11</a></span><span class="symbol">);</span>
+<span class="linenum">58:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#258">gpio_clear</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#186">PIO0_10</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#187">PIO0_11</a></span><span class="symbol">);</span>
+<span class="linenum">59:</span> 
+<span class="linenum">60:</span> <span class="normal">        </span><span class="comment">/* Set PIO0_2 and PIO0_3 to 'output push-pull'. */</span>
+<span class="linenum">61:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#291">GPIO_OUTPUT</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#178">PIO0_2</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#179">PIO0_3</a></span><span class="symbol">);</span>
+<span class="linenum">62:</span> 
+<span class="linenum">63:</span> <span class="normal">        </span><span class="comment">/* LED1 on */</span>
+<span class="linenum">64:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#253">gpio_set</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#178">PIO0_2</a></span><span class="symbol">);</span>
+<span class="linenum">65:</span> 
+<span class="linenum">66:</span> <span class="normal">        </span><span class="comment">/* LED2 off */</span>
+<span class="linenum">67:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#258">gpio_clear</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#179">PIO0_3</a></span><span class="symbol">);</span>
+<span class="linenum">68:</span> <span class="cbracket">}</span>
+<span class="linenum">69:</span> 
+<span class="linenum">70:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="70">main</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">71:</span> <span class="cbracket">{</span>
+<span class="linenum">72:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">73:</span> 
+<span class="linenum">74:</span> <span class="normal">        </span><span class="function"><a href="fancyblink.c.html#26">clock_setup</a></span><span class="symbol">();</span>
+<span class="linenum">75:</span> <span class="normal">        </span><span class="function"><a href="fancyblink.c.html#45">gpio_setup</a></span><span class="symbol">();</span>
+<span class="linenum">76:</span> 
+<span class="linenum">77:</span> <span class="normal">        </span><span class="comment">/* Blink the LEDs (PIO0_2 and PIO0_3). */</span>
+<span class="linenum">78:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">79:</span> <span class="normal">                </span><span class="comment">/* Wait a bit. */</span>
+<span class="linenum">80:</span> <span class="normal">                </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">500000</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span>
+<span class="linenum">81:</span> <span class="normal">                        </span><span class="normal"><a href="fancyblink.c.html#23">dont_delete_loop</a></span><span class="symbol">;</span>
+<span class="linenum">82:</span> 
+<span class="linenum">83:</span> <span class="normal">                </span><span class="comment">/* LED on/off */</span>
+<span class="linenum">84:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#268">gpio_toggle</a></span><span class="symbol">(</span><span class="function"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#205">PIO0</a></span><span class="symbol">(</span><span class="number">2</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3</span><span class="symbol">));</span>
+<span class="linenum">85:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">86:</span> 
+<span class="linenum">87:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">88:</span> <span class="cbracket">}</span>
+<span class="linenum">89:</span> </tt></pre>
+<h3><a href="Makefile.html">Makefile</a></h3>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+</body>
+</html>
