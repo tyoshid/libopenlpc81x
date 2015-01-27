@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Makefile</title>
+<link href="../../../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+<h1><a href="../../../../../libopenlpc81x.html">libopenlpc81x</a>/
+examples/
+nxp_lpc/
+lpc81x/
+<a href="../lpc810m021fn8.html#examples">lpc810m021fn8</a>/
+<a href="wwdt.html">wwdt</a>/
+Makefile</h1>
+<!-- Generator: GNU source-highlight 3.1.7
+by Lorenzo Bettini
+http://www.lorenzobettini.it
+http://www.gnu.org/software/src-highlite -->
+<pre><tt><span class="linenum">01:</span> <span class="comment"># Makefile for wwdt</span>
+<span class="linenum">02:</span> 
+<span class="linenum">03:</span> <span class="comment"># Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">04:</span> 
+<span class="linenum">05:</span> <span class="comment"># This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">06:</span> <span class="comment"># it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">07:</span> <span class="comment"># the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">08:</span> <span class="comment"># (at your option) any later version.</span>
+<span class="linenum">09:</span> 
+<span class="linenum">10:</span> <span class="comment"># This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">11:</span> <span class="comment"># but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">12:</span> <span class="comment"># MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">13:</span> <span class="comment"># GNU General Public License for more details.</span>
+<span class="linenum">14:</span> 
+<span class="linenum">15:</span> <span class="comment"># You should have received a copy of the GNU General Public License</span>
+<span class="linenum">16:</span> <span class="comment"># along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">17:</span> 
+<span class="linenum">18:</span> <span class="variable"><a name="18">NAME</a></span><span class="variable">            </span><span class="symbol">=</span><span class="normal"> wwdt</span>
+<span class="linenum">19:</span> <span class="variable"><a name="19">OBJS</a></span><span class="variable">            </span><span class="symbol">=</span><span class="normal"> wwdt.o</span>
+<span class="linenum">20:</span> <span class="variable"><a name="20">OUTFILES</a></span><span class="variable">        </span><span class="symbol">=</span><span class="normal"> $(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).bin $(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).list</span>
+<span class="linenum">21:</span> <span class="variable"><a name="21">LDSCRIPT</a></span><span class="variable">        </span><span class="symbol">=</span><span class="normal"> ldscripts/lpc810.x</span>
+<span class="linenum">22:</span> <span class="variable"><a name="22">LDSPECS</a></span><span class="variable">         </span><span class="symbol">=</span>
+<span class="linenum">23:</span> <span class="variable"><a name="23">LIBDIR</a></span><span class="variable">          </span><span class="symbol">?=</span><span class="normal"> ../../../../..</span>
+<span class="linenum">24:</span> 
+<span class="linenum">25:</span> <span class="variable"><a name="25">CC</a></span><span class="variable">              </span><span class="symbol">=</span><span class="normal"> arm-none-eabi-gcc</span>
+<span class="linenum">26:</span> <span class="variable"><a name="26">LD</a></span><span class="variable">              </span><span class="symbol">=</span><span class="normal"> arm-none-eabi-gcc</span>
+<span class="linenum">27:</span> <span class="variable"><a name="27">OBJCOPY</a></span><span class="variable">         </span><span class="symbol">=</span><span class="normal"> arm-none-eabi-objcopy</span>
+<span class="linenum">28:</span> <span class="variable"><a name="28">OBJDUMP</a></span><span class="variable">         </span><span class="symbol">=</span><span class="normal"> arm-none-eabi-objdump</span>
+<span class="linenum">29:</span> <span class="variable"><a name="29">SIZE</a></span><span class="variable">            </span><span class="symbol">=</span><span class="normal"> arm-none-eabi-size</span>
+<span class="linenum">30:</span> 
+<span class="linenum">31:</span> <span class="variable"><a name="31">ARCHFLAGS</a></span><span class="variable">       </span><span class="symbol">=</span><span class="normal"> -mthumb -mcpu=cortex-m0plus</span>
+<span class="linenum">32:</span> <span class="variable"><a name="32">CFLAGS</a></span><span class="variable">          </span><span class="symbol">=</span><span class="normal"> -MMD -Os \</span>
+<span class="linenum">33:</span> <span class="normal">                  -Wall -Wextra -Wimplicit-function-declaration \</span>
+<span class="linenum">34:</span> <span class="normal">                  -Wredundant-decls -Wstrict-prototypes -Wundef \</span>
+<span class="linenum">35:</span> <span class="normal">                  -I$(</span><span class="variable"><a href="Makefile.html#23">LIBDIR</a></span><span class="normal">)/include -I$(</span><span class="variable"><a href="Makefile.html#23">LIBDIR</a></span><span class="normal">)/include/nxp_lpc/lpc81x \</span>
+<span class="linenum">36:</span> <span class="normal">                  -fno-common -fstack-usage $(</span><span class="variable"><a href="Makefile.html#31">ARCHFLAGS</a></span><span class="normal">)</span>
+<span class="linenum">37:</span> <span class="variable"><a name="37">LDFLAGS</a></span><span class="variable">         </span><span class="symbol">=</span><span class="normal"> -L$(</span><span class="variable"><a href="Makefile.html#23">LIBDIR</a></span><span class="normal">)/lib/nxp_lpc/lpc81x -llpc81x \</span>
+<span class="linenum">38:</span> <span class="normal">                  -T $(</span><span class="variable"><a href="Makefile.html#21">LDSCRIPT</a></span><span class="normal">) -nostartfiles $(</span><span class="variable"><a href="Makefile.html#22">LDSPECS</a></span><span class="normal">) \</span>
+<span class="linenum">39:</span> <span class="normal">                  -Wl,--gc-sections -Wl,-Map=$(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).map -Wl,--cref \</span>
+<span class="linenum">40:</span> <span class="normal">                  $(</span><span class="variable"><a href="Makefile.html#31">ARCHFLAGS</a></span><span class="normal">)</span>
+<span class="linenum">41:</span> 
+<span class="linenum">42:</span> <span class="variable"><a name="42">USARTUTIL</a></span><span class="variable">       </span><span class="symbol">?=</span><span class="normal"> $(</span><span class="variable"><a href="Makefile.html#23">LIBDIR</a></span><span class="normal">)/tools/nxp_lpc/lpc81x/usart-util/usart-util</span>
+<span class="linenum">43:</span> <span class="keyword">ifneq</span><span class="normal"> ($(</span><span class="function">strip </span><span class="normal">$(</span><span class="variable">USARTUTIL_DEVICE</span><span class="normal">)),)</span>
+<span class="linenum">44:</span> <span class="variable"><a href="Makefile.html#42">USARTUTIL</a></span><span class="variable">       </span><span class="symbol">+=</span><span class="normal"> -d $(</span><span class="variable">USARTUTIL_DEVICE</span><span class="normal">)</span>
+<span class="linenum">45:</span> <span class="keyword">endif</span>
+<span class="linenum">46:</span> 
+<span class="linenum">47:</span> <span class="string">.PHONY</span><span class="normal">: all clean flash</span>
+<span class="linenum">48:</span> 
+<span class="linenum">49:</span> <span class="symbol">all</span><span class="normal">: $(</span><span class="variable"><a href="Makefile.html#20">OUTFILES</a></span><span class="normal">)</span>
+<span class="linenum">50:</span> 
+<span class="linenum">51:</span> <span class="symbol">%.bin</span><span class="normal">: %.elf</span>
+<span class="linenum">52:</span> <span class="normal">        echo "  </span><span class="preproc">$@</span><span class="normal">"</span>
+<span class="linenum">53:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#27">OBJCOPY</a></span><span class="normal">) -O binary </span><span class="preproc">$&lt;</span><span class="normal"> </span><span class="preproc">$@</span>
+<span class="linenum">54:</span> 
+<span class="linenum">55:</span> <span class="symbol">%.hex</span><span class="normal">: %.elf</span>
+<span class="linenum">56:</span> <span class="normal">        echo "  </span><span class="preproc">$@</span><span class="normal">"</span>
+<span class="linenum">57:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#27">OBJCOPY</a></span><span class="normal">) -O ihex </span><span class="preproc">$&lt;</span><span class="normal"> </span><span class="preproc">$@</span>
+<span class="linenum">58:</span> 
+<span class="linenum">59:</span> <span class="symbol">%.srec</span><span class="normal">: %.elf</span>
+<span class="linenum">60:</span> <span class="normal">        echo "  </span><span class="preproc">$@</span><span class="normal">"</span>
+<span class="linenum">61:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#27">OBJCOPY</a></span><span class="normal">) -O srec </span><span class="preproc">$&lt;</span><span class="normal"> </span><span class="preproc">$@</span>
+<span class="linenum">62:</span> 
+<span class="linenum">63:</span> <span class="symbol">%.list</span><span class="normal">: %.elf</span>
+<span class="linenum">64:</span> <span class="normal">        echo "  </span><span class="preproc">$@</span><span class="normal">"</span>
+<span class="linenum">65:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#28">OBJDUMP</a></span><span class="normal">) -d </span><span class="preproc">$&lt;</span><span class="normal"> &gt; </span><span class="preproc">$@</span>
+<span class="linenum">66:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#28">OBJDUMP</a></span><span class="normal">) -t </span><span class="preproc">$&lt;</span><span class="normal"> &gt;&gt; </span><span class="preproc">$@</span>
+<span class="linenum">67:</span> 
+<span class="linenum">68:</span> <span class="normal">$(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).elf: $(</span><span class="variable"><a href="Makefile.html#19">OBJS</a></span><span class="normal">)</span>
+<span class="linenum">69:</span> <span class="normal">        echo "  </span><span class="preproc">$@</span><span class="normal">"</span>
+<span class="linenum">70:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#26">LD</a></span><span class="normal">) -o </span><span class="preproc">$@</span><span class="normal"> $(</span><span class="variable"><a href="Makefile.html#19">OBJS</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#37">LDFLAGS</a></span><span class="normal">)</span>
+<span class="linenum">71:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#29">SIZE</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).elf</span>
+<span class="linenum">72:</span> 
+<span class="linenum">73:</span> <span class="symbol">%.o</span><span class="normal">: %.c</span>
+<span class="linenum">74:</span> <span class="normal">        echo "  </span><span class="preproc">$&lt;</span><span class="normal">"</span>
+<span class="linenum">75:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#25">CC</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#32">CFLAGS</a></span><span class="normal">) -o </span><span class="preproc">$@</span><span class="normal"> -c </span><span class="preproc">$&lt;</span>
+<span class="linenum">76:</span> 
+<span class="linenum">77:</span> <span class="symbol">clean</span><span class="normal">:</span>
+<span class="linenum">78:</span> <span class="normal">        rm -f $(</span><span class="variable"><a href="Makefile.html#20">OUTFILES</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).elf $(</span><span class="variable"><a href="Makefile.html#19">OBJS</a></span><span class="normal">) $(</span><span class="variable"><a href="Makefile.html#19">OBJS</a></span><span class="normal">:.o=.d) $(</span><span class="variable"><a href="Makefile.html#19">OBJS</a></span><span class="normal">:.o=.su) \</span>
+<span class="linenum">79:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).map</span>
+<span class="linenum">80:</span> 
+<span class="linenum">81:</span> <span class="symbol">flash</span><span class="normal">: $(</span><span class="variable"><a href="Makefile.html#18">NAME</a></span><span class="normal">).bin</span>
+<span class="linenum">82:</span> <span class="normal">        $(</span><span class="variable"><a href="Makefile.html#42">USARTUTIL</a></span><span class="normal">) -D </span><span class="preproc">$&lt;</span>
+<span class="linenum">83:</span> <span class="comment">#       @$(USARTUTIL) -D $&lt; 2&gt;&amp;1 | grep --color=never wrote</span>
+<span class="linenum">84:</span> 
+<span class="linenum">85:</span> <span class="keyword">ifneq</span><span class="normal"> ($(</span><span class="usertype">MAKECMDGOALS</span><span class="normal">),clean)</span>
+<span class="linenum">86:</span> <span class="keyword">-include</span><span class="normal"> $(</span><span class="variable"><a href="Makefile.html#19">OBJS</a></span><span class="normal">:.o=.d)</span>
+<span class="linenum">87:</span> <span class="keyword">endif</span>
+<span class="linenum">88:</span> </tt></pre>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
