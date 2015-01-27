@@ -1,0 +1,606 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>i2c_rom/</title>
+<meta name="generator" content="Bluefish 2.2.6" >
+<meta name="author" content="Toshiaki Yoshida" >
+<meta name="date" content="2015-01-26T22:18:56+0900" >
+<meta name="copyright" content="Copyright 2015 Toshiaki Yoshida">
+<meta name="keywords" content="LPC810">
+<meta name="description" content="LPC810 example">
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="expires" content="0">
+<link href="../../../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+<link href="../../../../../stylesheets/source-highlight.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+      
+<!-- header -->
+<h1><a href="../../../../../libopenlpc81x.html">libopenlpc81x</a>/
+examples/
+nxp_lpc/
+lpc81x/
+<a href="../lpc810m021fn8.html#examples">lpc810m021fn8</a>/
+i2c_rom/
+</h1>
+
+Write/read a serial EEPROM.
+
+<h2>Hardware</h2>
+
+<!-- schematic -->
+<h3><a href="i2c_rom.pdf">Schematic</a></h3>
+<p class="picture"><a href="i2c_rom.pdf"><img src="schematic.jpg" width="640" height="452" alt="i2c_rom schematic"></a></p>
+
+<!-- layout -->
+<h3><a href="layout.jpg">Layout</a></h3>
+<p class="picture"><a href="layout.jpg"><img src="layout.jpg" width="320" height="304" alt="i2c_rom layout"></a></p>
+
+<h2>Software</h2>
+
+<!-- source -->
+<h3><a href="i2c_rom.c.html">i2c_rom.c</a></h3>
+<pre><tt><span class="linenum">001:</span> <span class="comment">/*</span>
+<span class="linenum">002:</span> <span class="comment"> * i2c_rom - Write/read a serial EEPROM.</span>
+<span class="linenum">003:</span> <span class="comment"> *</span>
+<span class="linenum">004:</span> <span class="comment"> * Copyright 2014 Toshiaki Yoshida </span><span class="url">&lt;yoshida@mpc.net&gt;</span>
+<span class="linenum">005:</span> <span class="comment"> *</span>
+<span class="linenum">006:</span> <span class="comment"> * This program is free software: you can redistribute it and/or modify</span>
+<span class="linenum">007:</span> <span class="comment"> * it under the terms of the GNU General Public License as published by</span>
+<span class="linenum">008:</span> <span class="comment"> * the Free Software Foundation, either version 3 of the License, or</span>
+<span class="linenum">009:</span> <span class="comment"> * (at your option) any later version.</span>
+<span class="linenum">010:</span> <span class="comment"> *</span>
+<span class="linenum">011:</span> <span class="comment"> * This program is distributed in the hope that it will be useful,</span>
+<span class="linenum">012:</span> <span class="comment"> * but WITHOUT ANY WARRANTY; without even the implied warranty of</span>
+<span class="linenum">013:</span> <span class="comment"> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the</span>
+<span class="linenum">014:</span> <span class="comment"> * GNU General Public License for more details.</span>
+<span class="linenum">015:</span> <span class="comment"> *</span>
+<span class="linenum">016:</span> <span class="comment"> * You should have received a copy of the GNU General Public License</span>
+<span class="linenum">017:</span> <span class="comment"> * along with this program.  If not, see </span><span class="url">&lt;http://www.gnu.org/licenses/&gt;</span><span class="comment">.</span>
+<span class="linenum">018:</span> <span class="comment"> */</span>
+<span class="linenum">019:</span> 
+<span class="linenum">020:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;syscon.h&gt;</span>
+<span class="linenum">021:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;gpio.h&gt;</span>
+<span class="linenum">022:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;usart.h&gt;</span>
+<span class="linenum">023:</span> <span class="preproc">#include</span><span class="normal"> </span><span class="string">&lt;i2c.h&gt;</span>
+<span class="linenum">024:</span> 
+<span class="linenum">025:</span> <span class="comment">/*</span>
+<span class="linenum">026:</span> <span class="comment"> * Microchip 24FC64</span>
+<span class="linenum">027:</span> <span class="comment"> * 64Kbit I2C Serial EEPROM</span>
+<span class="linenum">028:</span> <span class="comment"> */</span>
+<span class="linenum">029:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="29">ROM_SIZE</a></span><span class="normal">        </span><span class="number">8192</span><span class="normal">    </span><span class="comment">/* 8KByte */</span>
+<span class="linenum">030:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="30">PAGE_SIZE</a></span><span class="normal">       </span><span class="number">32</span><span class="normal">      </span><span class="comment">/* 32Byte */</span>
+<span class="linenum">031:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="31">ROM_SLA</a></span><span class="normal">         </span><span class="number">0xa0</span><span class="normal">    </span><span class="comment">/* |1|0|1|0|A2|A1|A0|R/W| */</span>
+<span class="linenum">032:</span> 
+<span class="linenum">033:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="normal"><a name="33">FASTMODE</a></span>
+<span class="linenum">034:</span> 
+<span class="linenum">035:</span> <span class="comment">/* USART clock frequency */</span>
+<span class="linenum">036:</span> <span class="preproc">#define</span><span class="normal"> </span><span class="function"><a name="36">U_PCLK</a></span><span class="normal">  </span><span class="symbol">(</span><span class="number">16</span><span class="normal"> </span><span class="symbol">*</span><span class="normal"> </span><span class="number">115200</span><span class="symbol">)</span>
+<span class="linenum">037:</span> 
+<span class="linenum">038:</span> <span class="type">int</span><span class="normal"> </span><span class="normal"><a name="38">status</a></span><span class="symbol">;</span>
+<span class="linenum">039:</span> <span class="type">int</span><span class="normal"> </span><span class="normal"><a name="39">exp_state</a></span><span class="symbol">;</span>
+<span class="linenum">040:</span> 
+<span class="linenum">041:</span> <span class="comment">/* Set LPC810 to 24 MHz. */</span>
+<span class="linenum">042:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="42">clock_setup</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">043:</span> <span class="cbracket">{</span>
+<span class="linenum">044:</span> <span class="normal">        </span><span class="comment">/* Set up PLL (Fclkin = 12MHz (IRC), Fclkout (Main clock) = 24MHz) */</span>
+<span class="linenum">045:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#79">syscon_enable_pll</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#455">SYSCON_IRC</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">2</span><span class="symbol">,</span><span class="normal"> </span><span class="number">4</span><span class="symbol">);</span>
+<span class="linenum">046:</span> 
+<span class="linenum">047:</span> <span class="normal">        </span><span class="comment">/* Select PLL as system clock source. */</span>
+<span class="linenum">048:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#166">syscon_set_system_clock</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#460">SYSCON_PLL_OUT</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="linenum">049:</span> 
+<span class="linenum">050:</span> <span class="normal">        </span><span class="comment">/* Enable USART clock (U_PCLK). */</span>
+<span class="linenum">051:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#208">syscon_set_usart_clock</a></span><span class="symbol">(</span><span class="number">24000000</span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#36">U_PCLK</a></span><span class="symbol">);</span>
+<span class="linenum">052:</span> 
+<span class="linenum">053:</span> <span class="preproc">#ifdef</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#33">FASTMODE</a></span>
+<span class="linenum">054:</span> <span class="normal">        </span><span class="comment">/* Set IOCON glitch filter clock divider. */</span>
+<span class="linenum">055:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#278">syscon_set_ioconclkdiv</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="linenum">056:</span> <span class="preproc">#endif</span>
+<span class="linenum">057:</span> <span class="cbracket">}</span>
+<span class="linenum">058:</span> 
+<span class="linenum">059:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="59">gpio_setup</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">060:</span> <span class="cbracket">{</span>
+<span class="linenum">061:</span> <span class="normal">        </span><span class="comment">/* Enable GPIO clock. */</span>
+<span class="linenum">062:</span> <span class="normal">        </span><span class="comment">// syscon_enable_clock(SYSCON_GPIO);</span>
+<span class="linenum">063:</span> 
+<span class="linenum">064:</span> <span class="normal">        </span><span class="comment">/* Enable switch matrix clock. */</span>
+<span class="linenum">065:</span> <span class="normal">        </span><span class="comment">// syscon_enable_clock(SYSCON_SWM);</span>
+<span class="linenum">066:</span> 
+<span class="linenum">067:</span> <span class="normal">        </span><span class="comment">/* Enable IOCON clock. */</span>
+<span class="linenum">068:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#198">syscon_enable_clock</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#468">SYSCON_IOCON</a></span><span class="symbol">);</span>
+<span class="linenum">069:</span> 
+<span class="linenum">070:</span> <span class="normal">        </span><span class="comment">/* Prevent the I2C pins from internally floating. */</span>
+<span class="linenum">071:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#291">GPIO_OUTPUT</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#228">GPIO_IO</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#186">PIO0_10</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#187">PIO0_11</a></span><span class="symbol">);</span>
+<span class="linenum">072:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#258">gpio_clear</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#186">PIO0_10</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#187">PIO0_11</a></span><span class="symbol">);</span>
+<span class="linenum">073:</span> 
+<span class="linenum">074:</span> <span class="preproc">#ifndef</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#33">FASTMODE</a></span>
+<span class="linenum">075:</span> <span class="normal">        </span><span class="comment">/* Set PIO0_2 to 'I2C SCL'. */</span>
+<span class="linenum">076:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#274">GPIO_I2C_SCL</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#224">GPIO_OPENDRAIN</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#232">GPIO_HYST</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#178">PIO0_2</a></span><span class="symbol">);</span>
+<span class="linenum">077:</span> 
+<span class="linenum">078:</span> <span class="normal">        </span><span class="comment">/* Set PIO0_3 to 'I2C SDA'. */</span>
+<span class="linenum">079:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#273">GPIO_I2C_SDA</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#224">GPIO_OPENDRAIN</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#232">GPIO_HYST</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#179">PIO0_3</a></span><span class="symbol">);</span>
+<span class="linenum">080:</span> <span class="preproc">#else</span>
+<span class="linenum">081:</span> <span class="normal">        </span><span class="comment">/* Set PIO0_2 to 'I2C SCL'. */</span>
+<span class="linenum">082:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#274">GPIO_I2C_SCL</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#224">GPIO_OPENDRAIN</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#232">GPIO_HYST</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">083:</span> <span class="normal">                    </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#213">GPIO_IOCONCLKDIV0</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#222">GPIO_FILTER_2CLOCK</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#178">PIO0_2</a></span><span class="symbol">);</span>
+<span class="linenum">084:</span> 
+<span class="linenum">085:</span> <span class="normal">        </span><span class="comment">/* Set PIO0_3 to 'I2C SDA'. */</span>
+<span class="linenum">086:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#273">GPIO_I2C_SDA</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#224">GPIO_OPENDRAIN</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#232">GPIO_HYST</a></span><span class="normal"> </span><span class="symbol">|</span>
+<span class="linenum">087:</span> <span class="normal">                    </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#213">GPIO_IOCONCLKDIV0</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#222">GPIO_FILTER_2CLOCK</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#179">PIO0_3</a></span><span class="symbol">);</span>
+<span class="linenum">088:</span> <span class="preproc">#endif</span>
+<span class="linenum">089:</span> 
+<span class="linenum">090:</span> <span class="normal">        </span><span class="comment">/* Set PIO0_4 to 'USART0 TXD'. */</span>
+<span class="linenum">091:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/gpio.c.html#182">gpio_config</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#242">GPIO_U0_TXD</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#232">GPIO_HYST</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/gpio.h.html#180">PIO0_4</a></span><span class="symbol">);</span>
+<span class="linenum">092:</span> <span class="cbracket">}</span>
+<span class="linenum">093:</span> 
+<span class="linenum">094:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="94">usart_setup</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">095:</span> <span class="cbracket">{</span>
+<span class="linenum">096:</span> <span class="normal">        </span><span class="comment">/* Enable USART0 clock. */</span>
+<span class="linenum">097:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#198">syscon_enable_clock</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#472">SYSCON_UART0</a></span><span class="symbol">);</span>
+<span class="linenum">098:</span> 
+<span class="linenum">099:</span> <span class="normal">        </span><span class="comment">/* Set up USART0. */</span>
+<span class="linenum">100:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#109">usart_init</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#36">U_PCLK</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">115200</span><span class="symbol">,</span><span class="normal"> </span><span class="number">8</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#234">USART_PARITY_NONE</a></span><span class="symbol">,</span>
+<span class="linenum">101:</span> <span class="normal">                   </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#241">USART_FLOW_NONE</a></span><span class="symbol">);</span>
+<span class="linenum">102:</span> <span class="cbracket">}</span>
+<span class="linenum">103:</span> 
+<span class="linenum">104:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="104">i2c_setup</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">105:</span> <span class="cbracket">{</span>
+<span class="linenum">106:</span> <span class="normal">        </span><span class="comment">/* Enable I2C clock. */</span>
+<span class="linenum">107:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/syscon.c.html#198">syscon_enable_clock</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/syscon.h.html#481">SYSCON_I2C</a></span><span class="symbol">);</span>
+<span class="linenum">108:</span> 
+<span class="linenum">109:</span> <span class="preproc">#ifndef</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#33">FASTMODE</a></span>
+<span class="linenum">110:</span> <span class="normal">        </span><span class="comment">/* Set fSCL to 100kHz (tHIGH = 5 usec, tLOW = 5 usec). */</span>
+<span class="linenum">111:</span> <span class="normal">        </span><span class="comment">/* Standard-mode */</span>
+<span class="linenum">112:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#22">i2c_set_scl</a></span><span class="symbol">(</span><span class="number">24</span><span class="symbol">,</span><span class="normal"> </span><span class="number">5</span><span class="symbol">,</span><span class="normal"> </span><span class="number">5</span><span class="symbol">);</span>
+<span class="linenum">113:</span> <span class="preproc">#else</span>
+<span class="linenum">114:</span> <span class="normal">        </span><span class="comment">/* Set fSCL to 400kHz (tHIGH = 1 usec, tLOW = 1.5 usec). */</span>
+<span class="linenum">115:</span> <span class="normal">        </span><span class="comment">/* Fast-mode */</span>
+<span class="linenum">116:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#22">i2c_set_scl</a></span><span class="symbol">(</span><span class="number">12</span><span class="symbol">,</span><span class="normal"> </span><span class="number">2</span><span class="symbol">,</span><span class="normal"> </span><span class="number">3</span><span class="symbol">);</span>
+<span class="linenum">117:</span> <span class="preproc">#endif</span>
+<span class="linenum">118:</span> 
+<span class="linenum">119:</span> <span class="normal">        </span><span class="comment">/* Enable I2C master function */</span>
+<span class="linenum">120:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#33">i2c_enable_master</a></span><span class="symbol">(</span><span class="normal">false</span><span class="symbol">);</span>
+<span class="linenum">121:</span> <span class="cbracket">}</span>
+<span class="linenum">122:</span> 
+<span class="linenum">123:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="123">print_hex</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> c</span><span class="symbol">)</span>
+<span class="linenum">124:</span> <span class="cbracket">{</span>
+<span class="linenum">125:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> d</span><span class="symbol">;</span>
+<span class="linenum">126:</span> 
+<span class="linenum">127:</span> <span class="normal">        d </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">c </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">4</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">;</span>
+<span class="linenum">128:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">d </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">9</span><span class="symbol">)</span>
+<span class="linenum">129:</span> <span class="normal">                d </span><span class="symbol">+=</span><span class="normal"> </span><span class="string">'a'</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> </span><span class="number">10</span><span class="symbol">;</span>
+<span class="linenum">130:</span> <span class="normal">        </span><span class="keyword">else</span>
+<span class="linenum">131:</span> <span class="normal">                d </span><span class="symbol">+=</span><span class="normal"> </span><span class="string">'0'</span><span class="symbol">;</span>
+<span class="linenum">132:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> d</span><span class="symbol">);</span>
+<span class="linenum">133:</span> <span class="normal">        d </span><span class="symbol">=</span><span class="normal"> c </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xf</span><span class="symbol">;</span>
+<span class="linenum">134:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">d </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">9</span><span class="symbol">)</span>
+<span class="linenum">135:</span> <span class="normal">                d </span><span class="symbol">+=</span><span class="normal"> </span><span class="string">'a'</span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> </span><span class="number">10</span><span class="symbol">;</span>
+<span class="linenum">136:</span> <span class="normal">        </span><span class="keyword">else</span>
+<span class="linenum">137:</span> <span class="normal">                d </span><span class="symbol">+=</span><span class="normal"> </span><span class="string">'0'</span><span class="symbol">;</span>
+<span class="linenum">138:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> d</span><span class="symbol">);</span>
+<span class="linenum">139:</span> <span class="cbracket">}</span>
+<span class="linenum">140:</span> 
+<span class="linenum">141:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="141">print_hex_half_word</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> w</span><span class="symbol">)</span>
+<span class="linenum">142:</span> <span class="cbracket">{</span>
+<span class="linenum">143:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">((</span><span class="normal">w </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">144:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">(</span><span class="normal">w </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">145:</span> <span class="cbracket">}</span>
+<span class="linenum">146:</span> 
+<span class="linenum">147:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="147">print_hex_word</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> w</span><span class="symbol">)</span>
+<span class="linenum">148:</span> <span class="cbracket">{</span>
+<span class="linenum">149:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">((</span><span class="normal">w </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">24</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">150:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">((</span><span class="normal">w </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">16</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">151:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">((</span><span class="normal">w </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">)</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">152:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">(</span><span class="normal">w </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">153:</span> <span class="cbracket">}</span>
+<span class="linenum">154:</span> 
+<span class="linenum">155:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="155">print_int</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> d</span><span class="symbol">)</span>
+<span class="linenum">156:</span> <span class="cbracket">{</span>
+<span class="linenum">157:</span> <span class="normal">        </span><span class="type">bool</span><span class="normal"> zerosup</span><span class="symbol">;</span>
+<span class="linenum">158:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">159:</span> 
+<span class="linenum">160:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">d </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">161:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="string">'-'</span><span class="symbol">);</span>
+<span class="linenum">162:</span> <span class="normal">                d </span><span class="symbol">=</span><span class="normal"> </span><span class="symbol">-</span><span class="normal">d</span><span class="symbol">;</span>
+<span class="linenum">163:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">164:</span> <span class="normal">        zerosup </span><span class="symbol">=</span><span class="normal"> true</span><span class="symbol">;</span>
+<span class="linenum">165:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1000000000</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&gt;</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">/=</span><span class="normal"> </span><span class="number">10</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">166:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">d </span><span class="symbol">/</span><span class="normal"> i </span><span class="symbol">||</span><span class="normal"> i </span><span class="symbol">==</span><span class="normal"> </span><span class="number">1</span><span class="normal"> </span><span class="symbol">||</span><span class="normal"> </span><span class="symbol">!</span><span class="normal">zerosup</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">167:</span> <span class="normal">                        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> d </span><span class="symbol">/</span><span class="normal"> i </span><span class="symbol">+</span><span class="normal"> </span><span class="string">'0'</span><span class="symbol">);</span>
+<span class="linenum">168:</span> <span class="normal">                        d </span><span class="symbol">%=</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">169:</span> <span class="normal">                        zerosup </span><span class="symbol">=</span><span class="normal"> false</span><span class="symbol">;</span>
+<span class="linenum">170:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">171:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">172:</span> <span class="cbracket">}</span>
+<span class="linenum">173:</span> 
+<span class="linenum">174:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="174">xprintf</a></span><span class="symbol">(</span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">p</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> arg0</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> arg1</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> arg2</span><span class="symbol">)</span>
+<span class="linenum">175:</span> <span class="cbracket">{</span>
+<span class="linenum">176:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> arg</span><span class="symbol">[</span><span class="number">3</span><span class="symbol">];</span>
+<span class="linenum">177:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">178:</span> 
+<span class="linenum">179:</span> <span class="normal">        arg</span><span class="symbol">[</span><span class="number">0</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> arg0</span><span class="symbol">;</span>
+<span class="linenum">180:</span> <span class="normal">        arg</span><span class="symbol">[</span><span class="number">1</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> arg1</span><span class="symbol">;</span>
+<span class="linenum">181:</span> <span class="normal">        arg</span><span class="symbol">[</span><span class="number">2</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> arg2</span><span class="symbol">;</span>
+<span class="linenum">182:</span> <span class="normal">        i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">183:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal">p </span><span class="symbol">!=</span><span class="normal"> </span><span class="string">'</span><span class="specialchar">\0</span><span class="string">'</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">184:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal">p </span><span class="symbol">==</span><span class="normal"> </span><span class="string">'%'</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">185:</span> <span class="normal">                        </span><span class="keyword">switch</span><span class="normal"> </span><span class="symbol">(*++</span><span class="normal">p</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">186:</span> <span class="normal">                        </span><span class="keyword">case</span><span class="normal"> </span><span class="string">'%'</span><span class="symbol">:</span>
+<span class="linenum">187:</span> <span class="normal">                                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">p</span><span class="symbol">++);</span>
+<span class="linenum">188:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">189:</span> <span class="normal">                        </span><span class="keyword">case</span><span class="normal"> </span><span class="string">'x'</span><span class="symbol">:</span>
+<span class="linenum">190:</span> <span class="normal">                                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">191:</span> <span class="normal">                                        </span><span class="function"><a href="i2c_rom.c.html#123">print_hex</a></span><span class="symbol">(</span><span class="normal">arg</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">++]);</span>
+<span class="linenum">192:</span> <span class="normal">                                p</span><span class="symbol">++;</span>
+<span class="linenum">193:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">194:</span> <span class="normal">                        </span><span class="keyword">case</span><span class="normal"> </span><span class="string">'h'</span><span class="symbol">:</span>
+<span class="linenum">195:</span> <span class="normal">                                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">196:</span> <span class="normal">                                        </span><span class="function"><a href="i2c_rom.c.html#141">print_hex_half_word</a></span><span class="symbol">(</span><span class="normal">arg</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">++]);</span>
+<span class="linenum">197:</span> <span class="normal">                                p</span><span class="symbol">++;</span>
+<span class="linenum">198:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">199:</span> <span class="normal">                        </span><span class="keyword">case</span><span class="normal"> </span><span class="string">'w'</span><span class="symbol">:</span>
+<span class="linenum">200:</span> <span class="normal">                                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">201:</span> <span class="normal">                                        </span><span class="function"><a href="i2c_rom.c.html#147">print_hex_word</a></span><span class="symbol">(</span><span class="normal">arg</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">++]);</span>
+<span class="linenum">202:</span> <span class="normal">                                p</span><span class="symbol">++;</span>
+<span class="linenum">203:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">204:</span> <span class="normal">                        </span><span class="keyword">case</span><span class="normal"> </span><span class="string">'d'</span><span class="symbol">:</span>
+<span class="linenum">205:</span> <span class="normal">                                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="number">3</span><span class="symbol">)</span>
+<span class="linenum">206:</span> <span class="normal">                                        </span><span class="function"><a href="i2c_rom.c.html#155">print_int</a></span><span class="symbol">(</span><span class="normal">arg</span><span class="symbol">[</span><span class="normal">i</span><span class="symbol">++]);</span>
+<span class="linenum">207:</span> <span class="normal">                                p</span><span class="symbol">++;</span>
+<span class="linenum">208:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">209:</span> <span class="label">                        default:</span>
+<span class="linenum">210:</span> <span class="normal">                                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="string">'?'</span><span class="symbol">);</span>
+<span class="linenum">211:</span> <span class="normal">                                p</span><span class="symbol">++;</span>
+<span class="linenum">212:</span> <span class="normal">                                </span><span class="keyword">break</span><span class="symbol">;</span>
+<span class="linenum">213:</span> <span class="normal">                        </span><span class="cbracket">}</span>
+<span class="linenum">214:</span> <span class="normal">                </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">else</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">215:</span> <span class="normal">                        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">p</span><span class="symbol">++);</span>
+<span class="linenum">216:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">217:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">218:</span> <span class="cbracket">}</span>
+<span class="linenum">219:</span> 
+<span class="linenum">220:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">void</span><span class="normal"> </span><span class="function"><a name="220">xputs</a></span><span class="symbol">(</span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">p</span><span class="symbol">)</span>
+<span class="linenum">221:</span> <span class="cbracket">{</span>
+<span class="linenum">222:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(*</span><span class="normal">p </span><span class="symbol">!=</span><span class="normal"> </span><span class="string">'</span><span class="specialchar">\0</span><span class="string">'</span><span class="symbol">)</span>
+<span class="linenum">223:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">p</span><span class="symbol">++);</span>
+<span class="linenum">224:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="string">'</span><span class="specialchar">\r</span><span class="string">'</span><span class="symbol">);</span>
+<span class="linenum">225:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/usart.c.html#217">usart_send_blocking</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/usart.h.html#227">USART0</a></span><span class="symbol">,</span><span class="normal"> </span><span class="string">'</span><span class="specialchar">\n</span><span class="string">'</span><span class="symbol">);</span>
+<span class="linenum">226:</span> <span class="cbracket">}</span>
+<span class="linenum">227:</span> 
+<span class="linenum">228:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function"><a name="228">wait_i2c_state</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> state</span><span class="symbol">)</span>
+<span class="linenum">229:</span> <span class="cbracket">{</span>
+<span class="linenum">230:</span> <span class="normal">        </span><span class="normal"><a href="i2c_rom.c.html#39">exp_state</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> state</span><span class="symbol">;</span>
+<span class="linenum">231:</span> <span class="normal">        </span><span class="keyword">do</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">232:</span> <span class="normal">                </span><span class="normal"><a href="i2c_rom.c.html#38">status</a></span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#165">i2c_get_status</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#237">I2C_MSTPENDING</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#249">I2C_MSTSTATE</a></span><span class="symbol">);</span>
+<span class="linenum">233:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(!(</span><span class="normal"><a href="i2c_rom.c.html#38">status</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#237">I2C_MSTPENDING</a></span><span class="symbol">));</span>
+<span class="linenum">234:</span> 
+<span class="linenum">235:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">state </span><span class="symbol">!=</span><span class="normal"> </span><span class="symbol">(</span><span class="normal"><a href="i2c_rom.c.html#38">status</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#249">I2C_MSTSTATE</a></span><span class="symbol">))</span>
+<span class="linenum">236:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#38">status</a></span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#249">I2C_MSTSTATE</a></span><span class="symbol">;</span>
+<span class="linenum">237:</span> 
+<span class="linenum">238:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">239:</span> <span class="cbracket">}</span>
+<span class="linenum">240:</span> 
+<span class="linenum">241:</span> <span class="comment">/*</span>
+<span class="linenum">242:</span> <span class="comment"> * Byte Write </span>
+<span class="linenum">243:</span> <span class="comment"> *</span>
+<span class="linenum">244:</span> <span class="comment"> * |S|10100000|A|xxx.....|A|........|A|........|A|P|</span>
+<span class="linenum">245:</span> <span class="comment"> *    Slave      Address    Address    Data</span>
+<span class="linenum">246:</span> <span class="comment"> *    Address    High Byte  Low Byte</span>
+<span class="linenum">247:</span> <span class="comment"> */</span>
+<span class="linenum">248:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function"><a name="248">rom_write_byte</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> addr</span><span class="symbol">,</span><span class="normal"> </span><span class="type">char</span><span class="normal"> data</span><span class="symbol">)</span>
+<span class="linenum">249:</span> <span class="cbracket">{</span>
+<span class="linenum">250:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">251:</span> 
+<span class="linenum">252:</span> <span class="normal">        </span><span class="comment">/* Idle */</span>
+<span class="linenum">253:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#250">I2C_MST_IDLE</a></span><span class="symbol">)))</span>
+<span class="linenum">254:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">255:</span> 
+<span class="linenum">256:</span> <span class="normal">        </span><span class="keyword">do</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">257:</span> <span class="normal">                </span><span class="comment">/* Send START + I2C Slave address. */</span>
+<span class="linenum">258:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#65">i2c_master_send_addr</a></span><span class="symbol">(</span><span class="normal"><a href="i2c_rom.c.html#31">ROM_SLA</a></span><span class="symbol">);</span>
+<span class="linenum">259:</span> 
+<span class="linenum">260:</span> <span class="normal">                </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">261:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">262:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">!=</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#253">I2C_MST_NACK_ADDR</a></span><span class="symbol">)</span>
+<span class="linenum">263:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">264:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">265:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#253">I2C_MST_NACK_ADDR</a></span><span class="symbol">);</span>
+<span class="linenum">266:</span> 
+<span class="linenum">267:</span> <span class="normal">        </span><span class="comment">/* Send ROM address high byte. */</span>
+<span class="linenum">268:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">addr </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">);</span>
+<span class="linenum">269:</span> 
+<span class="linenum">270:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">271:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">272:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">273:</span> 
+<span class="linenum">274:</span> <span class="normal">        </span><span class="comment">/* Send ROM address low byte. */</span>
+<span class="linenum">275:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">addr </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">276:</span> 
+<span class="linenum">277:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">278:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">279:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">280:</span> 
+<span class="linenum">281:</span> <span class="normal">        </span><span class="comment">/* Send data. */</span>
+<span class="linenum">282:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">data</span><span class="symbol">);</span>
+<span class="linenum">283:</span> 
+<span class="linenum">284:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">285:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">286:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">287:</span> 
+<span class="linenum">288:</span> <span class="normal">        </span><span class="comment">/* Send STOP. */</span>
+<span class="linenum">289:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#55">i2c_stop</a></span><span class="symbol">();</span>
+<span class="linenum">290:</span> 
+<span class="linenum">291:</span> <span class="normal">        </span><span class="comment">/* Idle */</span>
+<span class="linenum">292:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#250">I2C_MST_IDLE</a></span><span class="symbol">)))</span>
+<span class="linenum">293:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">294:</span> 
+<span class="linenum">295:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">296:</span> <span class="cbracket">}</span>
+<span class="linenum">297:</span> 
+<span class="linenum">298:</span> <span class="comment">/*</span>
+<span class="linenum">299:</span> <span class="comment"> * Page Write </span>
+<span class="linenum">300:</span> <span class="comment"> *</span>
+<span class="linenum">301:</span> <span class="comment"> * |S|10100000|A|xxx.....|A|........|A|........|A|~|........|A|P|</span>
+<span class="linenum">302:</span> <span class="comment"> *    Slave      Address    Address    Data         Data</span>
+<span class="linenum">303:</span> <span class="comment"> *    Address    High Byte  Low Byte   Byte 0       Byte 31</span>
+<span class="linenum">304:</span> <span class="comment"> */</span>
+<span class="linenum">305:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function"><a name="305">rom_write_page</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> addr</span><span class="symbol">,</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">data</span><span class="symbol">)</span>
+<span class="linenum">306:</span> <span class="cbracket">{</span>
+<span class="linenum">307:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">308:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">309:</span> 
+<span class="linenum">310:</span> <span class="normal">        </span><span class="comment">/* Idle */</span>
+<span class="linenum">311:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#250">I2C_MST_IDLE</a></span><span class="symbol">)))</span>
+<span class="linenum">312:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">313:</span> 
+<span class="linenum">314:</span> <span class="normal">        </span><span class="keyword">do</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">315:</span> <span class="normal">                </span><span class="comment">/* Send START + I2C Slave address. */</span>
+<span class="linenum">316:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#65">i2c_master_send_addr</a></span><span class="symbol">(</span><span class="normal"><a href="i2c_rom.c.html#31">ROM_SLA</a></span><span class="symbol">);</span>
+<span class="linenum">317:</span> 
+<span class="linenum">318:</span> <span class="normal">                </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">319:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">320:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">!=</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#253">I2C_MST_NACK_ADDR</a></span><span class="symbol">)</span>
+<span class="linenum">321:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">322:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">323:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#253">I2C_MST_NACK_ADDR</a></span><span class="symbol">);</span>
+<span class="linenum">324:</span> 
+<span class="linenum">325:</span> <span class="normal">        </span><span class="comment">/* Send ROM address high byte. */</span>
+<span class="linenum">326:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">addr </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">);</span>
+<span class="linenum">327:</span> 
+<span class="linenum">328:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">329:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">330:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">331:</span> 
+<span class="linenum">332:</span> <span class="normal">        </span><span class="comment">/* Send ROM address low byte. */</span>
+<span class="linenum">333:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">addr </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">334:</span> 
+<span class="linenum">335:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#30">PAGE_SIZE</a></span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">336:</span> <span class="normal">                </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">337:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">338:</span> <span class="normal">                        </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">339:</span> 
+<span class="linenum">340:</span> <span class="normal">                </span><span class="comment">/* Send data. */</span>
+<span class="linenum">341:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(*</span><span class="normal">data</span><span class="symbol">++);</span>
+<span class="linenum">342:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">343:</span> 
+<span class="linenum">344:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">345:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">346:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">347:</span> 
+<span class="linenum">348:</span> <span class="normal">        </span><span class="comment">/* Send STOP. */</span>
+<span class="linenum">349:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#55">i2c_stop</a></span><span class="symbol">();</span>
+<span class="linenum">350:</span> 
+<span class="linenum">351:</span> <span class="normal">        </span><span class="comment">/* Idle */</span>
+<span class="linenum">352:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#250">I2C_MST_IDLE</a></span><span class="symbol">)))</span>
+<span class="linenum">353:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">354:</span> 
+<span class="linenum">355:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">356:</span> <span class="cbracket">}</span>
+<span class="linenum">357:</span> 
+<span class="linenum">358:</span> <span class="comment">/*</span>
+<span class="linenum">359:</span> <span class="comment"> * Random Read / Sequential Read</span>
+<span class="linenum">360:</span> <span class="comment"> *</span>
+<span class="linenum">361:</span> <span class="comment"> * |S|10100000|A|xxx.....|A|........|A|S|10100001|A|........|A|~|........|N|P|</span>
+<span class="linenum">362:</span> <span class="comment"> *    Slave      Address    Address      Slave      Data n       Data n + x</span>
+<span class="linenum">363:</span> <span class="comment"> *    Address    High Byte  Low Byte     Address</span>
+<span class="linenum">364:</span> <span class="comment"> */</span>
+<span class="linenum">365:</span> <span class="keyword">static</span><span class="normal"> </span><span class="type">int</span><span class="normal"> </span><span class="function"><a name="365">rom_read</a></span><span class="symbol">(</span><span class="type">int</span><span class="normal"> addr</span><span class="symbol">,</span><span class="normal"> </span><span class="type">char</span><span class="normal"> </span><span class="symbol">*</span><span class="normal">data</span><span class="symbol">,</span><span class="normal"> </span><span class="type">int</span><span class="normal"> nbyte</span><span class="symbol">)</span>
+<span class="linenum">366:</span> <span class="cbracket">{</span>
+<span class="linenum">367:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">368:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">369:</span> 
+<span class="linenum">370:</span> <span class="normal">        </span><span class="comment">/* Idle */</span>
+<span class="linenum">371:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#250">I2C_MST_IDLE</a></span><span class="symbol">)))</span>
+<span class="linenum">372:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">373:</span> 
+<span class="linenum">374:</span> <span class="normal">        </span><span class="keyword">do</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">375:</span> <span class="normal">                </span><span class="comment">/* Send START + I2C Slave address (Write). */</span>
+<span class="linenum">376:</span> <span class="normal">                </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#65">i2c_master_send_addr</a></span><span class="symbol">(</span><span class="normal"><a href="i2c_rom.c.html#31">ROM_SLA</a></span><span class="symbol">);</span>
+<span class="linenum">377:</span> 
+<span class="linenum">378:</span> <span class="normal">                </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">379:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">380:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">!=</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#253">I2C_MST_NACK_ADDR</a></span><span class="symbol">)</span>
+<span class="linenum">381:</span> <span class="normal">                                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">382:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">383:</span> <span class="normal">        </span><span class="cbracket">}</span><span class="normal"> </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">r </span><span class="symbol">==</span><span class="normal"> </span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#253">I2C_MST_NACK_ADDR</a></span><span class="symbol">);</span>
+<span class="linenum">384:</span> 
+<span class="linenum">385:</span> <span class="normal">        </span><span class="comment">/* Send ROM address high byte. */</span>
+<span class="linenum">386:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">addr </span><span class="symbol">&gt;&gt;</span><span class="normal"> </span><span class="number">8</span><span class="symbol">);</span>
+<span class="linenum">387:</span> 
+<span class="linenum">388:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">389:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">390:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">391:</span> 
+<span class="linenum">392:</span> <span class="normal">        </span><span class="comment">/* Send ROM address low byte. */</span>
+<span class="linenum">393:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#71">i2c_master_send</a></span><span class="symbol">(</span><span class="normal">addr </span><span class="symbol">&amp;</span><span class="normal"> </span><span class="number">0xff</span><span class="symbol">);</span>
+<span class="linenum">394:</span> 
+<span class="linenum">395:</span> <span class="normal">        </span><span class="comment">/* Receive ACK. */</span>
+<span class="linenum">396:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#252">I2C_MST_TX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">397:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">398:</span> 
+<span class="linenum">399:</span> <span class="normal">        </span><span class="comment">/* Send START + I2C Slave address (Read). */</span>
+<span class="linenum">400:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#65">i2c_master_send_addr</a></span><span class="symbol">(</span><span class="normal"><a href="i2c_rom.c.html#31">ROM_SLA</a></span><span class="normal"> </span><span class="symbol">|</span><span class="normal"> </span><span class="number">1</span><span class="symbol">);</span>
+<span class="linenum">401:</span> 
+<span class="linenum">402:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> nbyte </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">403:</span> <span class="normal">                </span><span class="comment">/* Receive data. */</span>
+<span class="linenum">404:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#251">I2C_MST_RX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">405:</span> <span class="normal">                        </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">406:</span> 
+<span class="linenum">407:</span> <span class="normal">                </span><span class="comment">/* Get data and send ACK. */</span>
+<span class="linenum">408:</span> <span class="normal">                </span><span class="symbol">*</span><span class="normal">data</span><span class="symbol">++</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#77">i2c_master_recv</a></span><span class="symbol">();</span>
+<span class="linenum">409:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">410:</span> 
+<span class="linenum">411:</span> <span class="normal">        </span><span class="comment">/* Receive data. */</span>
+<span class="linenum">412:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#251">I2C_MST_RX_RDY</a></span><span class="symbol">)))</span>
+<span class="linenum">413:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">414:</span> 
+<span class="linenum">415:</span> <span class="normal">        </span><span class="comment">/* Get data. */</span>
+<span class="linenum">416:</span> <span class="normal">        </span><span class="symbol">*</span><span class="normal">data </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#86">i2c_master_recv_last</a></span><span class="symbol">();</span>
+<span class="linenum">417:</span> 
+<span class="linenum">418:</span> <span class="normal">        </span><span class="comment">/* Send NACK + STOP. */</span>
+<span class="linenum">419:</span> <span class="normal">        </span><span class="function"><a href="../../../../../lib/nxp_lpc/lpc81x/i2c.c.html#55">i2c_stop</a></span><span class="symbol">();</span>
+<span class="linenum">420:</span> 
+<span class="linenum">421:</span> <span class="normal">        </span><span class="comment">/* Idle */</span>
+<span class="linenum">422:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">((</span><span class="normal">r </span><span class="symbol">=</span><span class="normal"> </span><span class="function"><a href="i2c_rom.c.html#228">wait_i2c_state</a></span><span class="symbol">(</span><span class="normal"><a href="../../../../../include/nxp_lpc/lpc81x/i2c.h.html#250">I2C_MST_IDLE</a></span><span class="symbol">)))</span>
+<span class="linenum">423:</span> <span class="normal">                </span><span class="keyword">return</span><span class="normal"> r</span><span class="symbol">;</span>
+<span class="linenum">424:</span> 
+<span class="linenum">425:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">426:</span> <span class="cbracket">}</span>
+<span class="linenum">427:</span> 
+<span class="linenum">428:</span> <span class="type">int</span><span class="normal"> </span><span class="function"><a name="428">main</a></span><span class="symbol">(</span><span class="type">void</span><span class="symbol">)</span>
+<span class="linenum">429:</span> <span class="cbracket">{</span>
+<span class="linenum">430:</span> <span class="normal">        </span><span class="type">char</span><span class="normal"> start_data</span><span class="symbol">;</span>
+<span class="linenum">431:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> addr</span><span class="symbol">;</span>
+<span class="linenum">432:</span> <span class="normal">        </span><span class="type">char</span><span class="normal"> data</span><span class="symbol">;</span>
+<span class="linenum">433:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> i</span><span class="symbol">;</span>
+<span class="linenum">434:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> j</span><span class="symbol">;</span>
+<span class="linenum">435:</span> <span class="normal">        </span><span class="type">char</span><span class="normal"> buf</span><span class="symbol">[</span><span class="number">256</span><span class="symbol">];</span>
+<span class="linenum">436:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="linenum">437:</span> <span class="normal">        </span><span class="type">int</span><span class="normal"> m</span><span class="symbol">;</span>
+<span class="linenum">438:</span> 
+<span class="linenum">439:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#42">clock_setup</a></span><span class="symbol">();</span>
+<span class="linenum">440:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#59">gpio_setup</a></span><span class="symbol">();</span>
+<span class="linenum">441:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#94">usart_setup</a></span><span class="symbol">();</span>
+<span class="linenum">442:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#104">i2c_setup</a></span><span class="symbol">();</span>
+<span class="linenum">443:</span> 
+<span class="linenum">444:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"i2c_rom"</span><span class="symbol">);</span>
+<span class="linenum">445:</span> 
+<span class="linenum">446:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"Random read"</span><span class="symbol">);</span>
+<span class="linenum">447:</span> <span class="normal">        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function"><a href="i2c_rom.c.html#365">rom_read</a></span><span class="symbol">(</span><span class="number">0</span><span class="symbol">,</span><span class="normal"> </span><span class="symbol">&amp;</span><span class="normal">start_data</span><span class="symbol">,</span><span class="normal"> </span><span class="number">1</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">448:</span> <span class="normal">                </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"ROM read error"</span><span class="symbol">);</span>
+<span class="linenum">449:</span> <span class="normal">                </span><span class="keyword">goto</span><span class="normal"> i2c_error</span><span class="symbol">;</span>
+<span class="linenum">450:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">451:</span> <span class="normal">        start_data</span><span class="symbol">++;</span>
+<span class="linenum">452:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#174">xprintf</a></span><span class="symbol">(</span><span class="string">"data = 0x%x</span><span class="specialchar">\r\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> start_data</span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">);</span>
+<span class="linenum">453:</span> 
+<span class="linenum">454:</span> <span class="normal">        </span><span class="comment">/* Write data. */</span>
+<span class="linenum">455:</span> <span class="normal">        addr </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">456:</span> <span class="normal">        data </span><span class="symbol">=</span><span class="normal"> start_data</span><span class="symbol">;</span>
+<span class="linenum">457:</span> <span class="normal">        </span><span class="comment">/* Byte */</span>
+<span class="linenum">458:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"Byte Write"</span><span class="symbol">);</span>
+<span class="linenum">459:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#30">PAGE_SIZE</a></span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">460:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function"><a href="i2c_rom.c.html#248">rom_write_byte</a></span><span class="symbol">(</span><span class="normal">addr</span><span class="symbol">++,</span><span class="normal"> data</span><span class="symbol">++))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">461:</span> <span class="normal">                        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"ROM write error"</span><span class="symbol">);</span>
+<span class="linenum">462:</span> <span class="normal">                        </span><span class="keyword">goto</span><span class="normal"> i2c_error</span><span class="symbol">;</span>
+<span class="linenum">463:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">464:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">465:</span> <span class="normal">        </span><span class="comment">/* Page */</span>
+<span class="linenum">466:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"Page Write"</span><span class="symbol">);</span>
+<span class="linenum">467:</span> <span class="normal">        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#29">ROM_SIZE</a></span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#30">PAGE_SIZE</a></span><span class="normal"> </span><span class="symbol">-</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">468:</span> <span class="normal">                </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">j </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> j </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#30">PAGE_SIZE</a></span><span class="symbol">;</span><span class="normal"> j</span><span class="symbol">++)</span>
+<span class="linenum">469:</span> <span class="normal">                        buf</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">=</span><span class="normal"> data</span><span class="symbol">++;</span>
+<span class="linenum">470:</span> <span class="normal">                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function"><a href="i2c_rom.c.html#305">rom_write_page</a></span><span class="symbol">(</span><span class="normal">addr</span><span class="symbol">,</span><span class="normal"> buf</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">471:</span> <span class="normal">                        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"ROM write error"</span><span class="symbol">);</span>
+<span class="linenum">472:</span> <span class="normal">                        </span><span class="keyword">goto</span><span class="normal"> i2c_error</span><span class="symbol">;</span>
+<span class="linenum">473:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">474:</span> <span class="normal">                addr </span><span class="symbol">+=</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#30">PAGE_SIZE</a></span><span class="symbol">;</span>
+<span class="linenum">475:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">476:</span> 
+<span class="linenum">477:</span> <span class="normal">        </span><span class="comment">/* Read and verify data. */</span>
+<span class="linenum">478:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"Sequential Read"</span><span class="symbol">);</span>
+<span class="linenum">479:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">480:</span> <span class="normal">                </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">n </span><span class="symbol">=</span><span class="normal"> </span><span class="number">1</span><span class="symbol">;</span><span class="normal"> n </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="symbol">(</span><span class="type">int</span><span class="symbol">)</span><span class="keyword">sizeof</span><span class="symbol">(</span><span class="normal">buf</span><span class="symbol">);</span><span class="normal"> n</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">481:</span> <span class="normal">                        </span><span class="function"><a href="i2c_rom.c.html#174">xprintf</a></span><span class="symbol">(</span><span class="string">"size = %d</span><span class="specialchar">\r\n</span><span class="string">"</span><span class="symbol">,</span><span class="normal"> n</span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">);</span>
+<span class="linenum">482:</span> 
+<span class="linenum">483:</span> <span class="normal">                        addr </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">484:</span> <span class="normal">                        data </span><span class="symbol">=</span><span class="normal"> start_data</span><span class="symbol">;</span>
+<span class="linenum">485:</span> <span class="normal">                        </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">i </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> i </span><span class="symbol">&lt;</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#29">ROM_SIZE</a></span><span class="normal"> </span><span class="symbol">/</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> i</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">486:</span> <span class="normal">                                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function"><a href="i2c_rom.c.html#365">rom_read</a></span><span class="symbol">(</span><span class="normal">addr</span><span class="symbol">,</span><span class="normal"> buf</span><span class="symbol">,</span><span class="normal"> n</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">487:</span> <span class="normal">                                        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"ROM read error"</span><span class="symbol">);</span>
+<span class="linenum">488:</span> <span class="normal">                                        </span><span class="keyword">goto</span><span class="normal"> i2c_error</span><span class="symbol">;</span>
+<span class="linenum">489:</span> <span class="normal">                                </span><span class="cbracket">}</span>
+<span class="linenum">490:</span> <span class="normal">                                </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">j </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> j </span><span class="symbol">&lt;</span><span class="normal"> n</span><span class="symbol">;</span><span class="normal"> j</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">491:</span> <span class="normal">                                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">buf</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> data</span><span class="symbol">)</span>
+<span class="linenum">492:</span> <span class="normal">                                                </span><span class="keyword">goto</span><span class="normal"> data_error</span><span class="symbol">;</span>
+<span class="linenum">493:</span> <span class="normal">                                        data</span><span class="symbol">++;</span>
+<span class="linenum">494:</span> <span class="normal">                                </span><span class="cbracket">}</span>
+<span class="linenum">495:</span> <span class="normal">                                addr </span><span class="symbol">+=</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="linenum">496:</span> <span class="normal">                        </span><span class="cbracket">}</span>
+<span class="linenum">497:</span> 
+<span class="linenum">498:</span> <span class="normal">                        m </span><span class="symbol">=</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#29">ROM_SIZE</a></span><span class="normal"> </span><span class="symbol">%</span><span class="normal"> n</span><span class="symbol">;</span>
+<span class="linenum">499:</span> <span class="normal">                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">m</span><span class="symbol">)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">500:</span> <span class="normal">                                </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="function"><a href="i2c_rom.c.html#365">rom_read</a></span><span class="symbol">(</span><span class="normal">addr</span><span class="symbol">,</span><span class="normal"> buf</span><span class="symbol">,</span><span class="normal"> m</span><span class="symbol">))</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">501:</span> <span class="normal">                                        </span><span class="function"><a href="i2c_rom.c.html#220">xputs</a></span><span class="symbol">(</span><span class="string">"ROM read error"</span><span class="symbol">);</span>
+<span class="linenum">502:</span> <span class="normal">                                        </span><span class="keyword">goto</span><span class="normal"> i2c_error</span><span class="symbol">;</span>
+<span class="linenum">503:</span> <span class="normal">                                </span><span class="cbracket">}</span>
+<span class="linenum">504:</span> <span class="normal">                                </span><span class="keyword">for</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">j </span><span class="symbol">=</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span><span class="normal"> j </span><span class="symbol">&lt;</span><span class="normal"> m</span><span class="symbol">;</span><span class="normal"> j</span><span class="symbol">++)</span><span class="normal"> </span><span class="cbracket">{</span>
+<span class="linenum">505:</span> <span class="normal">                                        </span><span class="keyword">if</span><span class="normal"> </span><span class="symbol">(</span><span class="normal">buf</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">]</span><span class="normal"> </span><span class="symbol">!=</span><span class="normal"> data</span><span class="symbol">)</span>
+<span class="linenum">506:</span> <span class="normal">                                                </span><span class="keyword">goto</span><span class="normal"> data_error</span><span class="symbol">;</span>
+<span class="linenum">507:</span> <span class="normal">                                        data</span><span class="symbol">++;</span>
+<span class="linenum">508:</span> <span class="normal">                                </span><span class="cbracket">}</span>
+<span class="linenum">509:</span> <span class="normal">                        </span><span class="cbracket">}</span>
+<span class="linenum">510:</span> <span class="normal">                </span><span class="cbracket">}</span>
+<span class="linenum">511:</span> <span class="normal">        </span><span class="cbracket">}</span>
+<span class="linenum">512:</span> 
+<span class="linenum">513:</span> <span class="normal">i2c_error</span><span class="symbol">:</span>
+<span class="linenum">514:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#174">xprintf</a></span><span class="symbol">(</span><span class="string">"I2C error: </span><span class="string"><a href="i2c_rom.c.html#38">status</a></span><span class="string"> = 0x%w  expected state = 0x%x</span><span class="specialchar">\r\n</span><span class="string">"</span><span class="symbol">,</span>
+<span class="linenum">515:</span> <span class="normal">                </span><span class="normal"><a href="i2c_rom.c.html#38">status</a></span><span class="symbol">,</span><span class="normal"> </span><span class="normal"><a href="i2c_rom.c.html#39">exp_state</a></span><span class="symbol">,</span><span class="normal"> </span><span class="number">0</span><span class="symbol">);</span>
+<span class="linenum">516:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">517:</span> <span class="normal">                </span><span class="symbol">;</span>
+<span class="linenum">518:</span> 
+<span class="linenum">519:</span> <span class="normal">data_error</span><span class="symbol">:</span>
+<span class="linenum">520:</span> <span class="normal">        </span><span class="function"><a href="i2c_rom.c.html#174">xprintf</a></span><span class="symbol">(</span><span class="string">"data error: addr = 0x%h  data = 0x%x (0x%x)</span><span class="specialchar">\r\n</span><span class="string">"</span><span class="symbol">,</span>
+<span class="linenum">521:</span> <span class="normal">                addr </span><span class="symbol">+</span><span class="normal"> j</span><span class="symbol">,</span><span class="normal"> buf</span><span class="symbol">[</span><span class="normal">j</span><span class="symbol">],</span><span class="normal"> data</span><span class="symbol">);</span>
+<span class="linenum">522:</span> <span class="normal">        </span><span class="keyword">while</span><span class="normal"> </span><span class="symbol">(</span><span class="number">1</span><span class="symbol">)</span>
+<span class="linenum">523:</span> <span class="normal">                </span><span class="symbol">;</span>
+<span class="linenum">524:</span> 
+<span class="linenum">525:</span> <span class="normal">        </span><span class="keyword">return</span><span class="normal"> </span><span class="number">0</span><span class="symbol">;</span>
+<span class="linenum">526:</span> <span class="cbracket">}</span>
+<span class="linenum">527:</span> </tt></pre>
+<h3><a href="Makefile.html">Makefile</a></h3>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+</body>
+</html>
