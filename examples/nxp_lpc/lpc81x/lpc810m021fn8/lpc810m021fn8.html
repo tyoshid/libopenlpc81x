@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>lpc810m021fn8/</title>
+<meta name="generator" content="Bluefish 2.2.6" >
+<meta name="author" content="Toshiaki Yoshida" >
+<meta name="date" content="2015-01-27T10:08:54+0900" >
+<meta name="copyright" content="Copyright 2015 Toshiaki Yoshida">
+<meta name="keywords" content="LPC810">
+<meta name="description" content="LPC810M021FN8 examples">
+<meta name="ROBOTS" content="NOINDEX, NOFOLLOW">
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+<meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+<meta http-equiv="content-style-type" content="text/css">
+<meta http-equiv="expires" content="0">
+<link href="../../../../stylesheets/stylesheet.css" rel="stylesheet" type="text/css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/tyoshid/libopenlpc81x">View on GitHub</a>
+
+          <h1 id="project_title">Libopenlpc81x</h1>
+          <h2 id="project_tagline">NXP LPC81x peripheral library</h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/tyoshid/libopenlpc81x/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/tyoshid/libopenlpc81x/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+      
+<h1><a href="../../../../libopenlpc81x.html">libopenlpc81x</a>/examples/nxp_lpc/lpc81x/lpc810m021fn8/</h1>
+
+<p>The LPC810M021FN8 is a 32-bit ARM Cortex-M0+ microcontroller.
+It can run at a 30 MHz frequency without any external parts.
+It has the following in an 8-pin DIP package.</p>
+
+<p><img src="lpc810m021fn8.jpg" alt="LPC810 8-pin DIP"></p>
+
+<ul>
+<li>4 KB flash memory</li>
+<li>1 KB SRAM</li>
+<li>8 KB ROM</li>
+<li>Nested Vectored Interrupt Controller (NVIC)</li>
+<li>Switch Matrix (SWM)</li>
+<li>6 General-Purpose I/Os (GPIO)</li>
+<li>Pin interrupts/pattern match engine</li>
+<li>State Configurable Timer/PWM (SCT)</li>
+<li>Multi-Rate Timer (MRT)</li>
+<li>Window Watchdog Timer (WWDT)</li>
+<li>Self Wake-up Timer (WKT)</li>
+<li>System Tick Timer (SysTick)</li>
+<li>2 USARTs</li>
+<li>I2C-bus interface</li>
+<li>SPI</li>
+<li>Analog comparator</li>
+<li>Cyclic Redundancy Check (CRC) engine</li>
+<li>Flash controller</li>
+<li>12 MHz Internal RC oscillator (IRC)</li>
+<li>Programmable watchdog oscillator (9.4 kHz &ndash; 2.3 MHz)</li>
+<li>10 kHz low-power oscillator</li>
+<li>System PLL</li>
+</ul>
+
+<p>I tried some circuits on a small breadboard.
+The breadboard has 10 columns, 23 rows and 1 power bus - a total of 270 tie points.
+It is 84 &times; 45 &times; 10 mm.</p>
+
+<p><img src="breadboard.jpg" alt="small breadboard"></p>
+
+<p>I used a breadboard compatible DC barrel jack 
+(<abbr title="SparkFun Electronics">SparkFun</abbr> <i>PRT-10811</i>) 
+and a 3.3 V 2 A wall mount AC adapter with 2.1 mm barrel plug.</p>
+
+<hr>
+
+<h2><a name="examples">Examples</a></h2>
+
+<span style="font-size: smaller;">
+<p>*** The 4 KB flash memory is too small to use the newlib or newlib-nano C library.</p>
+</span>
+
+<h3>GPIO</h3>
+<ul>
+<li><a href="miniblink/miniblink.html">miniblink</a>: Blink an LED.</li>
+<li><!a href="fancyblink/fancyblink.html">fancyblink<!/a>: Blink two LEDs.</li>
+<li><!a href="button/button.html">button<!/a>: Use a switch to control the blinking of an LED.</li>
+<li><!a href="pinint/pinint.html">pinint<!/a>: Count the number of button pushes.</li>
+</ul>
+
+
+<h3>USART</h3>
+<ul>
+<li><!a href="usart/usart.html">usart<!/a>: Transmit characters.</li>
+<li><!a href="usart_irq/usart_irq.html">usart_irq<!/a>: Receive and transmit (echo back) characters.</li>
+</ul>
+
+<h3>SCT</h3>
+<ul>
+<li><!a href="sct/sct.html">sct<!/a>: Blink two LEDs.</li>
+<li><!a href="sct_pwm/sct_pwm.html">sct_pwm<!/a>: Control the fading of an LED with a switch.</li>
+<li><!a href="piezo/piezo.html">piezo<!/a>: Play tones on a piezo sounder.</li>
+<li><!a href="rc_servo/rc_servo.html">rc_servo<!/a>: Control the shaft of a servo motor with a switch.</li>
+</ul>
+
+<h3>MRT</h3>
+<ul>
+<li><!a href="mrt/mrt.html">mrt<!/a>: Blink an LED.</li>
+</ul>
+
+<h3>WWDT</h3>
+<ul>
+<li><!a href="wwdt/wwdt.html">wwdt<!/a>: Test watchdog reset.</li>
+</ul>
+
+<h3>WKT</h3>
+<ul>
+<li><!a href="wkt/wkt.html">wkt<!/a>: Wake up from deep power-down mode.</li>
+</ul>
+
+<h3>SysTick</h3>
+<ul>
+<li><!a href="systick/systick.html">systick<!/a>: Blink an LED.</li>
+</ul>
+
+<h3>I2C</h3>
+<ul>
+<li><!a href="i2c_rom/i2c_rom.html">i2c_rom<!/a>: Write/read a serial EEPROM.</li>
+<li><!a href="i2c_proximity/i2c_proximity.html">i2c_proximity<!/a>: Detect objects with a proximity sensor.</li>
+</ul>
+
+<h3>SPI</h3>
+<ul>
+<li><!a href="spi_rom/spi_rom.html">spi_rom<!/a>: Write/read a serial EEPROM.</li>
+<li><!a href="spi_barometer/spi_barometer.html">spi_barometer<!/a>: Read a barometer.</li>
+</ul>
+
+<h3>Analog comparator</h3>
+<ul>
+<li><!a href="acmp/acmp.html">acmp<!/a>: Use a potentiometer to fade an LED.</li>
+</ul>
+
+<h3>CRC</h3>
+<ul>
+<li><!a href="crc/crc.html">crc<!/a>: Calculate CRCs.</li>
+</ul>
+
+<h3>Flash controller</h3>
+<ul>
+<li><!a href="flashcon/flashcon.html">flashcon<!/a>: Calculate the flash signatures.</li>
+</ul>
+
+<h3>Flash IAP</h3>
+<ul>
+<li><!a href="flash_iap/flash_iap.html">flash_iap<!/a>: Write the flash memory.</li>
+</ul>
+
+<h3>ROM API</h3>
+<ul>
+<li><!a href="rom_api/rom_api.html">rom_api<!/a>: Read a thermometer.</li>
+</ul>
+
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Libopenlpc81x maintained by <a href="https://github.com/tyoshid">tyoshid</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+</body>
+</html>
